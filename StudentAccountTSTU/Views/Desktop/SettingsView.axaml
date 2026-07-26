@@ -12,7 +12,7 @@
             <ScrollViewer Padding="12">
                 <StackPanel>
                     
-                    <Button Grid.Row="1" VerticalAlignment="Stretch" CornerRadius="24" Content="ВЫЙТИ" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding Logout}"/>
+                    <Button Grid.Row="1" VerticalAlignment="Stretch" CornerRadius="24" Content="ВЫЙТИ" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
 
                 </StackPanel>
             </ScrollViewer>

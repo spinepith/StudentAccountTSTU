@@ -4,18 +4,21 @@
 namespace StudentAccountTSTU.ViewModels; 
 
 public partial class MainViewModel : ViewModelBase {
+    private readonly Services.Settings _settings;
+    private readonly WebAccount.WebAccount _webAccount;
+    
     private ViewModelBase currentPage;
-    private LoginViewModel loginViewModel;
+    private int currentPageIndex;
+
     private bool isAuthenticated = false;
 
     public MainViewModel() {
-        var settings = App.Services.GetRequiredService<Services.Settings>();
-        var webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
+        _settings = App.Services.GetRequiredService<Services.Settings>();
+        _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
 
-        settings.Save();
+        _settings.Save();
 
-        loginViewModel = new LoginViewModel(this, settings, webAccount);
-        currentPage = loginViewModel;
+        currentPage = new LoginViewModel(this, _settings, _webAccount);
     }
 
     public ViewModelBase CurrentPage {
@@ -23,6 +26,17 @@ public partial class MainViewModel : ViewModelBase {
         set {
             currentPage = value;
             OnPropertyChanged();
+        }
+    }
+
+    public int CurrentPageIndex {
+        get => currentPageIndex;
+        set {
+            if (currentPageIndex != value) {
+                currentPageIndex = value;
+                OnPropertyChanged();
+                NavigateToPage(value);
+            }
         }
     }
 
@@ -37,18 +51,28 @@ public partial class MainViewModel : ViewModelBase {
     public void Login() {
         IsAuthenticated = true;
         CurrentPage = new HomeViewModel();
+        CurrentPageIndex = 0;
     }
 
     public void Logout() {
         IsAuthenticated = false;
-        CurrentPage = loginViewModel;
+        CurrentPageIndex = 0;
+        CurrentPage = new LoginViewModel(this, _settings, _webAccount);
     }
 
-    public void OpenHome()       => CurrentPage = new HomeViewModel();
-    public void OpenUserData()   => CurrentPage = new UserDataViewModel();
-    public void OpenMarks()      => CurrentPage = new MarksViewModel();
-    public void OpenSchedule()   => CurrentPage = new ScheduleViewModel();
-    public void OpenReportCard() => CurrentPage = new ReportCardViewModel();
-    public void OpenRating()     => CurrentPage = new RatingViewModel();
-    public void OpenSettings()   => CurrentPage = new SettingsViewModel();
+    private void NavigateToPage(int index) {
+        if (!IsAuthenticated)
+            return;
+
+        CurrentPage = index switch {
+            0 => new HomeViewModel(),
+            1 => new UserDataViewModel(),
+            2 => new MarksViewModel(),
+            3 => new ScheduleViewModel(),
+            4 => new ReportCardViewModel(),
+            5 => new RatingViewModel(),
+            6 => new SettingsViewModel(this, _settings, _webAccount),
+            _ => CurrentPage
+        };
+    }
 }

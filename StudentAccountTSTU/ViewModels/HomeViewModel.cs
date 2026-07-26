@@ -6,8 +6,5 @@ using CommunityToolkit.Mvvm.Input;
 namespace StudentAccountTSTU.ViewModels;
 
 internal partial class HomeViewModel : ViewModelBase {
-    [RelayCommand]
-    private async Task Logout() {
 
-    }
 }

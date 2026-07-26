@@ -14,20 +14,21 @@ namespace StudentAccountTSTU;
 
 public partial class NavigationBar : UserControl {
     #region FIELDS
-    #region PUBLIC
-    public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<NavigationBar, Orientation>(nameof(Orientation), defaultValue: Orientation.Horizontal);
+    public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<NavigationBar, Orientation>(nameof(Orientation), Orientation.Horizontal);
+    public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<NavigationBar, int>(nameof(SelectedIndex), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+
+    private readonly TranslateTransform _selectionTransform = new(0, 0);
+    #endregion
+
     public Orientation Orientation {
         get => GetValue(OrientationProperty);
         set => SetValue(OrientationProperty, value);
     }
 
-    public event EventHandler<int?>? PageChanged;
-    #endregion
-
-    #region PRIVATE
-    private readonly TranslateTransform _selectionTransform = new(0, 0);
-    #endregion
-    #endregion
+    public int SelectedIndex {
+        get => GetValue(SelectedIndexProperty);
+        set => SetValue(SelectedIndexProperty, value);
+    }
 
     public NavigationBar() {
         InitializeComponent();
@@ -45,6 +46,36 @@ public partial class NavigationBar : UserControl {
         };
 
         ButtonsGrid.AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+
+        SelectedIndexProperty.Changed.AddClassHandler<NavigationBar>((control, e) => control.OnSelectedIndexChanged(e));
+    }
+
+    private void OnSelectedIndexChanged(AvaloniaPropertyChangedEventArgs e) {
+        var newIndex = (int)e.NewValue!;
+        UpdateUIForIndex(newIndex);
+    }
+
+    private void UpdateUIForIndex(int index) {
+        if (ButtonsGrid.Children.Count == 0)
+            return;
+
+        if (index < 0 || index >= ButtonsGrid.Children.Count)
+            return;
+
+        foreach (var button in ButtonsGrid.Children.OfType<RadioButton>())
+            button.IsChecked = false;
+
+        if (ButtonsGrid.Children[index] is RadioButton targetButton)
+            targetButton.IsChecked = true;
+
+        if (ButtonsGrid.Bounds.Width == 0 || ButtonsGrid.Bounds.Height == 0)
+            return;
+
+        var count = ButtonsGrid.Children.Count;
+        var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
+        var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
+
+        SnapToTarget(index, cellWidth, cellHeight);
     }
 
     protected override void OnSizeChanged(SizeChangedEventArgs e) {
@@ -70,11 +101,8 @@ public partial class NavigationBar : UserControl {
             targetIndex = (int)(point.Y / cellHeight);
 
         targetIndex = Math.Clamp(targetIndex, 0, count - 1);
-        if (ButtonsGrid.Children[targetIndex] is RadioButton targetButton)
-            targetButton.IsChecked = true;
 
-        SnapToTarget(targetIndex, cellWidth, cellHeight);
-        PageChanged?.Invoke(this, targetIndex);
+        SelectedIndex = targetIndex;
     }
 
     private void UpdateElementsSize() {

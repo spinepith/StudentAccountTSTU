@@ -13,5 +13,5 @@
         TransparencyBackgroundFallback="White"
         Icon="/Assets/icon.ico"
         Title="StudentAccountTSTU">
-        <views:MainViewDesktop DataContext="{Binding}" />
+        <views:MainViewDesktop DataContext="{CompiledBinding}" />
 </Window>

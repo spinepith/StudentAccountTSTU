@@ -7,55 +7,15 @@
              x:Class="StudentAccountTSTU.Views.Desktop.LoginView"
              x:DataType="vm:LoginViewModel">
 
-  <UserControl.Styles>
-    <Style Selector="TextBox">
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="CaretBrush" Value="White"/>
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderBrush" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-
-    <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-      <Setter Property="Background" Value="#18FFFFFF"/>
-      <Setter Property="BorderBrush" Value="Transparent"/>
-    </Style>
-
-    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-      <Setter Property="Background" Value="#08FFFFFF"/>
-      <Setter Property="BorderBrush" Value="Transparent"/>
-    </Style>
-
-    <Style Selector="Button">
-      <Setter Property="Background" Value="#10FFFFFF"/>
-      <Setter Property="BorderBrush" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="RenderTransform" Value="scale(1)"/>
-    </Style>
-
-    <Style Selector="Button:pointerover /template/ ContentPresenter">
-      <Setter Property="Background" Value="#18FFFFFF"/>
-    </Style>
-
-    <Style Selector="Button:pressed /template/ ContentPresenter">
-      <Setter Property="Background" Value="#08FFFFFF"/>
-    </Style>
-
-    <Style Selector="Button:pressed">
-      <Setter Property="RenderTransform" Value="scale(1)"/>
-    </Style>
-  </UserControl.Styles>
-
     <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch" RowDefinitions="*, *" RowSpacing="4" MinWidth="200">
 
         <Svg Path="/Assets/logo-white.svg" VerticalAlignment="Top"/>
 
         <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="4" VerticalAlignment="Top">
-            <TextBlock Grid.Row="0" MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{Binding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
-            <TextBox Grid.Row="1" Text="{Binding Username}" IsEnabled="{Binding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="логин"/>
-            <TextBox Grid.Row="2" Text="{Binding Password}" IsEnabled="{Binding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="пароль" PasswordChar="*"/>
-            <Button Grid.Row="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" CornerRadius="28" Content="войти" Command="{Binding LoginCommand}"/>
+            <TextBlock Grid.Row="0" MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{CompiledBinding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
+            <TextBox Grid.Row="1" Text="{CompiledBinding Username}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="логин"/>
+            <TextBox Grid.Row="2" Text="{CompiledBinding Password}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="пароль" PasswordChar="*"/>
+            <Button Grid.Row="3" Content="войти" Command="{CompiledBinding LoginCommand}"/>
         </Grid>
 
     </Grid>  

@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
+
+using CommunityToolkit.Mvvm.Input;
 
 
 namespace StudentAccountTSTU.ViewModels;
 
-internal class HomeViewModel : ViewModelBase {
+internal partial class HomeViewModel : ViewModelBase {
+    [RelayCommand]
+    private async Task Logout() {
 
+    }
 }

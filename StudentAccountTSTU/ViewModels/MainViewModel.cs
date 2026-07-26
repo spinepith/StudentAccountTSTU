@@ -1,18 +1,20 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 
 namespace StudentAccountTSTU.ViewModels; 
 
 public partial class MainViewModel : ViewModelBase {
     private ViewModelBase currentPage;
-    private bool isAuthenticated = false;
     private LoginViewModel loginViewModel;
+    private bool isAuthenticated = false;
 
     public MainViewModel() {
-        loginViewModel = new LoginViewModel(this);
+        var settings = App.Services.GetRequiredService<Services.Settings>();
+        var webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
+
+        settings.Save();
+
+        loginViewModel = new LoginViewModel(this, settings, webAccount);
         currentPage = loginViewModel;
     }
 

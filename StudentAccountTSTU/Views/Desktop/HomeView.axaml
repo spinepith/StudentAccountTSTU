@@ -2,9 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:svg="clr-namespace:Svg.Controls.Skia.Avalonia"
-             x:Class="StudentAccountTSTU.Views.Desktop.HomeView">
+             x:Class="StudentAccountTSTU.Views.Desktop.HomeView"
+             x:DataType="vm:HomeViewModel">
   
     <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
         <Grid ColumnDefinitions="2*, *" ColumnSpacing="4">
@@ -40,7 +42,7 @@
                     <Label Content="БАЛЛЫ" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="True"/>                        
                 </Panel>
             </Border>
-
+            
         </Grid>
     </Border>
 

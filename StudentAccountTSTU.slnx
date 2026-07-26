@@ -1,5 +1,8 @@
 <Solution>
-  <Folder Name="/libs/" />
+  <Folder Name="/libs/">
+    <File Path="libs/StudentAccountTSTU.Crypto.dll" />
+    <File Path="libs/WebAccount.dll" />
+  </Folder>
   <Project Path="StudentAccountTSTU.Android/StudentAccountTSTU.Android.csproj">
     <Deploy />
   </Project>

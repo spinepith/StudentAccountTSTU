@@ -13,11 +13,11 @@
     </Design.DataContext>
 
     <Grid>
-        <ContentControl Content="{Binding CurrentPage}" IsVisible="{Binding !IsAuthenticated}"/>
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
 
-        <Grid ColumnDefinitions="64, *" ColumnSpacing="20" Margin="20" IsVisible="{Binding IsAuthenticated}">
+        <Grid ColumnDefinitions="64, *" ColumnSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">
             <local:NavigationBar Grid.Column="0" Orientation="Vertical" PageChanged="OnPageChanged"/>
-            <ContentControl Grid.Column="1" x:Name="MainContentArea" Content="{Binding CurrentPage}" Padding="4"/>
+            <ContentControl Grid.Column="1" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
         </Grid>
     </Grid>
 

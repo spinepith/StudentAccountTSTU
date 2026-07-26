@@ -27,9 +27,14 @@ namespace StudentAccountTSTU {
         public override void OnFrameworkInitializationCompleted() {
             var services = new ServiceCollection();
 
-            services.AddSingleton<WebAccount.Interfaces.IHttpService, Services.HttpService>();
-            services.AddSingleton<WebAccount.WebAccount>();
+            services.AddSingleton<WebAccount.Interfaces.IHttpService, HttpService>();
             services.AddSingleton(Settings.Load());
+
+            services.AddSingleton<WebAccount.WebAccount>(provider => {
+                var httpService = provider.GetRequiredService<WebAccount.Interfaces.IHttpService>();
+                var settings = provider.GetRequiredService<Settings>();
+                return new WebAccount.WebAccount(httpService, settings.BaseURL);
+            });
 
             Services = services.BuildServiceProvider();
 

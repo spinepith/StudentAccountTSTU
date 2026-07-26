@@ -10,6 +10,10 @@ namespace StudentAccountTSTU.Services;
 internal static class FileStorage {
     private static readonly string AppDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
+    public static bool ChechExists(string path) {
+        return File.Exists(Path.Combine(AppDirectory, path));
+    }
+
     public static async Task<T?> Get<T>(string path) {
         if (File.Exists(Path.Combine(AppDirectory, path))) {
             using FileStream stream = File.OpenRead(Path.Combine(AppDirectory, path));

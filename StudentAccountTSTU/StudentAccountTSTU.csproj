@@ -38,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="StudentAccountTSTU.Crypto">
+      <HintPath>..\libs\StudentAccountTSTU.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="WebAccount">
       <HintPath>..\libs\WebAccount.dll</HintPath>
     </Reference>

@@ -1,0 +1,94 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:StudentAccountTSTU"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.NavigationBar">
+
+
+    <UserControl.Styles>
+
+        <Style Selector="local|NavigationBar[Orientation=Horizontal] UniformGrid#ButtonsGrid">
+            <Setter Property="Rows" Value="0"/>
+            <Setter Property="Columns" Value="7"/>
+        </Style>
+
+        <Style Selector="local|NavigationBar[Orientation=Horizontal] Border#Pill">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="2"/>
+        </Style>
+
+
+        <Style Selector="local|NavigationBar[Orientation=Vertical] UniformGrid#ButtonsGrid">
+            <Setter Property="Rows" Value="7"/>
+            <Setter Property="Columns" Value="0"/>
+        </Style>
+
+        <Style Selector="local|NavigationBar[Orientation=Vertical] Border#Pill">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="2"/>
+            <Setter Property="Height" Value="20"/>
+        </Style>
+
+
+        <Style Selector="RadioButton.Page">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+    </UserControl.Styles>
+
+
+    <Border CornerRadius="28" BorderThickness="1" Background="#10FFFFFF" Padding="4">
+        <Grid>
+
+            <Grid x:Name="SelectionGrid" HorizontalAlignment="Left" VerticalAlignment="Top"  ClipToBounds="True">
+                <Border x:Name="Selector" Background="#20FFFFFF" CornerRadius="24"/>
+                <Border x:Name="Pill" Background="White" CornerRadius="4" Margin="2"/>
+            </Grid>
+
+            <UniformGrid x:Name="ButtonsGrid" Background="Transparent">
+
+                <RadioButton x:Name="HomeButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="True" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/home.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="UserDataButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/user-data_BORDER.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="MarksButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/marks_BORDER.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="ScheduleButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/schedule.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="ReportCardButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/report-card_BORDER.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="RatingButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/rating_BORDER.svg"/>
+                </RadioButton>
+
+                <RadioButton x:Name="SettingsButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
+                    <Svg Path="/Assets/UI/settings.svg"/>
+                </RadioButton>
+
+            </UniformGrid>
+
+        </Grid>
+    </Border>
+
+</UserControl>

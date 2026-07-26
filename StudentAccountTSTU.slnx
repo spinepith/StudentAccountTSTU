@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/libs/" />
+  <Project Path="StudentAccountTSTU.Android/StudentAccountTSTU.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="StudentAccountTSTU.Browser/StudentAccountTSTU.Browser.csproj" />
+  <Project Path="StudentAccountTSTU.Desktop/StudentAccountTSTU.Desktop.csproj" />
+  <Project Path="StudentAccountTSTU.iOS/StudentAccountTSTU.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="StudentAccountTSTU/StudentAccountTSTU.csproj" />
+</Solution>

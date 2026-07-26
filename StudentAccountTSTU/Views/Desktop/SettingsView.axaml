@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Desktop.SettingsView">
+
+    <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+        <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+            <StackPanel Spacing="4"/>
+        </Border>
+    </Border>
+
+</UserControl>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -59,6 +60,26 @@ public class HttpService : IHttpService, IDisposable {
         }
 
         return await client.SendAsync(request);
+    }
+
+    public async Task<Stream> GetStreamAsync(string url) {
+        using var request = new HttpRequestMessage(HttpMethod.Get, url);
+        using var response = await client.SendAsync(request);
+
+        if ((int)response.StatusCode is >= 300 and < 400 && response.Headers.Location is not null) {
+            var redirectUrl = response.Headers.Location.IsAbsoluteUri
+                ? response.Headers.Location.ToString()
+                : new Uri(new Uri(url), response.Headers.Location).ToString();
+            return await GetStreamAsync(redirectUrl);
+        }
+
+        response.EnsureSuccessStatusCode();
+
+        var memoryStream = new MemoryStream();
+        await response.Content.CopyToAsync(memoryStream);
+
+        memoryStream.Position = 0;
+        return memoryStream;
     }
 
     public void Dispose() => client.Dispose();

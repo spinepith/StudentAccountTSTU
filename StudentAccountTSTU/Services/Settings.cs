@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 
 
 namespace StudentAccountTSTU.Services;
 
 internal class Settings {
-    private static readonly string Path = System.IO.Path.Combine(AppContext.BaseDirectory, "settings.json");
+    private static readonly string Path = System.IO.Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        Assembly.GetEntryAssembly()!.GetName().Name!,
+        "settings.json"
+    );
 
     #region SETTINGS
     public string? BaseURL      { get; set; } = null;
@@ -28,5 +33,8 @@ internal class Settings {
         return new Settings();
     }
 
-    internal void Save() => File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+    internal void Save() {
+        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
+        File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+    }
 }

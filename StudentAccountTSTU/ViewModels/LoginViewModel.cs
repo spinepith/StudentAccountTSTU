@@ -2,6 +2,7 @@
 using System.Runtime;
 using System.Threading.Tasks;
 
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Crypto;
@@ -15,10 +16,18 @@ internal partial class LoginViewModel : ViewModelBase {
     private readonly Settings _settings;
     private readonly WebAccount.WebAccount _webAccount;
 
-    private string username     = string.Empty;
-    private string password     = string.Empty;
-    private string errorMessage = string.Empty;
-    private bool isLoading      = false;
+    [ObservableProperty]
+    private string _username = string.Empty;
+
+    [ObservableProperty]
+    private string _password = string.Empty;
+
+    [ObservableProperty]
+    private string _authMessage = string.Empty;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
+    private bool _isLoading = false;
 
     public LoginViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
         _mainViewModel = mainViewModel;
@@ -38,48 +47,14 @@ internal partial class LoginViewModel : ViewModelBase {
         }
     }
 
-    public string Username {
-        get => username;
-        set {
-            username = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string Password {
-        get => password;
-        set {
-            password = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string AuthMessage {
-        get => errorMessage;
-        set {
-            errorMessage = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsLoading {
-        get => isLoading;
-        set {
-            isLoading = value;
-            OnPropertyChanged();
-        }
-    }
-
     [RelayCommand(CanExecute = nameof(CanLogin))]
     private async Task Login() {
         if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             return;
 
         IsLoading = true;
-        LoginCommand.NotifyCanExecuteChanged();
 
         var result = await _webAccount.LoginAsync(Username, Password);
-
         if (result.succes is true) {
             AuthMessage = "УСПЕШНО";
             _mainViewModel.Login();
@@ -94,7 +69,6 @@ internal partial class LoginViewModel : ViewModelBase {
             AuthMessage = result.message;
             Password = string.Empty;
             IsLoading = false;
-            LoginCommand.NotifyCanExecuteChanged();
         }
     }
 

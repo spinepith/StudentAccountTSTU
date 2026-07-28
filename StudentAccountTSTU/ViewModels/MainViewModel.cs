@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+using WebAccount.Interfaces;
+
 
 namespace StudentAccountTSTU.ViewModels; 
 
 public partial class MainViewModel : ViewModelBase {
     private readonly Services.Settings _settings;
+    private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
     
     private ViewModelBase currentPage;
@@ -14,6 +17,7 @@ public partial class MainViewModel : ViewModelBase {
 
     public MainViewModel() {
         _settings = App.Services.GetRequiredService<Services.Settings>();
+        _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
 
         _settings.Save();
@@ -66,7 +70,7 @@ public partial class MainViewModel : ViewModelBase {
 
         CurrentPage = index switch {
             0 => new HomeViewModel(),
-            1 => new UserDataViewModel(),
+            1 => new UserDataViewModel(this, _httpService, _webAccount),
             2 => new MarksViewModel(),
             3 => new ScheduleViewModel(),
             4 => new ReportCardViewModel(),

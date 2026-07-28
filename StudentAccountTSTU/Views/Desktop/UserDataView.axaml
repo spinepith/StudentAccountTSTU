@@ -10,22 +10,35 @@
     <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
         <Grid ColumnDefinitions="*, 3*" ColumnSpacing="4">
         
-            <Grid Grid.Column="0" RowDefinitions="*, *" RowSpacing="4">
+            <Grid Grid.Column="0" RowDefinitions="10*, 10*, 2*" RowSpacing="4">
                 
                 <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                    <Image Source="{Binding UserData.Image}"/>
+                    <Grid>
+                        <Label Content="фото" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                        <Image Source="{CompiledBinding UserImage}" Margin="12" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    </Grid>
                 </Border>
 
                 <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                    <Label Content="ЛИЧНЫЕ ДАННЫЕ" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Grid>
+                        <!--<Label Content="основная информация" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding !DataRecived}"/>
+                        <ScrollViewer IsVisible="{CompiledBinding DataRecived}">
+                            
+                        </ScrollViewer>-->
+                    </Grid>
                 </Border>        
                 
+                <Button Grid.Row="2" VerticalAlignment="Stretch" Content="обновить" Command="{CompiledBinding GetDataCommand}"/>
+
             </Grid>
                 
             <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                <ScrollViewer>
-                    <StackPanel/>
-                </ScrollViewer>
+                <Grid>
+                    <!--<Label Content="приказы" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding !DataRecived}"/>
+                    <ScrollViewer IsVisible="{CompiledBinding DataRecived}">
+
+                    </ScrollViewer>-->
+                </Grid>
             </Border>
 
         </Grid>

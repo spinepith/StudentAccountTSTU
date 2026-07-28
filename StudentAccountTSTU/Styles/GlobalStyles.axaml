@@ -7,6 +7,24 @@
             <TextBox Text="textbox"/>
             <Button Content="button"/>
 
+            <StackPanel Margin="20">
+
+                <Border Classes="TableRow">
+                    <Grid ColumnDefinitions="*, *">
+                        <TextBlock Grid.Column="0" Classes="Label" Text="Label1"/>
+                        <TextBlock Grid.Column="1" Classes="Value" Text="Value1"/>
+                    </Grid>
+                </Border>
+
+                <Border Classes="TableRow">
+                    <Grid ColumnDefinitions="*, *">
+                        <TextBlock Grid.Column="0" Classes="Label" Text="Label2"/>
+                        <TextBlock Grid.Column="1" Classes="Value" Text="Value2"/>
+                    </Grid>
+                </Border>
+                
+            </StackPanel>
+
         </StackPanel>
     </Border>
   </Design.PreviewWith>
@@ -51,6 +69,24 @@
 
     <Style Selector="Button:pressed">
       <Setter Property="RenderTransform" Value="scale(1)"/>
+    </Style>
+
+    <Style Selector="Border.TableRow">
+        <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0, 0, 0, 2"/>
+        <Setter Property="Padding" Value="4, 0, 4, 4"/>
+    </Style>
+
+    <Style Selector="TextBlock.Label">
+        <Setter Property="Foreground" Value="#90FFFFFF"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="TextBlock.Value">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
 </Styles>

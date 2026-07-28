@@ -54,4 +54,8 @@ internal static class FileStorage {
     public static Stream GetFileStreamAsync(string path) {
         return File.OpenRead(Path.Combine(AppDirectory, path));
     }
+
+    public static void Remove(string path) {
+        File.Delete(Path.Combine(AppDirectory, path));
+    }
 }

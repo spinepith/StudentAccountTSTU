@@ -10,21 +10,78 @@
     <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
         <Grid ColumnDefinitions="*, 3*" ColumnSpacing="4">
         
-            <Grid Grid.Column="0" RowDefinitions="10*, 10*, 2*" RowSpacing="4">
+            <Grid Grid.Column="0" RowDefinitions="18*, 10*, 4*" RowSpacing="4">
                 
-                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                     <Grid>
-                        <Label Content="фото" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNull}}"/>
-                        <Image Source="{CompiledBinding UserImage}" Margin="12" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                    </Grid>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="фото"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                            
+                        <Border IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="20">
+                            <Border.Background>
+                                <ImageBrush Source="{CompiledBinding UserImage}" Stretch="UniformToFill"/>
+                            </Border.Background>
+                        </Border>
+
+                        </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                     <Grid>
-                        <!--<Label Content="основная информация" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding !DataRecived}"/>
-                        <ScrollViewer IsVisible="{CompiledBinding DataRecived}">
-                            
-                        </ScrollViewer>-->
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center" 
+                                   Text="основная информация"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNull}}"/>
+                        
+                        <ScrollViewer IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[1]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.PersonalCode}"/>
+                                    </Grid>
+                                </Border>
+                                
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[2]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.FioGroup}"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[3]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Contract}"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[4]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Email}"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[5]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.PhoneNumber}"/>
+                                    </Grid>
+                                </Border>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
                     </Grid>
                 </Border>        
                 
@@ -32,14 +89,87 @@
 
             </Grid>
                 
-            <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                <Grid>
-                    <!--<Label Content="приказы" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding !DataRecived}"/>
-                    <ScrollViewer IsVisible="{CompiledBinding DataRecived}">
+            <Grid Grid.Column="1" RowDefinitions="*, 7*" RowSpacing="4">
+                
+                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                    <Grid>
 
-                    </ScrollViewer>-->
-                </Grid>
-            </Border>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center" 
+                                   Text="финансирование"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4" VerticalAlignment="Center">
+
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Funding.Headers[0]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Funding.Faculty}"/>
+                                    </Grid>
+                                </Border>
+
+                                <Border Classes="TableRow">
+                                    <Grid ColumnDefinitions="*, *">
+                                        <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Funding.Headers[1]}"/>
+                                        <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Funding.Type}"/>
+                                    </Grid>
+                                </Border>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                    <Grid>
+                        
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center" 
+                                   Text="приказы"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                                <Border BorderBrush="#40FFFFFF" BorderThickness="0, 0, 0, 2" Padding="4">
+                                    <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
+                                        <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[0]}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[1]}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[3]}" TextWrapping="Wrap"/>
+                                    </Grid>
+                                </Border>
+
+                                <ItemsControl ItemsSource="{CompiledBinding UserData.Orders}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Classes="TableRow">
+                                                <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
+                                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
 
         </Grid>
         

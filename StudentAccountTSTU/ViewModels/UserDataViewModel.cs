@@ -45,6 +45,11 @@ internal partial class UserDataViewModel : ViewModelBase {
     private async Task GetData() {
         IsLoading = true;
 
+        FileStorage.Remove(Path.Combine("Data", "UserData.json"));
+        FileStorage.Remove(Path.Combine("Data", "UserImage.jpg"));
+        UserData = null;
+        UserImage = null;
+
         var userData = await _webAccount.GetUserDataAsync();
         if (userData is not null) {
             UserData = userData;
@@ -77,9 +82,6 @@ internal partial class UserDataViewModel : ViewModelBase {
             if (download) {
                 using var networkStream = await _httpService.GetStreamAsync(url);
                 await FileStorage.SaveStreamAsync(networkStream, path);
-
-                var fullPath = FileStorage.GetFullPath(path);
-                var fileInfo = new FileInfo(fullPath);
             }
 
             var loadPath = FileStorage.GetFullPath(path);
@@ -87,7 +89,7 @@ internal partial class UserDataViewModel : ViewModelBase {
         }
         catch {
             if (FileStorage.CheckExists(path))
-                File.Delete(FileStorage.GetFullPath(path));
+                FileStorage.Remove(path);
         }
 
         return null;

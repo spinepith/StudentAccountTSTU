@@ -70,9 +70,9 @@ public partial class MainViewModel : ViewModelBase {
 
         CurrentPage = index switch {
             0 => new HomeViewModel(),
-            1 => new UserDataViewModel(this, _httpService, _webAccount),
+            1 => new UserDataViewModel(_httpService, _webAccount),
             2 => new MarksViewModel(),
-            3 => new ScheduleViewModel(),
+            3 => new ScheduleViewModel(_webAccount),
             4 => new ReportCardViewModel(),
             5 => new RatingViewModel(),
             6 => new SettingsViewModel(this, _settings, _webAccount),

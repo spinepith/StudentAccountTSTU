@@ -1,10 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
+using System.IO;
+using System.Threading.Tasks;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+using StudentAccountTSTU.Services;
+
+using WebAccount.Models;
 
 
 namespace StudentAccountTSTU.ViewModels;
 
-internal class ScheduleViewModel : ViewModelBase {
+public class DayGroup {
+    public string? DayName               { get; init; }
+    public bool IsHighlited              { get; init; }
+    public List<Schedule.Lesson> Lessons { get; init; } = new();
+}
 
+internal partial class ScheduleViewModel : ViewModelBase {
+    private readonly WebAccount.WebAccount _webAccount;
+
+    [ObservableProperty]
+    private Schedule? _schedule;
+
+    [ObservableProperty]
+    private IEnumerable<DayGroup>? _groupedOddWeek;
+
+    [ObservableProperty]
+    private IEnumerable<DayGroup>? _groupedEvenWeek;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
+    private bool _isLoading;
+
+    public ScheduleViewModel(WebAccount.WebAccount webAccount) {
+        _webAccount = webAccount;
+
+        _ = InitializeDataAsync();
+    }
+
+    partial void OnScheduleChanged(Schedule? value) {
+        if (value is not null) {
+            GroupedOddWeek = GroupLessonsByDay(value.OddWeek, value.CurrentWeek!.Contains("ЧЕТНАЯ"));
+            GroupedEvenWeek = GroupLessonsByDay(value.EvenWeek, value.CurrentWeek!.Contains("НЕЧЕТНАЯ"));
+        }
+        else {
+            GroupedOddWeek = null;
+            GroupedEvenWeek = null;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    private async Task GetData() {
+        IsLoading = true;
+
+        FileStorage.Remove(Path.Combine("Data", "Schedule.json"));
+        Schedule = null;
+
+        var schedule = await _webAccount.GetScheduleAsync();
+        if (schedule is not null) {
+            Schedule = schedule;
+            await FileStorage.SaveAsync(Schedule, Path.Combine("Data", "Schedule.json"));
+        }
+
+        IsLoading = false;
+    }
+
+    private bool CanUpdate() => !IsLoading;
+
+    private async Task InitializeDataAsync() {
+        var path = Path.Combine("Data", "Schedule.json");
+
+        if (!FileStorage.CheckExists(path))
+            await GetData();
+        else
+            Schedule = await FileStorage.GetAsync<Schedule>(path);
+    }
+
+    private IEnumerable<DayGroup>? GroupLessonsByDay(IReadOnlyList<Schedule.Lesson>? lessons, bool isCurrentWeek) {
+        if (lessons is null)
+            return null;
+
+        var groupedList = new List<DayGroup>();
+        string today = DateTime.Now.DayOfWeek switch {
+            DayOfWeek.Monday    => "пн",
+            DayOfWeek.Tuesday   => "вт",
+            DayOfWeek.Wednesday => "ср",
+            DayOfWeek.Thursday  => "чт",
+            DayOfWeek.Friday    => "пт",
+            DayOfWeek.Saturday  => "сб",
+            DayOfWeek.Sunday    => "вс",
+            _                   => ""
+        };
+
+        foreach (var lesson in lessons) {
+            if (lesson.Day is null || string.IsNullOrEmpty(lesson.Day))
+                continue;
+
+            DayGroup? targetGroup = null;
+
+            foreach (var group in groupedList)
+                if (group.DayName == lesson.Day) {
+                    targetGroup = group;
+                    break;
+                }
+
+            if (targetGroup is null) {
+                targetGroup = new DayGroup {
+                    DayName = lesson.Day,
+                    IsHighlited = isCurrentWeek && string.Equals(lesson.Day, today, StringComparison.OrdinalIgnoreCase)
+                };
+                groupedList.Add(targetGroup);
+            }
+
+            targetGroup.Lessons.Add(lesson);
+        }
+
+        return groupedList;
+    }
 }

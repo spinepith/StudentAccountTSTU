@@ -14,11 +14,12 @@ internal class Settings {
     );
 
     #region SETTINGS
-    public string? BaseURL      { get; set; } = null;
-    public string? DeviceId     { get; set; } = null;
-    public string? UserLogin    { get; set; } = null;
-    public string? UserPassword { get; set; } = null;
-    public bool SaveData        { get; set; } = true;
+    public string? BaseURL       { get; set; } = null;
+    public string? DeviceId      { get; set; } = null;
+    public string? UserLogin     { get; set; } = null;
+    public string? UserPassword  { get; set; } = null;
+    public bool SaveData         { get; set; } = true;
+    //public string SelectionColor { get; set; } = "#4DA1FF";
     #endregion
 
     public static Settings Load() {

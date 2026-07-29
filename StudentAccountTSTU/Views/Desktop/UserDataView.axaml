@@ -20,6 +20,7 @@
                                    TextAlignment="Center"
                                    Text="фото"
                                    TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
                                    IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNull}}"/>
                             
                         <Border IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="20">
@@ -39,6 +40,7 @@
                                    TextAlignment="Center" 
                                    Text="основная информация"
                                    TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
                                    IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNull}}"/>
                         
                         <ScrollViewer IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -99,6 +101,7 @@
                                    TextAlignment="Center" 
                                    Text="финансирование"
                                    TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
                                    IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                         <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -132,6 +135,7 @@
                                    TextAlignment="Center" 
                                    Text="приказы"
                                    TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
                                    IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                         <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -152,11 +156,11 @@
                                         <DataTemplate>
                                             <Border Classes="TableRow">
                                                 <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
-                                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
-                                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
-                                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
-                                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
-                                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>

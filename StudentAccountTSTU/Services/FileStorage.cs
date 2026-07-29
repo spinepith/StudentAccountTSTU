@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -56,6 +55,8 @@ internal static class FileStorage {
     }
 
     public static void Remove(string path) {
-        File.Delete(Path.Combine(AppDirectory, path));
+        path = Path.Combine(AppDirectory, path);
+        if (File.Exists(path))
+            File.Delete(path);
     }
 }

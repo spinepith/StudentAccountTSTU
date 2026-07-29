@@ -18,7 +18,6 @@ using WebAccount.Models;
 namespace StudentAccountTSTU.ViewModels;
 
 internal partial class UserDataViewModel : ViewModelBase {
-    private readonly MainViewModel _mainViewModel;
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
 
@@ -33,8 +32,7 @@ internal partial class UserDataViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
-    public UserDataViewModel(MainViewModel mainViewModel, IHttpService httpService, WebAccount.WebAccount webAccount) {
-        _mainViewModel = mainViewModel;
+    public UserDataViewModel(IHttpService httpService, WebAccount.WebAccount webAccount) {
         _httpService = httpService;
         _webAccount = webAccount;
 
@@ -53,7 +51,9 @@ internal partial class UserDataViewModel : ViewModelBase {
         var userData = await _webAccount.GetUserDataAsync();
         if (userData is not null) {
             UserData = userData;
+
             await FileStorage.SaveAsync(UserData, Path.Combine("Data", "UserData.json"));
+
 
             if (!string.IsNullOrEmpty(UserData.Image))
                 UserImage = await LoadImageAsync(Path.Combine("Data", "UserImage.jpg"), UserData.Image, true);

@@ -89,4 +89,13 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <Style Selector="Border.SpacedBlock">
+        <Setter Property="Margin" Value="0, 0, 0, 32"/>
+        <Setter Property="Padding" Value="4"/>
+    </Style>
+
+    <Style Selector="Border.isHighlited TextBlock.Value">
+        <Setter Property="Foreground" Value="#4DA1FF"/>
+    </Style>
+
 </Styles>

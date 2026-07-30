@@ -71,9 +71,15 @@
       <Setter Property="RenderTransform" Value="scale(1)"/>
     </Style>
 
-    <Style Selector="Border.TableRow">
+    <Style Selector="Border.TableLabel">
         <Setter Property="BorderBrush" Value="#20FFFFFF"/>
         <Setter Property="BorderThickness" Value="0, 0, 0, 2"/>
+        <Setter Property="Padding" Value="4, 0, 4, 4"/>
+    </Style>
+
+    <Style Selector="Border.TableValue">
+        <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
         <Setter Property="Padding" Value="4, 0, 4, 4"/>
     </Style>
 
@@ -95,7 +101,13 @@
     </Style>
 
     <Style Selector="Border.isHighlited TextBlock.Value">
-        <Setter Property="Foreground" Value="#4DA1FF"/>
+        <Setter Property="Foreground" Value="#FF4DA1FF"/>
+    </Style>
+
+    <Style Selector="Border.Blurred">
+        <Setter Property="Effect">
+            <BlurEffect Radius="2"/>
+        </Setter>
     </Style>
 
 </Styles>

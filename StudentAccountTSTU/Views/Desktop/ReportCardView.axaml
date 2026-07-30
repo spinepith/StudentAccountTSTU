@@ -2,14 +2,166 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:WebAccount.Models"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="StudentAccountTSTU.Views.Desktop.ReportCardView">
+             x:Class="StudentAccountTSTU.Views.Desktop.ReportCardView"
+             x:DataType="vm:ReportCardViewModel">
 
-    <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-        <Grid ColumnDefinitions="*, *" ColumnSpacing="4">
-            <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True"/>           
-            <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True"/>
-        </Grid>
-    </Border>
+    <Grid>
+
+        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+            <Grid ColumnDefinitions="*, *" RowDefinitions="*, 12*, *" ColumnSpacing="4" RowSpacing="4">
+
+                <Border Grid.ColumnSpan="2" Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                    <Grid ColumnDefinitions="*, Auto, *">
+
+                        <TextBlock Grid.Column="0"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center" 
+                                   Text="ЭКЗАМЕНЫ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
+                                   Margin="8"/>
+
+                        <Border Grid.Column="1" Width="2" VerticalAlignment="Stretch" CornerRadius="8" Background="#90FFFFFF"/>
+
+                        <TextBlock Grid.Column="2"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center" 
+                                   Text="ЗАЧЕТЫ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"/>
+
+                    </Grid>                
+                </Border>
+
+                <Border Grid.Column="0" Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                    <ScrollViewer IsVisible="{CompiledBinding GrouppedExams, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                            <Border Classes="TableLabel">
+                                <Grid ColumnDefinitions="*, 0.5*, 3*, *, *, *, *, 2*" ColumnSpacing="4">
+                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="Семестр" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[0]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[1]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[2]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[3]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="5" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[4]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="6" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[5]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="7" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[6]}" TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{CompiledBinding GrouppedExams}">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SemesterGroup">
+                                        <Border Classes="SpacedBlock">
+                                            <ItemsControl ItemsSource="{CompiledBinding Exams}">
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:ReportCard+Exam">
+                                                        <Border>
+                                                            <Grid ColumnDefinitions="*, 0.5*, 3*, *, *, *, *, 2*" ColumnSpacing="4">
+                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Semester}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Hours}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Mark}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="5" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="6" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Signature}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="7" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Surname}" TextWrapping="Wrap"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <UniformGrid Columns="1" RowSpacing="8"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                            </ItemsControl>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <Border Grid.Column="1" Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                    <ScrollViewer IsVisible="{CompiledBinding GrouppedTests, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                            <Border Classes="TableLabel">
+                                <Grid ColumnDefinitions="*, 0.5*, 3*, *, *, *, *, 2*" ColumnSpacing="4">
+                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="Семестр" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[0]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[1]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[2]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[3]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="5" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[4]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="6" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[5]}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="7" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ReportCard.Headers[6]}" TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+
+                            <ItemsControl ItemsSource="{CompiledBinding GrouppedTests}">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SemesterGroup">
+                                        <Border Classes="SpacedBlock">
+                                            <ItemsControl ItemsSource="{CompiledBinding Exams}">
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:ReportCard+Exam">
+                                                        <Border>
+                                                            <Grid ColumnDefinitions="*, 0.5*, 3*, *, *, *, *, 2*" ColumnSpacing="4">
+                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Semester}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Hours}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Mark}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="5" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="6" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Signature}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="7" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Surname}" TextWrapping="Wrap"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <UniformGrid Columns="1" RowSpacing="8"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                            </ItemsControl>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <Button Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Stretch" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
 
 </UserControl>

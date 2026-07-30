@@ -35,8 +35,14 @@ internal partial class LoginViewModel : ViewModelBase {
         _webAccount = webAccount;
 
         if (_settings.DeviceId is not null && _settings.UserLogin is not null && _settings.UserPassword is not null) {
-            Username = CryptoService.Decrypt(_settings.UserLogin, _settings.DeviceId);
-            Password = CryptoService.Decrypt(_settings.UserPassword, _settings.DeviceId);
+            try {
+                Username = CryptoService.Decrypt(_settings.UserLogin, _settings.DeviceId);
+                Password = CryptoService.Decrypt(_settings.UserPassword, _settings.DeviceId);
+            }
+            catch {
+                Username = string.Empty;
+                Password = string.Empty;
+            }
             _ = Login();
         }
         else {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -13,6 +12,7 @@ using WebAccount.Models;
 
 
 namespace StudentAccountTSTU.ViewModels;
+
 
 public class DayGroup {
     public string? DayName               { get; init; }
@@ -57,7 +57,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private async Task GetData() {
         IsLoading = true;
 
-        FileStorage.Remove(Path.Combine("Data", "Schedule.json"));
+        FileStorage.RemoveFile(Path.Combine("Data", "Schedule.json"));
         Schedule = null;
 
         var schedule = await _webAccount.GetScheduleAsync();

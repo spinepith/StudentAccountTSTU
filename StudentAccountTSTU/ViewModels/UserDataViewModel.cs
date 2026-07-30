@@ -43,8 +43,8 @@ internal partial class UserDataViewModel : ViewModelBase {
     private async Task GetData() {
         IsLoading = true;
 
-        FileStorage.Remove(Path.Combine("Data", "UserData.json"));
-        FileStorage.Remove(Path.Combine("Data", "UserImage.jpg"));
+        FileStorage.RemoveFile(Path.Combine("Data", "UserData.json"));
+        FileStorage.RemoveFile(Path.Combine("Data", "UserImage.jpg"));
         UserData = null;
         UserImage = null;
 
@@ -89,7 +89,7 @@ internal partial class UserDataViewModel : ViewModelBase {
         }
         catch {
             if (FileStorage.CheckExists(path))
-                FileStorage.Remove(path);
+                FileStorage.RemoveFile(path);
         }
 
         return null;

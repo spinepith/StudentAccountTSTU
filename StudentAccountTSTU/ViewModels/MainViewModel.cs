@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+using StudentAccountTSTU.Services;
+
 using WebAccount.Interfaces;
 
 
@@ -62,6 +64,7 @@ public partial class MainViewModel : ViewModelBase {
         IsAuthenticated = false;
         CurrentPageIndex = 0;
         CurrentPage = new LoginViewModel(this, _settings, _webAccount);
+        FileStorage.RemoveDirectory("Data");
     }
 
     private void NavigateToPage(int index) {
@@ -73,7 +76,7 @@ public partial class MainViewModel : ViewModelBase {
             1 => new UserDataViewModel(_httpService, _webAccount),
             2 => new MarksViewModel(),
             3 => new ScheduleViewModel(_webAccount),
-            4 => new ReportCardViewModel(),
+            4 => new ReportCardViewModel(_webAccount),
             5 => new RatingViewModel(),
             6 => new SettingsViewModel(this, _settings, _webAccount),
             _ => CurrentPage

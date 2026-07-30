@@ -54,9 +54,15 @@ internal static class FileStorage {
         return File.OpenRead(Path.Combine(AppDirectory, path));
     }
 
-    public static void Remove(string path) {
+    public static void RemoveFile(string path) {
         path = Path.Combine(AppDirectory, path);
         if (File.Exists(path))
             File.Delete(path);
+    }
+
+    public static void RemoveDirectory(string path) {
+        path = Path.Combine(AppDirectory, path);
+        if (Directory.Exists(path))
+            Directory.Delete(path, true);
     }
 }

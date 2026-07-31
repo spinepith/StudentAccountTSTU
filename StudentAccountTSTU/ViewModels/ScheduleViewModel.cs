@@ -22,6 +22,7 @@ public class DayGroup {
 
 internal partial class ScheduleViewModel : ViewModelBase {
     private readonly WebAccount.WebAccount _webAccount;
+    private readonly Dictionary<string, Task?> _activeLoadingTasks;
 
     [ObservableProperty]
     private Schedule? _schedule;
@@ -36,7 +37,8 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
-    public ScheduleViewModel(WebAccount.WebAccount webAccount) {
+    public ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+        _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
 
         _ = InitializeDataAsync();
@@ -57,6 +59,12 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private async Task GetData() {
         IsLoading = true;
 
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Refresh", GetScheduleDataAsync(), LoadFromCacheAsync);
+
+        IsLoading = false;
+    }
+
+    private async Task GetScheduleDataAsync() {
         FileStorage.RemoveFile(Path.Combine("Data", "Schedule.json"));
         Schedule = null;
 
@@ -65,18 +73,31 @@ internal partial class ScheduleViewModel : ViewModelBase {
             Schedule = schedule;
             await FileStorage.SaveAsync(Schedule, Path.Combine("Data", "Schedule.json"));
         }
-
-        IsLoading = false;
     }
 
     private bool CanUpdate() => !IsLoading;
 
     private async Task InitializeDataAsync() {
+        IsLoading = true;
+
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Init", LoadScheduleAsync(), LoadFromCacheAsync, "Schedule_Refresh");
+
+        IsLoading = false;
+    }
+
+    private async Task LoadScheduleAsync() {
         var path = Path.Combine("Data", "Schedule.json");
 
         if (!FileStorage.CheckExists(path))
-            await GetData();
+            await GetScheduleDataAsync();
         else
+            await LoadFromCacheAsync();
+    }
+
+    private async Task LoadFromCacheAsync() {
+        var path = Path.Combine("Data", "Schedule.json");
+
+        if (FileStorage.CheckExists(path))
             Schedule = await FileStorage.GetAsync<Schedule>(path);
     }
 

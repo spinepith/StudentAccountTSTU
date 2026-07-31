@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using StudentAccountTSTU.Services;
 
@@ -8,17 +11,18 @@ using WebAccount.Interfaces;
 namespace StudentAccountTSTU.ViewModels; 
 
 public partial class MainViewModel : ViewModelBase {
-    private readonly Services.Settings _settings;
+    private readonly Settings _settings;
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
-    
+    private readonly Dictionary<string, Task?> _activeLoadingTasks = new();
+
     private ViewModelBase currentPage;
     private int currentPageIndex;
 
     private bool isAuthenticated = false;
 
     public MainViewModel() {
-        _settings = App.Services.GetRequiredService<Services.Settings>();
+        _settings = App.Services.GetRequiredService<Settings>();
         _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
 
@@ -73,10 +77,10 @@ public partial class MainViewModel : ViewModelBase {
 
         CurrentPage = index switch {
             0 => new HomeViewModel(),
-            1 => new UserDataViewModel(_httpService, _webAccount),
-            2 => new MarksViewModel(),
-            3 => new ScheduleViewModel(_webAccount),
-            4 => new ReportCardViewModel(_webAccount),
+            1 => new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount),
+            2 => new MarksViewModel(_activeLoadingTasks, _webAccount),
+            3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount),
+            4 => new ReportCardViewModel(_activeLoadingTasks, _webAccount),
             5 => new RatingViewModel(),
             6 => new SettingsViewModel(this, _settings, _webAccount),
             _ => CurrentPage

@@ -12,7 +12,9 @@
         <Svg Path="/Assets/logo-white.svg" VerticalAlignment="Top"/>
 
         <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="4" VerticalAlignment="Top">
-            <TextBlock Grid.Row="0" MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{CompiledBinding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
+            <ScrollViewer Grid.Row="0">
+                <TextBlock MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{CompiledBinding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
+            </ScrollViewer>
             <TextBox Grid.Row="1" Text="{CompiledBinding Username}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ЛОГИН"/>
             <TextBox Grid.Row="2" Text="{CompiledBinding Password}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ПАРОЛЬ" PasswordChar="*"/>
             <Button Grid.Row="3" Content="ВОЙТИ" Command="{CompiledBinding LoginCommand}"/>

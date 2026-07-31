@@ -1,6 +1,27 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace StudentAccountTSTU.ViewModels {
     public abstract class ViewModelBase : ObservableObject {
+        protected async Task InitializeWithCacheAsync(Dictionary<string, Task?> activeLoadingTasks, string taskKey, Task initTask, Func<Task> loadFromCache, string? alternativeTaskKey = null) {
+            if (alternativeTaskKey is not null && activeLoadingTasks.TryGetValue(alternativeTaskKey, out var altTask) && altTask is not null && !altTask.IsCompleted) {
+                await altTask;
+                await loadFromCache();
+                return;
+            }
+
+            if (activeLoadingTasks.TryGetValue(taskKey, out var existingTask) && existingTask is not null && !existingTask.IsCompleted) {
+                await existingTask;
+                await loadFromCache();
+                return;
+            }
+
+            activeLoadingTasks[taskKey] = initTask;
+            await initTask;
+            activeLoadingTasks[taskKey] = null;
+        }
     }
 }

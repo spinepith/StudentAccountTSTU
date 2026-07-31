@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-using Avalonia.Data.Converters;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -23,6 +21,7 @@ public class SemesterGroup {
 
 internal partial class ReportCardViewModel : ViewModelBase {
     private readonly WebAccount.WebAccount _webAccount;
+    private readonly Dictionary<string, Task?> _activeLoadingTasks;
 
     [ObservableProperty]
     private ReportCard? _reportCard;
@@ -37,7 +36,8 @@ internal partial class ReportCardViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
-    public ReportCardViewModel(WebAccount.WebAccount webAccount) {
+    public ReportCardViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+        _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
 
         _ = InitializeDataAsync();
@@ -58,6 +58,12 @@ internal partial class ReportCardViewModel : ViewModelBase {
     private async Task GetData() {
         IsLoading = true;
 
+        await InitializeWithCacheAsync(_activeLoadingTasks, "ReportCard_Refresh", GetReportCardDataAsync(), LoadFromCacheAsync);
+
+        IsLoading = false;
+    }
+
+    private async Task GetReportCardDataAsync() {
         FileStorage.RemoveFile(Path.Combine("Data", "ReportCard.json"));
         ReportCard = null;
 
@@ -66,18 +72,31 @@ internal partial class ReportCardViewModel : ViewModelBase {
             ReportCard = reportCard;
             await FileStorage.SaveAsync(ReportCard, Path.Combine("Data", "ReportCard.json"));
         }
-
-        IsLoading = false;
     }
 
     private bool CanUpdate() => !IsLoading;
 
     private async Task InitializeDataAsync() {
+        IsLoading = true;
+
+        await InitializeWithCacheAsync(_activeLoadingTasks, "ReportCard_Init", LoadReportCardAsync(), LoadFromCacheAsync, "ReportCard_Refresh");
+
+        IsLoading = false;
+    }
+
+    private async Task LoadReportCardAsync() {
         var path = Path.Combine("Data", "ReportCard.json");
 
         if (!FileStorage.CheckExists(path))
-            await GetData();
+            await GetReportCardDataAsync();
         else
+            await LoadFromCacheAsync();
+    }
+
+    private async Task LoadFromCacheAsync() {
+        var path = Path.Combine("Data", "ReportCard.json");
+
+        if (FileStorage.CheckExists(path))
             ReportCard = await FileStorage.GetAsync<ReportCard>(path);
     }
 

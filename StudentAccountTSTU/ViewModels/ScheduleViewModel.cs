@@ -13,8 +13,7 @@ using WebAccount.Models;
 
 namespace StudentAccountTSTU.ViewModels;
 
-
-public class DayGroup {
+internal class DayGroup {
     public string? DayName               { get; init; }
     public bool IsHighlited              { get; init; }
     public List<Schedule.Lesson> Lessons { get; init; } = new();
@@ -40,7 +39,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _lastUpdated;
 
-    public ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+    internal ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
 
@@ -61,9 +60,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-
         await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Refresh", GetScheduleDataAsync(), LoadFromCacheAsync);
-
         IsLoading = false;
     }
 
@@ -83,9 +80,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-
         await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Init", LoadScheduleAsync(), LoadFromCacheAsync, "Schedule_Refresh");
-
         IsLoading = false;
     }
 
@@ -109,12 +104,10 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = Services.FileStorage.GetLastModified(filePath);
-        if (lastModified.HasValue) {
+        if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
-        }
-        else {
+        else
             LastUpdated = null;
-        }
     }
 
     private IEnumerable<DayGroup>? GroupLessonsByDay(IReadOnlyList<Schedule.Lesson>? lessons, bool isCurrentWeek) {

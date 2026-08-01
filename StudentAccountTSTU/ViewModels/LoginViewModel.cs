@@ -29,7 +29,7 @@ internal partial class LoginViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
     private bool _isLoading = false;
 
-    public LoginViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
+    internal LoginViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
         _mainViewModel = mainViewModel;
         _settings = settings;
         _webAccount = webAccount;

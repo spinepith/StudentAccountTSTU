@@ -12,7 +12,7 @@ internal partial class SettingsViewModel : ViewModelBase {
     private readonly Settings _settings;
     private readonly WebAccount.WebAccount _webAccount;
 
-    public SettingsViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
+    internal SettingsViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
         _mainViewModel = mainViewModel;
         _settings = settings;
         _webAccount = webAccount;
@@ -27,9 +27,6 @@ internal partial class SettingsViewModel : ViewModelBase {
             _settings.Save();
 
             _mainViewModel.Logout();
-        }
-        else {
-
         }
     }
 }

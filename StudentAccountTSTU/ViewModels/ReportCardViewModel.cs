@@ -13,8 +13,7 @@ using WebAccount.Models;
 
 namespace StudentAccountTSTU.ViewModels;
 
-
-public class SemesterGroup {
+internal class SemesterGroup {
     public string? SemesterName { get; init; }
     public List<ReportCard.Exam> Exams { get; init; } = new();
 }
@@ -39,7 +38,7 @@ internal partial class ReportCardViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _lastUpdated;
 
-    public ReportCardViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+    internal ReportCardViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
 
@@ -60,9 +59,7 @@ internal partial class ReportCardViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-
         await InitializeWithCacheAsync(_activeLoadingTasks, "ReportCard_Refresh", GetReportCardDataAsync(), LoadFromCacheAsync);
-
         IsLoading = false;
     }
 
@@ -108,12 +105,10 @@ internal partial class ReportCardViewModel : ViewModelBase {
 
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = Services.FileStorage.GetLastModified(filePath);
-        if (lastModified.HasValue) {
+        if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
-        }
-        else {
+        else
             LastUpdated = null;
-        }
     }
 
     private IEnumerable<SemesterGroup>? GroupExamsBySemester(IReadOnlyList<ReportCard.Exam>? semester) {

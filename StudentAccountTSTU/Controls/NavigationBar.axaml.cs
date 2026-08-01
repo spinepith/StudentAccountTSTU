@@ -56,7 +56,7 @@ public partial class NavigationBar : UserControl {
     }
 
     private void UpdateUIForIndex(int index) {
-        if (ButtonsGrid.Children.Count == 0)
+        if (ButtonsGrid.Children.Count is 0)
             return;
 
         if (index < 0 || index >= ButtonsGrid.Children.Count)
@@ -68,7 +68,7 @@ public partial class NavigationBar : UserControl {
         if (ButtonsGrid.Children[index] is RadioButton targetButton)
             targetButton.IsChecked = true;
 
-        if (ButtonsGrid.Bounds.Width == 0 || ButtonsGrid.Bounds.Height == 0)
+        if (ButtonsGrid.Bounds.Width is 0 || ButtonsGrid.Bounds.Height == 0)
             return;
 
         var count = ButtonsGrid.Children.Count;
@@ -107,7 +107,7 @@ public partial class NavigationBar : UserControl {
 
     private void UpdateElementsSize() {
         var count = ButtonsGrid.Children.Count;
-        if (count == 0 || ButtonsGrid.Bounds.Width is 0 || ButtonsGrid.Bounds.Height is 0)
+        if (count is 0 || ButtonsGrid.Bounds.Width is 0 || ButtonsGrid.Bounds.Height is 0)
             return;
 
         var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;

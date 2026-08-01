@@ -8,9 +8,9 @@ using StudentAccountTSTU.Services;
 using WebAccount.Interfaces;
 
 
-namespace StudentAccountTSTU.ViewModels; 
+namespace StudentAccountTSTU.ViewModels;
 
-public partial class MainViewModel : ViewModelBase {
+internal partial class MainViewModel : ViewModelBase {
     private readonly Settings _settings;
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
@@ -21,7 +21,7 @@ public partial class MainViewModel : ViewModelBase {
 
     private bool isAuthenticated = false;
 
-    public MainViewModel() {
+    internal MainViewModel() {
         _settings = App.Services.GetRequiredService<Settings>();
         _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
@@ -31,7 +31,7 @@ public partial class MainViewModel : ViewModelBase {
         currentPage = new LoginViewModel(this, _settings, _webAccount);
     }
 
-    public ViewModelBase CurrentPage {
+    internal ViewModelBase CurrentPage {
         get => currentPage;
         set {
             currentPage = value;
@@ -39,7 +39,7 @@ public partial class MainViewModel : ViewModelBase {
         }
     }
 
-    public int CurrentPageIndex {
+    internal int CurrentPageIndex {
         get => currentPageIndex;
         set {
             if (currentPageIndex != value) {
@@ -50,7 +50,7 @@ public partial class MainViewModel : ViewModelBase {
         }
     }
 
-    public bool IsAuthenticated {
+    internal bool IsAuthenticated {
         get => isAuthenticated;
         set {
             isAuthenticated = value;
@@ -58,13 +58,13 @@ public partial class MainViewModel : ViewModelBase {
         }
     }
 
-    public void Login() {
+    internal void Login() {
         IsAuthenticated = true;
         CurrentPage = new HomeViewModel();
         CurrentPageIndex = 0;
     }
 
-    public void Logout() {
+    internal void Logout() {
         IsAuthenticated = false;
         CurrentPageIndex = 0;
         CurrentPage = new LoginViewModel(this, _settings, _webAccount);
@@ -78,7 +78,7 @@ public partial class MainViewModel : ViewModelBase {
         CurrentPage = index switch {
             0 => new HomeViewModel(),
             1 => new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount),
-            2 => new MarksViewModel(_activeLoadingTasks, _webAccount),
+            2 => new LessonsViewModel(_activeLoadingTasks, _webAccount),
             3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount),
             4 => new ReportCardViewModel(_activeLoadingTasks, _webAccount),
             5 => new RatingViewModel(),

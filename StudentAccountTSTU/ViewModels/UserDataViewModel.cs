@@ -34,7 +34,7 @@ internal partial class UserDataViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _lastUpdated;
 
-    public UserDataViewModel(Dictionary<string, Task?> activeLoadingTasks, IHttpService httpService, WebAccount.WebAccount webAccount) {
+    internal UserDataViewModel(Dictionary<string, Task?> activeLoadingTasks, IHttpService httpService, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _httpService = httpService;
         _webAccount = webAccount;
@@ -45,9 +45,7 @@ internal partial class UserDataViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-
         await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Refresh", GetUserDataAsync(), LoadFromCacheAsync);
-
         IsLoading = false;
     }
 
@@ -75,9 +73,7 @@ internal partial class UserDataViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-
         await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Init", LoadUserDataAsync(), LoadFromCacheAsync, "UserData_Refresh");
-
         IsLoading = false;
     }
 
@@ -97,21 +93,18 @@ internal partial class UserDataViewModel : ViewModelBase {
 
         if (FileStorage.CheckExists(path)) {
             UserData = await FileStorage.GetAsync<UserData>(path);
-            if (UserData is not null && !string.IsNullOrEmpty(UserData.Image)) {
+            if (UserData is not null && !string.IsNullOrEmpty(UserData.Image))
                 UserImage = await LoadImageAsync(imagePath, UserData.Image, false);
-            }
             UpdateLastModifiedDate(path);
         }
     }
 
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = FileStorage.GetLastModified(filePath);
-        if (lastModified.HasValue) {
+        if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
-        }
-        else {
+        else
             LastUpdated = null;
-        }
     }
 
     private async Task<Bitmap?> LoadImageAsync(string path, string url, bool download) {

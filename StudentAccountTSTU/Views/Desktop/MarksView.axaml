@@ -10,71 +10,35 @@
 
     <Grid>
 
-         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-             <Grid RowDefinitions="Auto, *, Auto">
-                 <Grid.Styles>
-                     <Style Selector="Grid">
-                         <Setter Property="RowSpacing" Value="0"/>
-                     </Style>
-                     <Style Selector="Grid[Tag=True]">
-                         <Setter Property="RowSpacing" Value="4"/>
-                     </Style>
-                 </Grid.Styles>
-                 <Grid.Tag>
-                     <Binding Path="ShowLastUpdated"/>
-                 </Grid.Tag>
+        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+            <Grid RowDefinitions="Auto, *, Auto" RowSpacing="8">
 
-                 <TextBlock Grid.Row="0"
-                            HorizontalAlignment="Center"
-                            TextAlignment="Center"
-                            Text="{CompiledBinding LastUpdated}"
-                            TextWrapping="Wrap"
-                            Foreground="#90FFFFFF"
-                            FontSize="10"
-                            IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                <TextBlock Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{CompiledBinding LastUpdated}"
+                           TextWrapping="Wrap"
+                           Foreground="#90FFFFFF"
+                           FontSize="10"
+                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
-                 <ScrollViewer Grid.Row="1" IsVisible="{CompiledBinding !SelectedLesson}">
-                     <ItemsControl ItemsSource="{CompiledBinding Lessons}">
+                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4">
+                    <Grid>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="x:String">
-                                <Button MinHeight="64"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Content="{CompiledBinding .}"
-                                        CornerRadius="24"
-                                        CommandParameter="{CompiledBinding .}"
-                                        Command="{CompiledBinding $parent[UserControl].((vm:MarksViewModel)DataContext).SelectLessonCommand}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="БАЛЛЫ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
+                                   IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
 
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Spacing="4"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                        <ScrollViewer IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4" VerticalAlignment="Center">
 
-                    </ItemsControl>
-                 </ScrollViewer>
+                                <ItemsControl ItemsSource="{CompiledBinding Marks}">
 
-                 <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" IsVisible="{CompiledBinding SelectedLesson}">
-                     <Grid>
-
-                         <TextBlock HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    TextAlignment="Center"
-                                    Text="БАЛЛЫ"
-                                    TextWrapping="Wrap"
-                                    Foreground="#90FFFFFF"
-                                    IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
-
-
-                         <ScrollViewer IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
-                             <StackPanel Spacing="4" VerticalAlignment="Center">
-                                 
-                                 <ItemsControl ItemsSource="{CompiledBinding Marks}">
-
-                                     <ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Spacing="64"/>
                                         </ItemsPanelTemplate>
@@ -83,15 +47,15 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Spacing="8">
-                                                
+
                                                 <TextBlock Classes="Label" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
 
                                                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
                                                     <StackPanel>
-                                                        
+
                                                         <Border Classes="TableLabel">
                                                             <Grid ColumnDefinitions="128, *">
-                                                            
+
                                                                 <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Headers[0]}" TextWrapping="Wrap"/>
 
                                                                 <ItemsControl Grid.Column="1" ItemsSource="{CompiledBinding Headers}">
@@ -156,25 +120,26 @@
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
-                                 </ItemsControl>
+                                </ItemsControl>
 
-                             </StackPanel>
-                         </ScrollViewer>
+                            </StackPanel>
+                        </ScrollViewer>
 
-                     </Grid>
-                 </Border>
+                    </Grid>
+                </Border>
 
-                 <StackPanel Grid.Row="2" Spacing="4" Margin="0,16,0,0">
-                     <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
-                     <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}" IsVisible="{CompiledBinding SelectedLesson}"/>
-                 </StackPanel>
+                <StackPanel Grid.Row="2" Spacing="4">
+                    <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                    <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
+                </StackPanel>
 
-             </Grid>
-         </Border>
+            </Grid>
+        </Border>
 
         <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
             <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
+
     </Grid>
 
 </UserControl>

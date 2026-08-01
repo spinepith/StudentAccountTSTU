@@ -87,17 +87,20 @@ internal partial class RatingViewModel : ViewModelBase {
 
     private async Task GetRatingDataAsync() {
         var ratingDirectory = Path.Combine("Data", "Ratings");
+        var ratingPath = Path.Combine(ratingDirectory, $"{_groupName}.json");
+
+        FileStorage.RemoveFile(ratingPath);
         InstituteRating = null;
         GroupRating = null;
 
         var ratingData = await _webAccount.GetRatingAsync(_groupName);
         if (ratingData is not null) {
-            await FileStorage.SaveAsync(ratingData, Path.Combine(ratingDirectory, $"{_groupName}.json"));
+            await FileStorage.SaveAsync(ratingData, ratingPath);
 
             InstituteRating = ConvertToWrappedRating("Рейтинг института", ratingData.Headers, ratingData.Institute);
             GroupRating = ConvertToWrappedRating("Рейтинг группы", ratingData.Headers, ratingData.Group);
 
-            UpdateLastModifiedDate(Path.Combine(ratingDirectory, $"{_groupName}.json"));
+            UpdateLastModifiedDate(ratingPath);
         }
     }
 

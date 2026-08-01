@@ -14,7 +14,8 @@
         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
             <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, *, 12*, *" ColumnSpacing="4" RowSpacing="4">
 
-                <TextBlock Grid.ColumnSpan="2" Grid.Row="0"
+                <TextBlock Grid.ColumnSpan="2"
+                           Grid.Row="0"
                            HorizontalAlignment="Center"
                            TextAlignment="Center"
                            Text="{CompiledBinding LastUpdated}"

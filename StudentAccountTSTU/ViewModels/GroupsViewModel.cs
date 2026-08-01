@@ -1,16 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
 
-
 namespace StudentAccountTSTU.ViewModels;
 
-internal partial class LessonsViewModel : ViewModelBase {
+internal partial class GroupsViewModel : ViewModelBase {
     private readonly WebAccount.WebAccount _webAccount;
     private readonly Dictionary<string, Task?> _activeLoadingTasks;
 
@@ -18,7 +17,7 @@ internal partial class LessonsViewModel : ViewModelBase {
     private ViewModelBase? _currentPage;
 
     [ObservableProperty]
-    private List<string>? _lessons;
+    private List<string>? groups;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
@@ -27,7 +26,7 @@ internal partial class LessonsViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _lastUpdated;
 
-    internal LessonsViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+    internal GroupsViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
 
@@ -35,33 +34,33 @@ internal partial class LessonsViewModel : ViewModelBase {
     }
 
     [RelayCommand]
-    private void SelectLesson(string lessonName) {
-        CurrentPage = new MarksViewModel(_activeLoadingTasks, _webAccount, lessonName, this);
+    private void SelectGroup(string groupName) {
+        CurrentPage = new RatingViewModel(_activeLoadingTasks, _webAccount, groupName, this);
     }
 
-    internal void BackToLessons() {
+    internal void BackToGroups() {
         CurrentPage = null;
     }
 
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Refresh", GetLessonsDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Refresh", GetGroupsDataAsync(), LoadFromCacheAsync);
         IsLoading = false;
     }
 
-    private async Task GetLessonsDataAsync() {
-        var lessonsPath = Path.Combine("Data", "Lessons.json");
-        FileStorage.RemoveFile(lessonsPath);
-        FileStorage.RemoveDirectory(Path.Combine("Data", "Marks"));
+    private async Task GetGroupsDataAsync() {
+        var groupsPath = Path.Combine("Data", "Groups.json");
+        FileStorage.RemoveFile(groupsPath);
+        FileStorage.RemoveDirectory(Path.Combine("Data", "Ratings"));
 
-        Lessons = null;
+        Groups = null;
 
-        var lessons = await _webAccount.GetLessonsAsync();
-        if (lessons is not null) {
-            Lessons = lessons;
-            await FileStorage.SaveAsync(Lessons, lessonsPath);
-            UpdateLastModifiedDate(lessonsPath);
+        var groups = await _webAccount.GetGroupsAsync();
+        if (groups is not null) {
+            Groups = groups;
+            await FileStorage.SaveAsync(Groups, groupsPath);
+            UpdateLastModifiedDate(groupsPath);
         }
     }
 
@@ -69,26 +68,24 @@ internal partial class LessonsViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Init", LoadLessonsAsync(), LoadFromCacheAsync, "Lessons_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Init", LoadGroupsAsync(), LoadFromCacheAsync, "Groups_Refresh");
         IsLoading = false;
     }
 
-    private async Task LoadLessonsAsync() {
-        var path = Path.Combine("Data", "Lessons.json");
+    private async Task LoadGroupsAsync() {
+        var path = Path.Combine("Data", "Groups.json");
 
         if (!FileStorage.CheckExists(path))
-            await GetLessonsDataAsync();
+            await GetGroupsDataAsync();
         else
             await LoadFromCacheAsync();
     }
 
     private async Task LoadFromCacheAsync() {
-        var path = Path.Combine("Data", "Lessons.json");
+        var path = Path.Combine("Data", "Groups.json");
 
         if (FileStorage.CheckExists(path)) {
-            var allLessonsButton = await FileStorage.GetAsync<List<string>>(path);
-            allLessonsButton?.Add("Все");
-            Lessons = allLessonsButton;
+            Groups = await FileStorage.GetAsync<List<string>>(path);
             UpdateLastModifiedDate(path);
         }
     }

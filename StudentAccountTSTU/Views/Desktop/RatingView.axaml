@@ -2,13 +2,130 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="StudentAccountTSTU.Views.Desktop.RatingView">
+             x:Class="StudentAccountTSTU.Views.Desktop.RatingView"
+             x:DataType="vm:RatingViewModel">
 
-    <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-        <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-            <StackPanel Spacing="4"/>
+    <Grid>
+
+        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+            <Grid RowDefinitions="Auto, *, Auto" RowSpacing="8">
+
+                <TextBlock Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{CompiledBinding LastUpdated}"
+                           TextWrapping="Wrap"
+                           Foreground="#90FFFFFF"
+                           FontSize="10"
+                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4">
+                    <Grid>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="РЕЙТИНГ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
+                                   IsVisible="{CompiledBinding InstituteRating, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <ScrollViewer IsVisible="{CompiledBinding InstituteRating, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="64" VerticalAlignment="Center">
+
+                                <StackPanel Spacing="8" IsVisible="{CompiledBinding GroupRating, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                                    <TextBlock Classes="Label" TextAlignment="Center" Text="{CompiledBinding GroupRating.Name}" TextWrapping="Wrap"/>
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel>
+
+                                            <Border Classes="TableLabel">
+                                                <Grid ColumnDefinitions="*, *, *, *">
+                                                    <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding GroupRating.Headers[0]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding GroupRating.Headers[1]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding GroupRating.Headers[2]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding GroupRating.Headers[3]}" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <ItemsControl ItemsSource="{CompiledBinding GroupRating.Students}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Classes="TableValue" Classes.isHighlited="{CompiledBinding IsCurrentUser}">
+                                                            <Grid ColumnDefinitions="*, *, *, *">
+                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Position}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Fio}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Rating}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Group}" TextWrapping="Wrap"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                </StackPanel>
+
+                                <StackPanel Spacing="8" IsVisible="{CompiledBinding InstituteRating, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                                    <TextBlock Classes="Label" TextAlignment="Center" Text="{CompiledBinding InstituteRating.Name}" TextWrapping="Wrap"/>
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                        <StackPanel>
+
+                                            <Border Classes="TableLabel">
+                                                <Grid ColumnDefinitions="*, *, *, *">
+                                                    <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding InstituteRating.Headers[0]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding InstituteRating.Headers[1]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding InstituteRating.Headers[2]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding InstituteRating.Headers[3]}" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <ItemsControl ItemsSource="{CompiledBinding InstituteRating.Students}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Classes="TableValue" Classes.isHighlited="{CompiledBinding IsCurrentUser}">
+                                                            <Grid ColumnDefinitions="*, *, *, *">
+                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Position}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Fio}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Rating}" TextWrapping="Wrap"/>
+                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Group}" TextWrapping="Wrap"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                </StackPanel>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="2" Spacing="4">
+                    <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                    <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToGroupsCommand}"/>
+                </StackPanel>
+
+            </Grid>
         </Border>
-    </Border>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
 
 </UserControl>

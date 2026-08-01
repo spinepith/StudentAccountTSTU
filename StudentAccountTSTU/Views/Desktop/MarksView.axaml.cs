@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.VisualTree;
 
 namespace StudentAccountTSTU.Views.Desktop {
     public partial class MarksView : UserControl {

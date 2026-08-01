@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.Services;
 
 using WebAccount.Interfaces;
@@ -12,9 +13,11 @@ namespace StudentAccountTSTU.ViewModels;
 
 internal partial class MainViewModel : ViewModelBase {
     private readonly Settings _settings;
+    private readonly StudentProfileStore _studentProfileStore;
+    private readonly Dictionary<string, Task?> _activeLoadingTasks = new();
+
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
-    private readonly Dictionary<string, Task?> _activeLoadingTasks = new();
 
     private ViewModelBase currentPage;
     private int currentPageIndex;
@@ -23,6 +26,8 @@ internal partial class MainViewModel : ViewModelBase {
 
     internal MainViewModel() {
         _settings = App.Services.GetRequiredService<Settings>();
+        _studentProfileStore = App.Services.GetRequiredService<StudentProfileStore>();
+
         _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
 
@@ -81,7 +86,7 @@ internal partial class MainViewModel : ViewModelBase {
             2 => new LessonsViewModel(_activeLoadingTasks, _webAccount),
             3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount),
             4 => new ReportCardViewModel(_activeLoadingTasks, _webAccount),
-            5 => new RatingViewModel(),
+            5 => new GroupsViewModel(_activeLoadingTasks, _webAccount),
             6 => new SettingsViewModel(this, _settings, _webAccount),
             _ => CurrentPage
         };

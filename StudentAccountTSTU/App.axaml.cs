@@ -12,6 +12,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.ViewModels;
 using StudentAccountTSTU.Views.Desktop;
 using StudentAccountTSTU.Views.Mobile;
@@ -30,11 +31,20 @@ namespace StudentAccountTSTU {
             services.AddSingleton<WebAccount.Interfaces.IHttpService, HttpService>();
             services.AddSingleton(Settings.Load());
 
-            services.AddSingleton<WebAccount.WebAccount>(provider => {
-                var httpService = provider.GetRequiredService<WebAccount.Interfaces.IHttpService>();
-                var settings = provider.GetRequiredService<Settings>();
-                return new WebAccount.WebAccount(httpService, settings.BaseURL);
-            });
+            services.AddSingleton<WebAccount.WebAccount>(
+                provider => {
+                    var httpService = provider.GetRequiredService<WebAccount.Interfaces.IHttpService>();
+                    var settings = provider.GetRequiredService<Settings>();
+                    return new WebAccount.WebAccount(httpService, settings.BaseURL);
+                }
+            );
+
+            services.AddSingleton<StudentProfileStore>(
+                provider => {
+                    var webAccount = provider.GetRequiredService<WebAccount.WebAccount>();
+                    return new StudentProfileStore(webAccount);
+                }
+            );
 
             Services = services.BuildServiceProvider();
 

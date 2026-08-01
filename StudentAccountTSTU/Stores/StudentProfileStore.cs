@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+
+using StudentAccountTSTU.Services;
 
 using WebAccount.Models;
 
@@ -19,15 +22,22 @@ internal class StudentProfileStore {
     private async void OnPageLoaded(string? page) {
         if (page is null)
             return;
-        
+
+        string path;
         switch (page) {
-            case nameof(Pages.Schedule):
-            case nameof(Pages.Lessons):
-                Lessons = await webAccount.GetLessonsAsync(page);
-                break;
+            /* ДИСЦИПЛИНЫ ПАРСЯТСЯ В ФАЙЛЕ LessonsViewModel.cs */
+            //case nameof(Pages.Lessons):
+            //    Lessons = await webAccount.GetLessonsAsync(page);
+            //    await FileStorage.SaveAsync(Lessons, Path.Combine("Data", "Lessons.json"));
+            //    break;
 
             case nameof(Pages.Achievements):
-                Groups = await webAccount.GetGroupsAsync(page);
+                System.Diagnostics.Debug.WriteLine(page);
+                path = Path.Combine("Data", "Groups.json");
+                if (!FileStorage.CheckExists(path)) {
+                    Groups = await webAccount.GetGroupsAsync(page);
+                    await FileStorage.SaveAsync(Groups, path);
+                }
                 break;
         }
     }

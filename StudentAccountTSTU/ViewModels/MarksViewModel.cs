@@ -59,6 +59,12 @@ internal partial class MarksViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _currentUserName;
 
+    [ObservableProperty]
+    private string? _lastUpdated;
+
+    [ObservableProperty]
+    private bool _showLastUpdated;
+
     public MarksViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
@@ -85,6 +91,12 @@ internal partial class MarksViewModel : ViewModelBase {
 
         IsLoading = true;
         await InitializeWithCacheAsync(_activeLoadingTasks, $"Marks_{lessonName}", LoadMarksAsync(lessonName), () => LoadMarksFromCacheAsync(lessonName));
+
+        if (lessonName is "Все") {
+            LastUpdated = null;
+            ShowLastUpdated = false;
+        }
+
         IsLoading = false;
     }
 
@@ -128,9 +140,23 @@ internal partial class MarksViewModel : ViewModelBase {
             var path = Path.Combine("Data", "Marks", $"{lessonName}.json");
             if (FileStorage.CheckExists(path)) {
                 var lessonData = await FileStorage.GetAsync<Marks.Lesson>(path);
-                if (lessonData is not null)
+                if (lessonData is not null) {
                     Marks = ConvertToWrappedMarks(new List<Marks.Lesson> { lessonData });
+                    UpdateLastModifiedDate(path);
+                }
             }
+        }
+    }
+
+    private void UpdateLastModifiedDate(string filePath) {
+        var lastModified = FileStorage.GetLastModified(filePath);
+        if (lastModified.HasValue) {
+            LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
+            ShowLastUpdated = true;
+        }
+        else {
+            LastUpdated = null;
+            ShowLastUpdated = false;
         }
     }
 
@@ -160,6 +186,7 @@ internal partial class MarksViewModel : ViewModelBase {
         SelectedLesson = false;
         CurrentLesson = null;
         Marks = null;
+        UpdateLastModifiedDate(Path.Combine("Data", "Lessons.json"));
     }
 
     private bool CanUpdate() => !IsLoading;
@@ -173,6 +200,7 @@ internal partial class MarksViewModel : ViewModelBase {
 
         CurrentUserName = await _webAccount.GetUserNameAsync();
         await InitializeWithCacheAsync(_activeLoadingTasks, "Marks_Init", InitializeLessonsAsync(), LoadFromCacheAsync, "Marks_Lessons");
+        UpdateLastModifiedDate(Path.Combine("Data", "Lessons.json"));
 
         IsLoading = false;
     }
@@ -207,6 +235,7 @@ internal partial class MarksViewModel : ViewModelBase {
         if (lessons is not null) {
             Lessons = lessons;
             await FileStorage.SaveAsync(Lessons, lessonsPath);
+            UpdateLastModifiedDate(lessonsPath);
         }
     }
 
@@ -236,7 +265,12 @@ internal partial class MarksViewModel : ViewModelBase {
             }
         }
 
-        if (lessonsData is not null)
+        if (lessonsData is not null) {
             Marks = ConvertToWrappedMarks(lessonsData);
+            if (lesson is not "Все") {
+                var filePath = Path.Combine(marksDirectory, $"{lesson}.json");
+                UpdateLastModifiedDate(filePath);
+            }
+        }
     }
 }

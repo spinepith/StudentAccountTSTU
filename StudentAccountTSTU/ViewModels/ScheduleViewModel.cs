@@ -37,6 +37,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
+    [ObservableProperty]
+    private string? _lastUpdated;
+
     public ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
@@ -72,6 +75,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
         if (schedule is not null) {
             Schedule = schedule;
             await FileStorage.SaveAsync(Schedule, Path.Combine("Data", "Schedule.json"));
+            UpdateLastModifiedDate(Path.Combine("Data", "Schedule.json"));
         }
     }
 
@@ -97,8 +101,20 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "Schedule.json");
 
-        if (FileStorage.CheckExists(path))
+        if (FileStorage.CheckExists(path)) {
             Schedule = await FileStorage.GetAsync<Schedule>(path);
+            UpdateLastModifiedDate(path);
+        }
+    }
+
+    private void UpdateLastModifiedDate(string filePath) {
+        var lastModified = Services.FileStorage.GetLastModified(filePath);
+        if (lastModified.HasValue) {
+            LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
+        }
+        else {
+            LastUpdated = null;
+        }
     }
 
     private IEnumerable<DayGroup>? GroupLessonsByDay(IReadOnlyList<Schedule.Lesson>? lessons, bool isCurrentWeek) {

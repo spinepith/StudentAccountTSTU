@@ -12,9 +12,18 @@
     <Grid>
 
         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-            <Grid ColumnDefinitions="*, *" RowDefinitions="*, 12*, *" ColumnSpacing="4" RowSpacing="4">
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, *, 12*, *" ColumnSpacing="4" RowSpacing="4">
 
-                <Border Grid.ColumnSpan="2" Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{CompiledBinding LastUpdated}"
+                           TextWrapping="Wrap"
+                           Foreground="#90FFFFFF"
+                           FontSize="10"
+                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                <Border Grid.ColumnSpan="2" Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
                     <Grid ColumnDefinitions="*, Auto, *">
 
                         <TextBlock Grid.Column="0"
@@ -39,7 +48,7 @@
                     </Grid>                
                 </Border>
 
-                <Border Grid.Column="0" Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                <Border Grid.Column="0" Grid.Row="2" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                     <ScrollViewer IsVisible="{CompiledBinding GrouppedExams, Converter={x:Static ObjectConverters.IsNotNull}}">
                         <StackPanel Spacing="4" VerticalAlignment="Center">
                                 
@@ -96,7 +105,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <Border Grid.Column="1" Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                <Border Grid.Column="1" Grid.Row="2" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                     <ScrollViewer IsVisible="{CompiledBinding GrouppedTests, Converter={x:Static ObjectConverters.IsNotNull}}">
                         <StackPanel Spacing="4" VerticalAlignment="Center">
                                 
@@ -153,7 +162,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <Button Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Stretch" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                <Button Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Stretch" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
 
             </Grid>
         </Border>

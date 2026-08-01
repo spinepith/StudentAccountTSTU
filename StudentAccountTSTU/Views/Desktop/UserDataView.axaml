@@ -9,11 +9,20 @@
              x:DataType="vm:UserDataViewModel">
 
     <Grid>
-        
+
         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-            <Grid ColumnDefinitions="*, 3*" ColumnSpacing="4">
-        
-                <Grid Grid.Column="0" RowDefinitions="18*, 10*, 4*" RowSpacing="4">
+            <Grid ColumnDefinitions="*, 3*" RowDefinitions="Auto, *" ColumnSpacing="4" RowSpacing="4">
+
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{CompiledBinding LastUpdated}"
+                           TextWrapping="Wrap"
+                           Foreground="#90FFFFFF"
+                           FontSize="10"
+                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" RowDefinitions="18*, 10*, 4*" RowSpacing="4">
                 
                     <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                         <Grid>
@@ -40,12 +49,12 @@
 
                             <TextBlock HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       TextAlignment="Center" 
+                                       TextAlignment="Center"
                                        Text="ОСНОВНАЯ ИНФОРМАЦИЯ"
                                        TextWrapping="Wrap"
                                        Foreground="#90FFFFFF"
                                        IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNull}}"/>
-                        
+
                             <ScrollViewer IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <StackPanel Spacing="4" VerticalAlignment="Center">
                                 
@@ -94,7 +103,7 @@
 
                 </Grid>
                 
-                <Grid Grid.Column="1" RowDefinitions="*, 7*" RowSpacing="4">
+                <Grid Grid.Column="1" Grid.Row="1" RowDefinitions="*, 7*" RowSpacing="4">
                 
                     <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                         <Grid>

@@ -36,6 +36,9 @@ internal partial class ReportCardViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
+    [ObservableProperty]
+    private string? _lastUpdated;
+
     public ReportCardViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
@@ -71,6 +74,7 @@ internal partial class ReportCardViewModel : ViewModelBase {
         if (reportCard is not null) {
             ReportCard = reportCard;
             await FileStorage.SaveAsync(ReportCard, Path.Combine("Data", "ReportCard.json"));
+            UpdateLastModifiedDate(Path.Combine("Data", "ReportCard.json"));
         }
     }
 
@@ -96,8 +100,20 @@ internal partial class ReportCardViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "ReportCard.json");
 
-        if (FileStorage.CheckExists(path))
+        if (FileStorage.CheckExists(path)) {
             ReportCard = await FileStorage.GetAsync<ReportCard>(path);
+            UpdateLastModifiedDate(path);
+        }
+    }
+
+    private void UpdateLastModifiedDate(string filePath) {
+        var lastModified = Services.FileStorage.GetLastModified(filePath);
+        if (lastModified.HasValue) {
+            LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
+        }
+        else {
+            LastUpdated = null;
+        }
     }
 
     private IEnumerable<SemesterGroup>? GroupExamsBySemester(IReadOnlyList<ReportCard.Exam>? semester) {

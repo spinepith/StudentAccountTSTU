@@ -31,6 +31,9 @@ internal partial class UserDataViewModel : ViewModelBase {
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
+    [ObservableProperty]
+    private string? _lastUpdated;
+
     public UserDataViewModel(Dictionary<string, Task?> activeLoadingTasks, IHttpService httpService, WebAccount.WebAccount webAccount) {
         _activeLoadingTasks = activeLoadingTasks;
         _httpService = httpService;
@@ -63,6 +66,8 @@ internal partial class UserDataViewModel : ViewModelBase {
 
             if (!string.IsNullOrEmpty(UserData.Image))
                 UserImage = await LoadImageAsync(Path.Combine("Data", "UserImage.jpg"), UserData.Image, true);
+
+            UpdateLastModifiedDate(Path.Combine("Data", "UserData.json"));
         }
     }
 
@@ -95,6 +100,17 @@ internal partial class UserDataViewModel : ViewModelBase {
             if (UserData is not null && !string.IsNullOrEmpty(UserData.Image)) {
                 UserImage = await LoadImageAsync(imagePath, UserData.Image, false);
             }
+            UpdateLastModifiedDate(path);
+        }
+    }
+
+    private void UpdateLastModifiedDate(string filePath) {
+        var lastModified = FileStorage.GetLastModified(filePath);
+        if (lastModified.HasValue) {
+            LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
+        }
+        else {
+            LastUpdated = null;
         }
     }
 

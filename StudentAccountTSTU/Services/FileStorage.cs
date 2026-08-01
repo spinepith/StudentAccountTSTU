@@ -65,4 +65,14 @@ internal static class FileStorage {
         if (Directory.Exists(path))
             Directory.Delete(path, true);
     }
+
+    public static DateTime? GetLastModified(string path) {
+        try {
+            var fullPath = Path.Combine(AppDirectory, path);
+            if (File.Exists(fullPath))
+                return File.GetLastWriteTime(fullPath);
+        }
+        catch { }
+        return null;
+    }
 }

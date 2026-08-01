@@ -11,9 +11,29 @@
     <Grid>
 
          <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-             <Grid RowDefinitions="*, Auto" RowSpacing="16">
+             <Grid RowDefinitions="Auto, *, Auto">
+                 <Grid.Styles>
+                     <Style Selector="Grid">
+                         <Setter Property="RowSpacing" Value="0"/>
+                     </Style>
+                     <Style Selector="Grid[Tag=True]">
+                         <Setter Property="RowSpacing" Value="4"/>
+                     </Style>
+                 </Grid.Styles>
+                 <Grid.Tag>
+                     <Binding Path="ShowLastUpdated"/>
+                 </Grid.Tag>
 
-                 <ScrollViewer Grid.Row="0" IsVisible="{CompiledBinding !SelectedLesson}">
+                 <TextBlock Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            Text="{CompiledBinding LastUpdated}"
+                            TextWrapping="Wrap"
+                            Foreground="#90FFFFFF"
+                            FontSize="10"
+                            IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                 <ScrollViewer Grid.Row="1" IsVisible="{CompiledBinding !SelectedLesson}">
                      <ItemsControl ItemsSource="{CompiledBinding Lessons}">
 
                         <ItemsControl.ItemTemplate>
@@ -37,7 +57,7 @@
                     </ItemsControl>
                  </ScrollViewer>
 
-                 <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" IsVisible="{CompiledBinding SelectedLesson}">
+                 <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" IsVisible="{CompiledBinding SelectedLesson}">
                      <Grid>
 
                          <TextBlock HorizontalAlignment="Center"
@@ -144,7 +164,7 @@
                      </Grid>
                  </Border>
 
-                 <StackPanel Grid.Row="1" Spacing="4">
+                 <StackPanel Grid.Row="2" Spacing="4" Margin="0,16,0,0">
                      <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
                      <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}" IsVisible="{CompiledBinding SelectedLesson}"/>
                  </StackPanel>

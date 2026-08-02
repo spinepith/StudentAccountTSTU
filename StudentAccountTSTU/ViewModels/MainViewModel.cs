@@ -25,6 +25,8 @@ internal partial class MainViewModel : ViewModelBase {
 
     private bool isAuthenticated = false;
 
+    internal Settings Settings => _settings;
+
     internal MainViewModel() {
         _settings = App.Services.GetRequiredService<Settings>();
         _studentProfileStore = App.Services.GetRequiredService<StudentProfileStore>();
@@ -83,7 +85,7 @@ internal partial class MainViewModel : ViewModelBase {
             0 => new HomeViewModel(),
             1 => new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount),
             2 => new LessonsViewModel(_activeLoadingTasks, _webAccount),
-            3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount),
+            3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings),
             4 => new ReportCardViewModel(_activeLoadingTasks, _webAccount),
             5 => new GroupsViewModel(_activeLoadingTasks, _webAccount),
             6 => new SettingsViewModel(this, _settings, _webAccount),

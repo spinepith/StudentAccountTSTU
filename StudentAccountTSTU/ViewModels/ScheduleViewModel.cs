@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using Avalonia.Media.Imaging;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -27,6 +29,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private Schedule? _schedule;
 
     [ObservableProperty]
+    private bool _customSchedule;
+
+    [ObservableProperty]
     private IEnumerable<DayGroup>? _groupedOddWeek;
 
     [ObservableProperty]
@@ -39,9 +44,23 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [ObservableProperty]
     private string? _lastUpdated;
 
-    internal ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount) {
+    [ObservableProperty]
+    private Bitmap? _firstTypeImage;
+
+    [ObservableProperty]
+    private Bitmap? _secondTypeFirstImage;
+
+    [ObservableProperty]
+    private Bitmap? _secondTypeSecondImage;
+
+    [ObservableProperty]
+    private bool _showCustomSchedule;
+
+    internal ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount, Settings settings) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
+
+        CustomSchedule = settings.CustomSchedule;
 
         _ = InitializeDataAsync();
     }
@@ -85,12 +104,37 @@ internal partial class ScheduleViewModel : ViewModelBase {
     }
 
     private async Task LoadScheduleAsync() {
-        var path = Path.Combine("Data", "Schedule.json");
+        var firstTypePath = Path.Combine("Data", "ScheduleFirstType.jpg");
+        var secondType1Path = Path.Combine("Data", "ScheduleSecondType1.jpg");
+        var secondType2Path = Path.Combine("Data", "ScheduleSecondType2.jpg");
 
-        if (!FileStorage.CheckExists(path))
-            await GetScheduleDataAsync();
-        else
-            await LoadFromCacheAsync();
+        var firstTypeExists = FileStorage.CheckExists(firstTypePath);
+        var secondType1Exists = FileStorage.CheckExists(secondType1Path);
+        var secondType2Exists = FileStorage.CheckExists(secondType2Path);
+
+        var hasSecondType = secondType1Exists || secondType2Exists;
+        var hasFirstType = firstTypeExists;
+
+        if (hasSecondType) {
+            ShowCustomSchedule = true;
+            if (secondType1Exists)
+                SecondTypeFirstImage = new Bitmap(FileStorage.GetFullPath(secondType1Path));
+            if (secondType2Exists)
+                SecondTypeSecondImage = new Bitmap(FileStorage.GetFullPath(secondType2Path));
+        }
+        else if (hasFirstType) {
+            ShowCustomSchedule = true;
+            FirstTypeImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
+        }
+        else {
+            ShowCustomSchedule = false;
+            var path = Path.Combine("Data", "Schedule.json");
+
+            if (!FileStorage.CheckExists(path))
+                await GetScheduleDataAsync();
+            else
+                await LoadFromCacheAsync();
+        }
     }
 
     private async Task LoadFromCacheAsync() {

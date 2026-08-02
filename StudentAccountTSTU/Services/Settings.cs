@@ -30,20 +30,20 @@ public partial class Settings : ObservableObject {
 
     /* Œ—ÕŒ¬Õ€≈ */
     [ObservableProperty]
-    private bool _saveData = true;                // [x]
-                                                  
-    [ObservableProperty]                          
-    private bool _customSchedule = false;         // [ ]
+    private bool _saveData = true;
 
-    /* »Õ“≈–‘≈…— */                               
-    [ObservableProperty]                          
-    private bool _useBlur = true;                 // [ ]
-                                                  
-    [ObservableProperty]                          
-    private string _accentColor = "#4DA1FF";      // [x]
-                                                  
-    [ObservableProperty]                          
-    private bool _customAvatar = false;           // [ ]
+    [ObservableProperty]
+    private bool _customSchedule = false;
+
+    /* »Õ“≈–‘≈…— */
+    [ObservableProperty]
+    private bool _useBlur = true;
+
+    [ObservableProperty]
+    private string _accentColor = "#4DA1FF";
+
+    [ObservableProperty]
+    private bool _customAvatar = false;
     #endregion
 
     public Settings() {

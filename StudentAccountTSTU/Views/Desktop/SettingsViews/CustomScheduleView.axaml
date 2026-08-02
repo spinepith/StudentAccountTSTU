@@ -8,7 +8,6 @@
              x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.CustomScheduleView"
              x:DataType="vm:CustomScheduleViewModel">
 
-    <!-- ЭТА СТРАНИЦА НАПИСАНА ПОЛНОСТЬЮ CLAUDE CODE -->
     <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
         <Grid RowDefinitions="*, 12*, Auto" RowSpacing="4">
                 
@@ -29,35 +28,34 @@
                         <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
 
                             <Grid Grid.Column="0" Background="Transparent">
-                                <Grid RowDefinitions="200, Auto">
-                                    <Panel Grid.Row="0" MaxHeight="256">
+                                
+                                <Grid RowDefinitions="*, Auto">
+
+                                    <Panel Grid.Row="0" Height="256">
                                         <Image Source="/Assets/Settings/schedule-first-type.png" Stretch="Uniform" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNull}}"/>
                                         <Image Source="{CompiledBinding FirstTypeImage}" Stretch="Uniform" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                                     </Panel>
-                                    <RadioButton Grid.Row="1" Content="ОДНО ИЗОБРАЖЕНИЕ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsFirstTypeSelected}" Margin="0,8,0,0"/>
+                                    <RadioButton Grid.Row="1" Content="ОДНО ИЗОБРАЖЕНИЕ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsFirstTypeSelected}"/>
+                                
                                 </Grid>
                                 <RadioButton GroupName="Schedule" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{CompiledBinding IsFirstTypeSelected}"/>
+                            
                             </Grid>
 
                             <Grid Grid.Column="1" Background="Transparent">
 
-                                <Grid RowDefinitions="200, Auto" IsVisible="{CompiledBinding ShowSecondTypeDefault}">
-                                    <Panel Grid.Row="0" MaxHeight="256">
-                                        <Image Source="/Assets/Settings/schedule-second-type.png" Stretch="Uniform"/>
-                                    </Panel>
-                                    <RadioButton Grid.Row="1" Content="ДВА ИЗОБРАЖЕНИЯ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsSecondTypeSelected}" Margin="0,8,0,0"/>
-                                </Grid>
+                                <Grid RowDefinitions="*, Auto">
+                                    
+                                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto, *" ColumnSpacing="4">
 
-                                <Grid RowDefinitions="200, Auto" IsVisible="{CompiledBinding !ShowSecondTypeDefault}">
-                                    <Grid Grid.Row="0" ColumnDefinitions="*, *" ColumnSpacing="4">
-                                        <Panel Grid.Column="0" MaxHeight="200">
-                                            <Image Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform"/>
-                                        </Panel>
-                                        <Panel Grid.Column="1" MaxHeight="200">
-                                            <Image Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform"/>
-                                        </Panel>
+                                        <Image Grid.ColumnSpan="3" MaxHeight="256" Source="/Assets/Settings/schedule-second-type.png" Stretch="Uniform" IsVisible="{CompiledBinding ShowSecondTypeDefault}"/>
+                                        <Image Grid.Column="0" MaxHeight="256" Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+                                        <Border Grid.Column="1" Width="2" VerticalAlignment="Stretch" CornerRadius="8" Background="#90FFFFFF" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+                                        <Image Grid.Column="2" MaxHeight="256" Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+
                                     </Grid>
-                                    <RadioButton Grid.Row="1" Content="ДВА ИЗОБРАЖЕНИЯ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsSecondTypeSelected}" Margin="0,8,0,0"/>
+                                    <RadioButton Grid.Row="1" Content="ДВА ИЗОБРАЖЕНИЯ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsSecondTypeSelected}"/>
+                                
                                 </Grid>
 
                                 <RadioButton GroupName="Schedule" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{CompiledBinding IsSecondTypeSelected}"/>

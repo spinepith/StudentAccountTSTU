@@ -101,7 +101,7 @@
     </Style>
 
     <Style Selector="Border.isHighlited TextBlock.Value">
-        <Setter Property="Foreground" Value="#FF4DA1FF"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
     </Style>
 
     <Style Selector="Border.Blurred">

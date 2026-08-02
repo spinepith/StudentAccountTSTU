@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;

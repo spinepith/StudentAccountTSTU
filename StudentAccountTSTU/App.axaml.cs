@@ -48,16 +48,19 @@ namespace StudentAccountTSTU {
 
             Services = services.BuildServiceProvider();
 
+            var mainViewModel = new MainViewModel();
+            DataContext = mainViewModel;
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.MainWindow = new MainWindow {
-                    DataContext = new MainViewModel()
+                    DataContext = mainViewModel
                 };
             }
             else if (ApplicationLifetime is IActivityApplicationLifetime singleViewFactoryApplicationLifetime) {
-                singleViewFactoryApplicationLifetime.MainViewFactory = () => new MainViewMobile { DataContext = new MainViewModel() };
+                singleViewFactoryApplicationLifetime.MainViewFactory = () => new MainViewMobile { DataContext = mainViewModel };
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
-                singleViewPlatform.MainView = new MainViewMobile { DataContext = new MainViewModel() };
+                singleViewPlatform.MainView = new MainViewMobile { DataContext = mainViewModel };
             }
 
             base.OnFrameworkInitializationCompleted();

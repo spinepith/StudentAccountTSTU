@@ -11,7 +11,7 @@
         TransparencyLevelHint="AcrylicBlur, Blur"
         Background="#40000000"
         TransparencyBackgroundFallback="White"
-        Icon="/Assets/icon.ico"
+        Icon="/Assets/icon-white.ico"
         Title="StudentAccountTSTU">
         <views:MainViewDesktop DataContext="{CompiledBinding}" />
 </Window>

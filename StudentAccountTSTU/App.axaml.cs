@@ -29,7 +29,7 @@ namespace StudentAccountTSTU {
             var services = new ServiceCollection();
 
             services.AddSingleton<WebAccount.Interfaces.IHttpService, HttpService>();
-            services.AddSingleton(Settings.Load());
+            services.AddSingleton<Settings>(provider => Settings.Load());
 
             services.AddSingleton<WebAccount.WebAccount>(
                 provider => {

@@ -49,7 +49,6 @@ internal partial class LoginViewModel : ViewModelBase {
             _settings.DeviceId     = null;
             _settings.UserLogin    = null;
             _settings.UserPassword = null;
-            _settings.Save();
         }
     }
 
@@ -69,7 +68,6 @@ internal partial class LoginViewModel : ViewModelBase {
             _settings.DeviceId     = Guid.NewGuid().ToString();
             _settings.UserLogin    = CryptoService.Encrypt(Username, _settings.DeviceId);
             _settings.UserPassword = CryptoService.Encrypt(Password, _settings.DeviceId);
-            _settings.Save();
         }
         else {
             AuthMessage = result.message;

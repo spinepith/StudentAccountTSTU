@@ -23,9 +23,15 @@ namespace StudentAccountTSTU {
 
             string viewTypeName;
             if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
-                viewTypeName = viewModelTypeName.Replace("ViewModels", "Views.Mobile", StringComparison.Ordinal).Replace("ViewModel", "View", StringComparison.Ordinal) + "Mobile";
+                viewTypeName = viewModelTypeName
+                    .Replace("SettingsViewModels", "SettingsViews", StringComparison.Ordinal)
+                    .Replace("ViewModels", "Views.Mobile", StringComparison.Ordinal)
+                    .Replace("ViewModel", "View", StringComparison.Ordinal) + "Mobile";
             else
-                viewTypeName = viewModelTypeName.Replace("ViewModels", "Views.Desktop", StringComparison.Ordinal).Replace("ViewModel", "View", StringComparison.Ordinal);
+                viewTypeName = viewModelTypeName
+                    .Replace("SettingsViewModels", "SettingsViews", StringComparison.Ordinal)
+                    .Replace("ViewModels", "Views.Desktop", StringComparison.Ordinal)
+                    .Replace("ViewModel", "View", StringComparison.Ordinal);
 
             var viewType = viewModelType.Assembly.GetType(viewTypeName);
 

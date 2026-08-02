@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace StudentAccountTSTU.Services;
 
@@ -28,8 +30,12 @@ internal static class FileStorage {
     }
 
     public static async Task SaveAsync<T>(T data, string path) {
+        var settings = App.Services.GetRequiredService<Settings>();
+        if (!settings.SaveData)
+            return;
+
         var fullPath = Path.Combine(AppDirectory, path);
-        
+
         var directory = Path.GetDirectoryName(fullPath);
         if (directory is not null)
             Directory.CreateDirectory(directory);
@@ -39,6 +45,10 @@ internal static class FileStorage {
     }
 
     public static async Task SaveStreamAsync(Stream stream, string path) {
+        var settings = App.Services.GetRequiredService<Settings>();
+        if (!settings.SaveData)
+            return;
+
         var fullPath = Path.Combine(AppDirectory, path);
 
         var directory = Path.GetDirectoryName(fullPath);

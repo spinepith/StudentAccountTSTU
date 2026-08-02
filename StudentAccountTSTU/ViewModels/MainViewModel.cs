@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.ViewModels.SettingsViewModels;
 
 using WebAccount.Interfaces;
 
@@ -30,8 +31,6 @@ internal partial class MainViewModel : ViewModelBase {
 
         _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
-
-        _settings.Save();
 
         currentPage = new LoginViewModel(this, _settings, _webAccount);
     }

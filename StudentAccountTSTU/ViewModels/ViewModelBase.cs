@@ -12,7 +12,7 @@ namespace StudentAccountTSTU.ViewModels {
                 await loadFromCache();
                 return;
             }
-           
+
             if (activeLoadingTasks.TryGetValue(taskKey, out var existingTask) && existingTask is not null && !existingTask.IsCompleted) {
                 await existingTask;
                 await loadFromCache();

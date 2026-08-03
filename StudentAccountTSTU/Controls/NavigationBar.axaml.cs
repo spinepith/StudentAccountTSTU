@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 
 using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -18,6 +20,10 @@ public partial class NavigationBar : UserControl {
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<NavigationBar, int>(nameof(SelectedIndex), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
     private readonly TranslateTransform _selectionTransform = new(0, 0);
+    private bool _isDragging = false;
+    private bool _hasMoved = false;
+    private Point _dragStartPoint;
+    private Transitions? _animationTransitions;
     #endregion
 
     public Orientation Orientation {
@@ -35,6 +41,23 @@ public partial class NavigationBar : UserControl {
 
         SelectionGrid.RenderTransform = _selectionTransform;
 
+        _animationTransitions = new Transitions
+        {
+            new DoubleTransition
+            {
+                Property = TranslateTransform.XProperty,
+                Duration = TimeSpan.FromMilliseconds(150),
+                Easing = new CubicEaseOut()
+            },
+            new DoubleTransition
+            {
+                Property = TranslateTransform.YProperty,
+                Duration = TimeSpan.FromMilliseconds(150),
+                Easing = new CubicEaseOut()
+            }
+        };
+        _selectionTransform.Transitions = _animationTransitions;
+
         Loaded += (sender, e) => {
             UpdateElementsSize();
             UpdateElementsPosition();
@@ -46,12 +69,15 @@ public partial class NavigationBar : UserControl {
         };
 
         ButtonsGrid.AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+        ButtonsGrid.AddHandler(PointerMovedEvent, OnPointerMoved, RoutingStrategies.Tunnel);
+        ButtonsGrid.AddHandler(PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel);
 
         SelectedIndexProperty.Changed.AddClassHandler<NavigationBar>((control, e) => control.OnSelectedIndexChanged(e));
     }
 
     private void OnSelectedIndexChanged(AvaloniaPropertyChangedEventArgs e) {
         var newIndex = (int)e.NewValue!;
+        System.Diagnostics.Debug.WriteLine($"OnSelectedIndexChanged: NewIndex={newIndex}");
         UpdateUIForIndex(newIndex);
     }
 
@@ -89,20 +115,107 @@ public partial class NavigationBar : UserControl {
         if (count is 0)
             return;
 
-        var point = e.GetPosition(ButtonsGrid);
+        _isDragging = true;
+        _hasMoved = false;
+        _dragStartPoint = e.GetPosition(ButtonsGrid);
 
         var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
         var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
 
-        var targetIndex = 0;
-        if (Orientation is Orientation.Horizontal && cellWidth > 0)
-            targetIndex = (int)(point.X / cellWidth);
-        else if (Orientation is Orientation.Vertical && cellHeight > 0)
-            targetIndex = (int)(point.Y / cellHeight);
+        if (Orientation is Orientation.Horizontal) {
+            var newX = Math.Clamp(_dragStartPoint.X - SelectionGrid.Width / 2, 0, ButtonsGrid.Bounds.Width - SelectionGrid.Width);
+            _selectionTransform.X = newX;
+        }
+        else {
+            var newY = Math.Clamp(_dragStartPoint.Y - SelectionGrid.Height / 2, 0, ButtonsGrid.Bounds.Height - SelectionGrid.Height);
+            _selectionTransform.Y = newY;
+        }
+
+        e.Handled = true;
+    }
+
+    private void OnPointerMoved(object? sender, PointerEventArgs e) {
+        if (!_isDragging)
+            return;
+
+        var count = ButtonsGrid.Children.Count;
+        if (count is 0)
+            return;
+
+        var point = e.GetPosition(ButtonsGrid);
+
+        if (!_hasMoved) {
+            _hasMoved = true;
+        }
+
+        var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
+        var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
+
+        if (Orientation is Orientation.Horizontal) {
+            var newX = Math.Clamp(point.X - SelectionGrid.Width / 2, 0, ButtonsGrid.Bounds.Width - SelectionGrid.Width);
+            _selectionTransform.X = newX;
+        }
+        else {
+            var newY = Math.Clamp(point.Y - SelectionGrid.Height / 2, 0, ButtonsGrid.Bounds.Height - SelectionGrid.Height);
+            _selectionTransform.Y = newY;
+        }
+    }
+
+    private void OnPointerReleased(object? sender, PointerReleasedEventArgs e) {
+        if (!_isDragging)
+            return;
+
+        _isDragging = false;
+        var wasMoved = _hasMoved;
+        _hasMoved = false;
+
+        var count = ButtonsGrid.Children.Count;
+        if (count is 0)
+            return;
+
+        var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
+        var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
+
+        int targetIndex;
+
+        if (wasMoved) {
+            if (Orientation is Orientation.Horizontal && cellWidth > 0) {
+                var selectorCenterX = _selectionTransform.X + SelectionGrid.Width / 2;
+                targetIndex = (int)(selectorCenterX / cellWidth);
+            }
+            else if (Orientation is Orientation.Vertical && cellHeight > 0) {
+                var selectorCenterY = _selectionTransform.Y + SelectionGrid.Height / 2;
+                targetIndex = (int)(selectorCenterY / cellHeight);
+
+                System.Diagnostics.Debug.WriteLine($"DRAG: CenterY={selectorCenterY}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
+            }
+            else {
+                targetIndex = 0;
+            }
+        }
+        else {
+            var point = e.GetPosition(ButtonsGrid);
+            if (Orientation is Orientation.Horizontal && cellWidth > 0) {
+                targetIndex = (int)(point.X / cellWidth);
+            }
+            else if (Orientation is Orientation.Vertical && cellHeight > 0) {
+                targetIndex = (int)(point.Y / cellHeight);
+
+                System.Diagnostics.Debug.WriteLine($"CLICK: PointY={point.Y}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
+            }
+            else {
+                targetIndex = 0;
+            }
+        }
 
         targetIndex = Math.Clamp(targetIndex, 0, count - 1);
 
-        SelectedIndex = targetIndex;
+        if (targetIndex == SelectedIndex) {
+            SnapToTarget(targetIndex, cellWidth, cellHeight);
+        }
+        else {
+            SelectedIndex = targetIndex;
+        }
     }
 
     private void UpdateElementsSize() {
@@ -132,7 +245,7 @@ public partial class NavigationBar : UserControl {
 
     private void UpdateElementsPosition() {
         var checkedButton = ButtonsGrid.Children.OfType<RadioButton>().FirstOrDefault(b => b.IsChecked is true);
-        
+
         if (checkedButton is null)
             return;
 
@@ -149,6 +262,8 @@ public partial class NavigationBar : UserControl {
     private void SnapToTarget(int index, double cellWidth, double cellHeight) {
         double targetX = Orientation is Orientation.Horizontal ? index * cellWidth : 0;
         double targetY = Orientation is Orientation.Vertical ? index * cellHeight : 0;
+
+        System.Diagnostics.Debug.WriteLine($"SnapToTarget: Orientation={Orientation}, Index={index}, CurrentY={_selectionTransform.Y}, TargetY={targetY}");
 
         _selectionTransform.X = targetX;
         _selectionTransform.Y = targetY;

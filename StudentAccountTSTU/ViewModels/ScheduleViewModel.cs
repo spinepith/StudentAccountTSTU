@@ -38,6 +38,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private IEnumerable<DayGroup>? _groupedEvenWeek;
 
     [ObservableProperty]
+    private IEnumerable<DayGroup>? _currentWeekSchedule;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
@@ -67,12 +70,15 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     partial void OnScheduleChanged(Schedule? value) {
         if (value is not null) {
-            GroupedOddWeek = GroupLessonsByDay(value.OddWeek, value.CurrentWeek!.Contains("ЧЕТНАЯ"));
-            GroupedEvenWeek = GroupLessonsByDay(value.EvenWeek, value.CurrentWeek!.Contains("НЕЧЕТНАЯ"));
+            var isOddWeek = value.CurrentWeek!.Split()[^1].Trim() is "НЕЧЕТНАЯ";
+            GroupedOddWeek = GroupLessonsByDay(value.OddWeek, isOddWeek);
+            GroupedEvenWeek = GroupLessonsByDay(value.EvenWeek, !isOddWeek);
+            CurrentWeekSchedule = isOddWeek ? GroupedOddWeek : GroupedEvenWeek;
         }
         else {
             GroupedOddWeek = null;
             GroupedEvenWeek = null;
+            CurrentWeekSchedule = null;
         }
     }
 

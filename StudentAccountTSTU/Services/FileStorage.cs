@@ -12,7 +12,7 @@ namespace StudentAccountTSTU.Services;
 internal static class FileStorage {
     private static readonly string AppDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        Assembly.GetEntryAssembly()!.GetName().Name!
+        "StudentAccountTSTU"
     );
 
     public static string GetFullPath(string path) => Path.Combine(AppDirectory, path);

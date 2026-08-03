@@ -8,7 +8,8 @@ internal static class SettingsPages {
     public const string CustomAvatar     = "АВАТАРКА";
 
     /* НЕ ИМЕЮТ ОТДЕЛЬНОЙ СТРАНИЦЫ */
-    public const string SaveData = "СОХРАНЕНИЕ ДАННЫХ";
-    public const string UseBlur  = "ПРОЗРАЧНОЕ ОКНО";
-    public const string Logout   = "ВЫЙТИ";
+    public const string SaveData   = "СОХРАНЕНИЕ ДАННЫХ";
+    public const string RemoveData = "УДАЛИТЬ СОХРАНЕННЫЕ ДАННЫЕ";
+    public const string UseBlur    = "ПРОЗРАЧНОЕ ОКНО";
+    public const string Logout     = "ВЫЙТИ";
 }

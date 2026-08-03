@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
              x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
@@ -22,6 +22,17 @@
                                 <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.SaveData}" OffContent="" OnContent="" IsHitTestVisible="False"/>
                             </Grid>
                         </Button>
+
+                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                            <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.RemoveData}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="*" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+
+                        <Button MinHeight="32" HorizontalContentAlignment="Center" Content="ПОДТВЕРДИТЬ" Padding="16, 0" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
+
+                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                         <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
                             <Grid ColumnDefinitions="*, *">

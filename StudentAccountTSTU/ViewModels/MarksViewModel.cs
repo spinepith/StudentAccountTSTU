@@ -22,6 +22,9 @@ internal partial class StudentMarkWrapper : ObservableObject {
 
     [ObservableProperty]
     private bool _isCurrentUser;
+
+    [ObservableProperty]
+    private string? _currentMark;
 }
 
 internal partial class LessonMarkWrapper : ObservableObject {
@@ -120,7 +123,8 @@ internal partial class MarksViewModel : ViewModelBase {
                     student => new StudentMarkWrapper {
                         Name = student.Name,
                         Marks = student.Marks,
-                        IsCurrentUser = string.Equals(student.Name, CurrentUserName, System.StringComparison.OrdinalIgnoreCase)
+                        IsCurrentUser = string.Equals(student.Name, CurrentUserName, System.StringComparison.OrdinalIgnoreCase),
+                        CurrentMark = student.Marks is not null && student.Marks.Count >= 3 ? student.Marks[student.Marks.Count - 3] : null
                     }
                 ).ToList()
             };

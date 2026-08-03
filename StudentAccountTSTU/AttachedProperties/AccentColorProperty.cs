@@ -11,7 +11,13 @@ public class AccentColorProperty : AvaloniaObject {
             "AccentColorAttached",
             defaultValue: "#4DA1FF",
             inherits: false,
-            defaultBindingMode: BindingMode.OneWay);
+            defaultBindingMode: BindingMode.OneWay,
+            coerce: (obj, value) => {
+                if (obj is Window window) {
+                    ApplyAccentColor((string)value);
+                }
+                return value;
+            });
 
     static AccentColorProperty() {
         AccentColorAttachedProperty.Changed.AddClassHandler<Window>(OnAccentColorChanged);
@@ -26,8 +32,10 @@ public class AccentColorProperty : AvaloniaObject {
     }
 
     private static void OnAccentColorChanged(Window window, AvaloniaPropertyChangedEventArgs e) {
-        var colorString = (string)e.NewValue!;
+        ApplyAccentColor((string)e.NewValue!);
+    }
 
+    private static void ApplyAccentColor(string colorString) {
         try {
             var color = Color.Parse(colorString);
 

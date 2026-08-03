@@ -11,7 +11,7 @@ namespace StudentAccountTSTU.Services;
 public partial class Settings : ObservableObject {
     private static readonly string Path = System.IO.Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        Assembly.GetEntryAssembly()!.GetName().Name!,
+        "StudentAccountTSTU",
         "Settings.json"
     );
 
@@ -28,14 +28,14 @@ public partial class Settings : ObservableObject {
     [ObservableProperty]
     private string? _userPassword = null;
 
-    /* Œ—ÕŒ¬Õ€≈ */
+    /* –û–°–ù–û–í–ù–´–ï */
     [ObservableProperty]
     private bool _saveData = true;
 
     [ObservableProperty]
     private bool _customSchedule = false;
 
-    /* »Õ“≈–‘≈…— */
+    /* –ò–ù–¢–ï–†–§–ï–ô–° */
     [ObservableProperty]
     private bool _useBlur = true;
 

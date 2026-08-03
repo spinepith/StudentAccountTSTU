@@ -32,7 +32,6 @@ internal class StudentProfileStore {
             //    break;
 
             case nameof(Pages.Achievements):
-                System.Diagnostics.Debug.WriteLine(page);
                 path = Path.Combine("Data", "Groups.json");
                 if (!FileStorage.CheckExists(path)) {
                     Groups = await webAccount.GetGroupsAsync(page);

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
 using Microsoft.Extensions.DependencyInjection;
 
-using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.ViewModels.SettingsViewModels;
 
 using WebAccount.Interfaces;
@@ -14,59 +17,40 @@ namespace StudentAccountTSTU.ViewModels;
 
 internal partial class MainViewModel : ViewModelBase {
     private readonly Settings _settings;
-    private readonly StudentProfileStore _studentProfileStore;
-    private readonly Dictionary<string, Task?> _activeLoadingTasks = new();
 
+    private readonly Dictionary<string, Task?> _activeLoadingTasks = new();
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
 
-    private ViewModelBase currentPage;
-    private int currentPageIndex;
 
-    private bool isAuthenticated = false;
+    [ObservableProperty]
+    private ViewModelBase _currentPage;
 
-    internal Settings Settings => _settings;
+    [ObservableProperty]
+    private bool _isAuthenticated;
+
+    [ObservableProperty]
+    private int _currentPageIndex;
+
+    public Settings Settings => _settings;
 
     internal MainViewModel() {
         _settings = App.Services.GetRequiredService<Settings>();
-        _studentProfileStore = App.Services.GetRequiredService<StudentProfileStore>();
 
         _httpService = App.Services.GetRequiredService<IHttpService>();
         _webAccount = App.Services.GetRequiredService<WebAccount.WebAccount>();
+        App.Services.GetRequiredService<StudentProfileStore>();
 
-        currentPage = new LoginViewModel(this, _settings, _webAccount);
+        CurrentPage = new LoginViewModel(this, _settings, _webAccount);
     }
 
-    internal ViewModelBase CurrentPage {
-        get => currentPage;
-        set {
-            currentPage = value;
-            OnPropertyChanged();
-        }
-    }
-
-    internal int CurrentPageIndex {
-        get => currentPageIndex;
-        set {
-            if (currentPageIndex != value) {
-                currentPageIndex = value;
-                OnPropertyChanged();
-                NavigateToPage(value);
-            }
-        }
-    }
-
-    internal bool IsAuthenticated {
-        get => isAuthenticated;
-        set {
-            isAuthenticated = value;
-            OnPropertyChanged();
-        }
+    partial void OnCurrentPageIndexChanged(int value) {
+        NavigateToPage(value);
     }
 
     internal void Login() {
         IsAuthenticated = true;
-        CurrentPage = new HomeViewModel();
+        CurrentPageIndex = -1;
         CurrentPageIndex = 0;
     }
 
@@ -82,7 +66,7 @@ internal partial class MainViewModel : ViewModelBase {
             return;
 
         CurrentPage = index switch {
-            0 => new HomeViewModel(),
+            0 => new HomeViewModel(_activeLoadingTasks, _httpService, _webAccount, _settings),
             1 => new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount),
             2 => new LessonsViewModel(_activeLoadingTasks, _webAccount),
             3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings),

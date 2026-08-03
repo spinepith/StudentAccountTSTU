@@ -18,6 +18,9 @@ internal partial class SettingsViewModel : ViewModelBase {
     [ObservableProperty]
     private Settings _settings;
 
+    [ObservableProperty]
+    private bool _removeDataButtonVisible = false;
+
     internal SettingsViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
         _mainViewModel = mainViewModel;
         _webAccount = webAccount;
@@ -43,6 +46,17 @@ internal partial class SettingsViewModel : ViewModelBase {
     private void ToggleUseBlur() => Settings.UseBlur = !Settings.UseBlur;
 
     internal void BackToAllSettings() => CurrentPage = null;
+
+    [RelayCommand]
+    private void ShowRemoveSavedDataButton() {
+        RemoveDataButtonVisible = !RemoveDataButtonVisible;
+    }
+
+    [RelayCommand]
+    private void RemoveSavedData() {
+        FileStorage.RemoveDirectory("Data");
+        RemoveDataButtonVisible = false;
+    }
 
     [RelayCommand]
     private async Task Logout() {

@@ -429,3 +429,8 @@ FodyWeavers.xsd
 *.msp
 
 /StudentAccountTSTU.Desktop/Properties/
+
+.DS_Store
+
+# VS Code
+.vscode/

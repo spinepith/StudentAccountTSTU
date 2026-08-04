@@ -37,7 +37,7 @@ public partial class Settings : ObservableObject {
 
     /* ИНТЕРФЕЙС */
     [ObservableProperty]
-    private bool _useBlur = true;
+    private bool _useBlur = OperatingSystem.IsWindows();
 
     [ObservableProperty]
     private string _accentColor = "#4DA1FF";

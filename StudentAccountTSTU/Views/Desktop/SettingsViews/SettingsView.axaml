@@ -51,7 +51,7 @@
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                         <!-- ИНТЕРФЕЙС -->
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleUseBlurCommand}">
+                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleUseBlurCommand}" IsEnabled="{OnPlatform Default=False, Windows=True}">
                             <Grid ColumnDefinitions="*, Auto">
                                 <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.UseBlur}" VerticalAlignment="Center"/>
                                 <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.UseBlur}" OffContent="" OnContent="" IsHitTestVisible="False"/>

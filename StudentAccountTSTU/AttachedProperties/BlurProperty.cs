@@ -1,3 +1,5 @@
+using System;
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -39,7 +41,7 @@ public class BlurProperty : AvaloniaObject {
     }
 
     private static void ApplyBlur(Window window, bool useBlur) {
-        if (useBlur) {
+        if (useBlur && OperatingSystem.IsWindows()) {
             window.TransparencyLevelHint = new[] {
                 WindowTransparencyLevel.AcrylicBlur,
                 WindowTransparencyLevel.Blur

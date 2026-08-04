@@ -42,9 +42,11 @@ internal partial class HomeViewModel : ViewModelBase {
     private Bitmap? _displayImage;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SelectGroupCommand))]
     private RatingViewModel? _ratingViewModel;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SelectGroupCommand))]
     private string? _selectedGroupName;
 
     [ObservableProperty]
@@ -72,6 +74,7 @@ internal partial class HomeViewModel : ViewModelBase {
         MarksViewModel = new MarksViewModel(_activeLoadingTasks, _webAccount, "Все", null!);
 
         _ = MonitorImageLoading();
+        CheckForActiveRatingTask();
 
         if (!hasData) {
             while (true) {
@@ -91,6 +94,18 @@ internal partial class HomeViewModel : ViewModelBase {
         }
 
         IsLoading = false;
+    }
+
+    private void CheckForActiveRatingTask() {
+        foreach (var kvp in _activeLoadingTasks) {
+            if (kvp.Value != null && !kvp.Value.IsCompleted && kvp.Key.StartsWith("Rating_") && kvp.Key.EndsWith("_Init")) {
+                var groupName = kvp.Key.Substring(7, kvp.Key.Length - 12);
+
+                SelectedGroupName = groupName;
+                RatingViewModel = new RatingViewModel(_activeLoadingTasks, _webAccount, groupName, null!);
+                break;
+            }
+        }
     }
 
     private async Task MonitorImageLoading() {
@@ -141,9 +156,20 @@ internal partial class HomeViewModel : ViewModelBase {
         return false;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSelectGroup))]
     private void SelectGroup(string groupName) {
         SelectedGroupName = groupName;
         RatingViewModel = new RatingViewModel(_activeLoadingTasks, _webAccount, groupName, null!);
+    }
+
+    private bool CanSelectGroup(string groupName) {
+        if (SelectedGroupName is not null)
+            return false;
+
+        foreach (var kvp in _activeLoadingTasks)
+            if (kvp.Value is not null && !kvp.Value.IsCompleted && kvp.Key.StartsWith("Rating_"))
+                return false;
+
+        return true;
     }
 }

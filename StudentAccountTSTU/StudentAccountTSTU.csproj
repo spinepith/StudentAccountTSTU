@@ -6,6 +6,11 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  	<DebugType>none</DebugType>
+  	<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>

@@ -11,6 +11,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  	<DebugType>none</DebugType>
+  	<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="AvaloniaUI.DiagnosticsSupport" >

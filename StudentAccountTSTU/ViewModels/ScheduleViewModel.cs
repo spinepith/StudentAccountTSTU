@@ -134,13 +134,15 @@ internal partial class ScheduleViewModel : ViewModelBase {
         }
         else {
             ShowCustomSchedule = false;
-            var path = Path.Combine("Data", "Schedule.json");
-
-            if (!FileStorage.CheckExists(path))
-                await GetScheduleDataAsync();
-            else
-                await LoadFromCacheAsync();
         }
+
+        // Всегда загружаем обычное расписание
+        var path = Path.Combine("Data", "Schedule.json");
+
+        if (!FileStorage.CheckExists(path))
+            await GetScheduleDataAsync();
+        else
+            await LoadFromCacheAsync();
     }
 
     private async Task LoadFromCacheAsync() {

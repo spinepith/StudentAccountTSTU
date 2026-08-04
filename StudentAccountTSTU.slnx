@@ -3,6 +3,10 @@
     <File Path="libs/StudentAccountTSTU.Crypto.dll" />
     <File Path="libs/WebAccount.dll" />
   </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+  </Folder>
   <Project Path="StudentAccountTSTU.Android/StudentAccountTSTU.Android.csproj">
     <Deploy />
   </Project>

@@ -107,7 +107,6 @@
                                                     <Button Content="{CompiledBinding .}"
                                                             Command="{Binding $parent[UserControl].DataContext.SelectGroupCommand}"
                                                             CommandParameter="{CompiledBinding}"
-                                                            IsEnabled="{Binding $parent[UserControl].DataContext.SelectedGroupName, Converter={x:Static ObjectConverters.IsNull}}"
                                                             HorizontalAlignment="Center"/>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>

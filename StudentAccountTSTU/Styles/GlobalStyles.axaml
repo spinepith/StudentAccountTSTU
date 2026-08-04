@@ -2,34 +2,72 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Design.PreviewWith>
     <Border Padding="20">
-        <StackPanel>
+        <StackPanel Spacing="4">
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Label Content="label"/>
+            </Border>
             
-            <TextBox Text="textbox"/>
-            <Button Content="button"/>
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <StackPanel Spacing="4" Margin="3">
 
-            <StackPanel Margin="20">
-
-                <Border Classes="TableRow">
-                    <Grid ColumnDefinitions="*, *">
-                        <TextBlock Grid.Column="0" Classes="Label" Text="Label1"/>
-                        <TextBlock Grid.Column="1" Classes="Value" Text="Value1"/>
-                    </Grid>
-                </Border>
-
-                <Border Classes="TableRow">
-                    <Grid ColumnDefinitions="*, *">
-                        <TextBlock Grid.Column="0" Classes="Label" Text="Label2"/>
-                        <TextBlock Grid.Column="1" Classes="Value" Text="Value2"/>
-                    </Grid>
-                </Border>
+                    <Border BorderThickness="2" BorderBrush="Coral">
+                        <TextBox PlaceholderText="textbox"/>
+                    </Border>
                 
-            </StackPanel>
+                    <Border BorderThickness="2" BorderBrush="Coral">
+                        <TextBox Text="textbox"/>
+                    </Border>
+                    
+                </StackPanel>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Button Content="button"/>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <StackPanel Spacing="4" Margin="4">
+
+                    <Border Classes="TableLabel" BorderThickness="2" BorderBrush="Coral">
+                        <Grid ColumnDefinitions="*, *">
+                            <TextBlock Grid.Column="0" Classes="Label" Text="Label1"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="Value1"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="SpacedBlock" BorderThickness="2" BorderBrush="Coral"/>
+
+                    <Border Classes="TableValue" BorderThickness="2" BorderBrush="Coral">
+                        <Grid ColumnDefinitions="*, *">
+                            <TextBlock Grid.Column="0" Classes="Label" Text="Label2"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="Value2"/>
+                        </Grid>
+                    </Border>
+                
+                </StackPanel>
+            </Border>
+
+            <Border Classes="isHighlited" BorderThickness="2" BorderBrush="CornflowerBlue">
+                <TextBlock Classes="Value" Text="Текст"/>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Border Classes="Blurred">
+                    <Label Content="label"/>
+                </Border>
+            </Border>
 
         </StackPanel>
     </Border>
   </Design.PreviewWith>
 
+    <Style Selector="Label">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
     <Style Selector="TextBox">
+      <Setter Property="PlaceholderForeground" Value="White"/>
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="CaretBrush" Value="White"/>
       <Setter Property="Background" Value="Transparent"/>
@@ -42,9 +80,17 @@
       <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
 
+    <Style Selector="TextBox:pointerover">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
     <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
       <Setter Property="Background" Value="#08FFFFFF"/>
       <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style Selector="TextBox:focus">
+      <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style Selector="Button">
@@ -60,15 +106,21 @@
     </Style>
 
     <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
       <Setter Property="Background" Value="#18FFFFFF"/>
     </Style>
 
     <Style Selector="Button:pressed /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
       <Setter Property="Background" Value="#08FFFFFF"/>
     </Style>
 
     <Style Selector="Button:pressed">
       <Setter Property="RenderTransform" Value="scale(1)"/>
+    </Style>
+
+    <Style Selector="Button:disabled /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White" />
     </Style>
 
     <Style Selector="Border.TableLabel">

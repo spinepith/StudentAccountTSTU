@@ -12,7 +12,7 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Grid>
+    <Grid Background="#40000000">
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
 
         <Grid ColumnDefinitions="64, *" ColumnSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">

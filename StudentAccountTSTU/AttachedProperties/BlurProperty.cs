@@ -40,8 +40,11 @@ public class BlurProperty : AvaloniaObject {
 
     private static void ApplyBlur(Window window, bool useBlur) {
         if (useBlur) {
-            window.TransparencyLevelHint = new[] { WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur };
-            window.Background = new SolidColorBrush(Color.Parse("#40000000"));
+            window.TransparencyLevelHint = new[] {
+                WindowTransparencyLevel.AcrylicBlur,
+                WindowTransparencyLevel.Blur
+            };
+            window.Background = Brushes.Transparent;
         }
         else {
             window.TransparencyLevelHint = new[] { WindowTransparencyLevel.None };

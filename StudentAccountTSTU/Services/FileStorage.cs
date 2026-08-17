@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -10,10 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 namespace StudentAccountTSTU.Services;
 
 internal static class FileStorage {
-    private static readonly string AppDirectory = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "StudentAccountTSTU"
-    );
+    private static readonly string AppDirectory =
+        OperatingSystem.IsAndroid() || OperatingSystem.IsIOS()
+        ? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StudentAccountTSTU");
 
     public static string GetFullPath(string path) => Path.Combine(AppDirectory, path);
     public static bool CheckExists(string path) => File.Exists(Path.Combine(AppDirectory, path));

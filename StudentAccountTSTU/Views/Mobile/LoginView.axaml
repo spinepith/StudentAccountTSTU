@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Mobile.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch" RowDefinitions="*, *" RowSpacing="4" MinWidth="200">
+
+        <Svg Path="/Assets/logo-white.svg" VerticalAlignment="Top"/>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="4" MaxWidth="300" VerticalAlignment="Top">
+            
+            <ScrollViewer Grid.Row="0">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{CompiledBinding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
+            </ScrollViewer>
+            
+            <TextBox Grid.Row="1" Text="{CompiledBinding Username}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ЛОГИН"/>
+            <TextBox Grid.Row="2" Text="{CompiledBinding Password}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ПАРОЛЬ" PasswordChar="*"/>
+            <Button Grid.Row="3" Content="ВОЙТИ" Command="{CompiledBinding LoginCommand}"/>
+        
+        </Grid>
+
+    </Grid>  
+
+</UserControl>

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -23,6 +23,17 @@ internal partial class UserDataViewModel : ViewModelBase {
 
     [ObservableProperty]
     private UserData? _userData;
+
+    [ObservableProperty]
+    private string _greeting = "Здравствуйте!";
+
+    partial void OnUserDataChanged(UserData? value) {
+        if (value?.FioGroup is string fio) {
+            var parts = fio.Split('/', System.StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 1)
+                Greeting = parts[0].Trim();
+        }
+    }
 
     [ObservableProperty]
     private Bitmap? _userImage;

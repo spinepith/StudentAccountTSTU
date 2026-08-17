@@ -2,6 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             x:Class="StudentAccountTSTU.Views.Mobile.MainViewMobile">
-  Welcome to Avalonia!
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             xmlns:local="using:StudentAccountTSTU"
+             xmlns:ap="using:StudentAccountTSTU.AttachedProperties"
+             x:Class="StudentAccountTSTU.Views.Mobile.MainViewMobile"
+             x:DataType="vm:MainViewModel"
+             ap:AccentColorProperty.AccentColorAttached="{Binding Settings.AccentColor}">
+
+    <Grid Background="#FF282C34">
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
+
+        <Grid RowDefinitions="*, 64" RowSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">
+            <ContentControl Grid.Row="0" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
+            <local:NavigationBar Grid.Row="1" Orientation="Horizontal" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=TwoWay}"/>
+        </Grid>
+    </Grid>
+
 </UserControl>

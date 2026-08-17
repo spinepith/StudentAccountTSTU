@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -71,6 +71,16 @@ internal partial class HomeViewModel : ViewModelBase {
         ReportCardViewModel = new ReportCardViewModel(_activeLoadingTasks, _webAccount);
         LessonsViewModel = new LessonsViewModel(_activeLoadingTasks, _webAccount);
         GroupsViewModel = new GroupsViewModel(_activeLoadingTasks, _webAccount);
+        GroupsViewModel.PropertyChanged += (s, e) => {
+            if (e.PropertyName is nameof(GroupsViewModel.Groups)) {
+                if (GroupsViewModel.Groups?.Count is 1 && SelectedGroupName is null) {
+                    SelectGroup(GroupsViewModel.Groups[0]);
+                }
+            }
+        };
+        if (GroupsViewModel.Groups?.Count is 1 && SelectedGroupName is null)
+            SelectGroup(GroupsViewModel.Groups[0]);
+
         MarksViewModel = new MarksViewModel(_activeLoadingTasks, _webAccount, "Все", null!);
 
         _ = MonitorImageLoading();

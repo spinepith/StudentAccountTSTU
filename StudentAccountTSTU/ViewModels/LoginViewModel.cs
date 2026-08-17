@@ -62,12 +62,15 @@ internal partial class LoginViewModel : ViewModelBase {
         var result = await _webAccount.LoginAsync(Username, Password);
         if (result.succes is true) {
             AuthMessage = "УСПЕШНО";
-            _mainViewModel.Login();
+
+            if (_settings.DeviceId is null)
+                _settings.DeviceId = Guid.NewGuid().ToString();
 
             _settings.BaseURL      = result.message;
-            _settings.DeviceId     = Guid.NewGuid().ToString();
             _settings.UserLogin    = CryptoService.Encrypt(Username, _settings.DeviceId);
             _settings.UserPassword = CryptoService.Encrypt(Password, _settings.DeviceId);
+
+            _mainViewModel.Login();
         }
         else {
             AuthMessage = result.message;

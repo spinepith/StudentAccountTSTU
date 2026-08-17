@@ -1,12 +1,11 @@
-﻿using Android.App;
+using Android.App;
 using Android.Content.PM;
 
-using Avalonia;
 using Avalonia.Android;
 
 namespace StudentAccountTSTU.Android {
     [Activity(
-        Label = "StudentAccountTSTU.Android",
+        Label = "Student Account TSTU",
         Theme = "@style/MyTheme.NoActionBar",
         Icon = "@drawable/icon",
         MainLauncher = true,

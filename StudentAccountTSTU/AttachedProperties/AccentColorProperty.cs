@@ -7,31 +7,31 @@ namespace StudentAccountTSTU.AttachedProperties;
 
 public class AccentColorProperty : AvaloniaObject {
     public static readonly AttachedProperty<string> AccentColorAttachedProperty =
-        AvaloniaProperty.RegisterAttached<AccentColorProperty, Window, string>(
+        AvaloniaProperty.RegisterAttached<AccentColorProperty, Control, string>(
             "AccentColorAttached",
             defaultValue: "#4DA1FF",
             inherits: false,
             defaultBindingMode: BindingMode.OneWay,
             coerce: (obj, value) => {
-                if (obj is Window window) {
+                if (obj is Control control) {
                     ApplyAccentColor((string)value);
                 }
                 return value;
             });
 
     static AccentColorProperty() {
-        AccentColorAttachedProperty.Changed.AddClassHandler<Window>(OnAccentColorChanged);
+        AccentColorAttachedProperty.Changed.AddClassHandler<Control>(OnAccentColorChanged);
     }
 
-    public static void SetAccentColorAttached(Window element, string value) {
+    public static void SetAccentColorAttached(Control element, string value) {
         element.SetValue(AccentColorAttachedProperty, value);
     }
 
-    public static string GetAccentColorAttached(Window element) {
+    public static string GetAccentColorAttached(Control element) {
         return element.GetValue(AccentColorAttachedProperty);
     }
 
-    private static void OnAccentColorChanged(Window window, AvaloniaPropertyChangedEventArgs e) {
+    private static void OnAccentColorChanged(Control control, AvaloniaPropertyChangedEventArgs e) {
         ApplyAccentColor((string)e.NewValue!);
     }
 

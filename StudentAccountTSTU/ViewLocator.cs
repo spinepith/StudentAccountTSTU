@@ -26,7 +26,7 @@ namespace StudentAccountTSTU {
                 viewTypeName = viewModelTypeName
                     .Replace("SettingsViewModels", "SettingsViews", StringComparison.Ordinal)
                     .Replace("ViewModels", "Views.Mobile", StringComparison.Ordinal)
-                    .Replace("ViewModel", "View", StringComparison.Ordinal) + "Mobile";
+                    .Replace("ViewModel", "View", StringComparison.Ordinal);
             else
                 viewTypeName = viewModelTypeName
                     .Replace("SettingsViewModels", "SettingsViews", StringComparison.Ordinal)

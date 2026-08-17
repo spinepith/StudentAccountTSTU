@@ -21,12 +21,15 @@
                         <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">                      
                             <Panel VerticalAlignment="Stretch">
 
-                                <Label Content="ЛИЧНЫЕ ДАННЫЕ"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       IsVisible="{CompiledBinding DisplayImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="ЛИЧНЫЕ ДАННЫЕ&#xA;загрузка"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{CompiledBinding UserDataViewModel.UserData, Converter={x:Static ObjectConverters.IsNull}}"/>
 
-                                <Grid ColumnDefinitions="*, Auto,  *" ColumnSpacing="4">
+                                <Grid ColumnDefinitions="*, Auto,  *" ColumnSpacing="4"
+                                      IsVisible="{CompiledBinding UserDataViewModel.UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
 
                                     <Border Grid.Column="0" IsVisible="{CompiledBinding DisplayImage, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="20">
                                         <Border.Background>
@@ -72,10 +75,12 @@
 
                         <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
                             <Panel>
-                                <Label Content="РЕЙТИНГ"
-                                       HorizontalContentAlignment="Center"
-                                       VerticalContentAlignment="Center"
-                                       IsVisible="{CompiledBinding GroupsViewModel.Groups, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="РЕЙТИНГ&#xA;загрузка"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{CompiledBinding GroupsViewModel.Groups, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                                 <ScrollViewer IsVisible="{CompiledBinding RatingViewModel.GroupRating, Converter={x:Static ObjectConverters.IsNotNull}}">
                                     <StackPanel Spacing="4">
@@ -127,10 +132,12 @@
 
                     <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                         <Grid>
-                            <Label Content="РАСПИСАНИЕ"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   IsVisible="{CompiledBinding ScheduleViewModel.Schedule, Converter={x:Static ObjectConverters.IsNull}}"/>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="РАСПИСАНИЕ&#xA;загрузка"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       IsVisible="{CompiledBinding ScheduleViewModel.Schedule, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                             <ScrollViewer IsVisible="{CompiledBinding ScheduleViewModel.Schedule, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <StackPanel Spacing="4" VerticalAlignment="Center">
@@ -188,10 +195,12 @@
 
                 <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
                     <Panel VerticalAlignment="Stretch">
-                        <Label Content="БАЛЛЫ"
-                               HorizontalContentAlignment="Center"
-                               VerticalContentAlignment="Center"
-                               IsVisible="{CompiledBinding MarksViewModel.Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="БАЛЛЫ&#xA;загрузка"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{CompiledBinding MarksViewModel.Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                         <ScrollViewer IsVisible="{CompiledBinding MarksViewModel.Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
                             <ItemsControl VerticalAlignment="Center" ItemsSource="{CompiledBinding MarksViewModel.Marks}">

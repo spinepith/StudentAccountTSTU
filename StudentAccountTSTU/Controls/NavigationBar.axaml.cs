@@ -20,6 +20,9 @@ public partial class NavigationBar : UserControl {
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<NavigationBar, int>(nameof(SelectedIndex), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
 
     private readonly TranslateTransform _selectionTransform = new(0, 0);
+    private readonly ScaleTransform _scaleTransform = new(1, 1);
+    private readonly ScaleTransform _pillScaleTransform = new(1, 1);
+    private readonly double SelectorCornerRadius = 24;
     private bool _isDragging = false;
     private bool _hasMoved = false;
     private Point _dragStartPoint;
@@ -40,6 +43,10 @@ public partial class NavigationBar : UserControl {
         InitializeComponent();
 
         SelectionGrid.RenderTransform = _selectionTransform;
+        Selector.RenderTransform = _scaleTransform;
+        Selector.RenderTransformOrigin = RelativePoint.Center;
+        Pill.RenderTransform = _pillScaleTransform;
+        Pill.RenderTransformOrigin = RelativePoint.Center;
 
         _animationTransitions = new Transitions
         {
@@ -54,9 +61,23 @@ public partial class NavigationBar : UserControl {
                 Property = TranslateTransform.YProperty,
                 Duration = TimeSpan.FromMilliseconds(150),
                 Easing = new CubicEaseOut()
+            },
+            new DoubleTransition
+            {
+                Property = ScaleTransform.ScaleXProperty,
+                Duration = TimeSpan.FromMilliseconds(150),
+                Easing = new CubicEaseOut()
+            },
+            new DoubleTransition
+            {
+                Property = ScaleTransform.ScaleYProperty,
+                Duration = TimeSpan.FromMilliseconds(150),
+                Easing = new CubicEaseOut()
             }
         };
         _selectionTransform.Transitions = _animationTransitions;
+        _scaleTransform.Transitions = _animationTransitions;
+        _pillScaleTransform.Transitions = _animationTransitions;
 
         Loaded += (sender, e) => {
             UpdateElementsSize();
@@ -71,6 +92,7 @@ public partial class NavigationBar : UserControl {
         ButtonsGrid.AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
         ButtonsGrid.AddHandler(PointerMovedEvent, OnPointerMoved, RoutingStrategies.Tunnel);
         ButtonsGrid.AddHandler(PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel);
+        ButtonsGrid.AddHandler(PointerCaptureLostEvent, OnPointerCaptureLost, RoutingStrategies.Tunnel);
 
         SelectedIndexProperty.Changed.AddClassHandler<NavigationBar>((control, e) => control.OnSelectedIndexChanged(e));
     }
@@ -131,6 +153,19 @@ public partial class NavigationBar : UserControl {
             _selectionTransform.Y = newY;
         }
 
+        if (Orientation is Orientation.Horizontal) {
+            _scaleTransform.ScaleX = 1.4;
+            _scaleTransform.ScaleY = 1.4;
+            _pillScaleTransform.ScaleX = 1.6;
+        }
+        else {
+            _scaleTransform.ScaleX = 1.3;
+            _scaleTransform.ScaleY = 1.2;
+            _pillScaleTransform.ScaleY = 1.3;
+        }
+
+        Selector.CornerRadius = new CornerRadius(26);
+
         e.Handled = true;
     }
 
@@ -144,9 +179,8 @@ public partial class NavigationBar : UserControl {
 
         var point = e.GetPosition(ButtonsGrid);
 
-        if (!_hasMoved) {
+        if (!_hasMoved)
             _hasMoved = true;
-        }
 
         var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
         var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
@@ -164,6 +198,12 @@ public partial class NavigationBar : UserControl {
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e) {
         if (!_isDragging)
             return;
+
+        _scaleTransform.ScaleX = 1.0;
+        _scaleTransform.ScaleY = 1.0;
+        _pillScaleTransform.ScaleX = 1.0;
+        _pillScaleTransform.ScaleY = 1.0;
+        Selector.CornerRadius = new CornerRadius(SelectorCornerRadius);
 
         _isDragging = false;
         var wasMoved = _hasMoved;
@@ -189,9 +229,8 @@ public partial class NavigationBar : UserControl {
 
                 System.Diagnostics.Debug.WriteLine($"DRAG: CenterY={selectorCenterY}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
             }
-            else {
+            else
                 targetIndex = 0;
-            }
         }
         else {
             var point = e.GetPosition(ButtonsGrid);
@@ -203,19 +242,25 @@ public partial class NavigationBar : UserControl {
 
                 System.Diagnostics.Debug.WriteLine($"CLICK: PointY={point.Y}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
             }
-            else {
+            else
                 targetIndex = 0;
-            }
         }
 
         targetIndex = Math.Clamp(targetIndex, 0, count - 1);
 
-        if (targetIndex == SelectedIndex) {
+        if (targetIndex == SelectedIndex)
             SnapToTarget(targetIndex, cellWidth, cellHeight);
-        }
-        else {
+        else
             SelectedIndex = targetIndex;
-        }
+    }
+
+    private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) {
+        _scaleTransform.ScaleX = 1.0;
+        _scaleTransform.ScaleY = 1.0;
+        _pillScaleTransform.ScaleX = 1.0;
+        _pillScaleTransform.ScaleY = 1.0;
+        _isDragging = false;
+        _hasMoved = false;
     }
 
     private void UpdateElementsSize() {
@@ -252,8 +297,8 @@ public partial class NavigationBar : UserControl {
         var count = ButtonsGrid.Children.Count;
         var index = ButtonsGrid.Children.IndexOf(checkedButton);
 
-        var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count: ButtonsGrid.Bounds.Width;
-        var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count: ButtonsGrid.Bounds.Height;
+        var cellWidth = Orientation is Orientation.Horizontal ? ButtonsGrid.Bounds.Width / count : ButtonsGrid.Bounds.Width;
+        var cellHeight = Orientation is Orientation.Vertical ? ButtonsGrid.Bounds.Height / count : ButtonsGrid.Bounds.Height;
 
         SnapToTarget(index, cellWidth, cellHeight);
     }

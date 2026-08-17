@@ -11,7 +11,7 @@
         MinHeight="600"
         TransparencyBackgroundFallback="White"
         Icon="/Assets/icon-white.ico"
-        Title="StudentAccountTSTU"
+        Title="Student Account TSTU"
         ap:BlurProperty.BlurAttached="{Binding Settings.UseBlur}"
         ap:AccentColorProperty.AccentColorAttached="{Binding Settings.AccentColor}">
         <views:MainViewDesktop DataContext="{CompiledBinding}" />

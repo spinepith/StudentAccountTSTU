@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,11 +8,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace StudentAccountTSTU.Services;
 
 public partial class Settings : ObservableObject {
-    private static readonly string Path = System.IO.Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "StudentAccountTSTU",
-        "Settings.json"
-    );
+    private static readonly string Path =
+        OperatingSystem.IsAndroid() || OperatingSystem.IsIOS()
+        ? System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Settings.json")
+        : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StudentAccountTSTU", "Settings.json");
 
     #region SETTINGS
     [ObservableProperty]
@@ -58,10 +56,14 @@ public partial class Settings : ObservableObject {
                 return settings;
             }
             catch {
-                return new Settings();
+                var settings = new Settings();
+                settings.Save();
+                return settings;
             }
         }
-        return new Settings();
+        var newSettings = new Settings();
+        newSettings.Save();
+        return newSettings;
     }
 
     private void Save() {

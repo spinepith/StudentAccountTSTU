@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:StudentAccountTSTU"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="StudentAccountTSTU.NavigationBar">
+             x:Class="StudentAccountTSTU.NavigationBar"
+             ClipToBounds="False">
 
     <UserControl.Styles>
 
@@ -19,6 +20,11 @@
             <Setter Property="Height" Value="2"/>
         </Style>
 
+        <Style Selector="local|NavigationBar[Orientation=Horizontal] RadioButton.Page > Svg">
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="1.4" Y="0"/>
+            </Setter>
+        </Style>
 
         <Style Selector="local|NavigationBar[Orientation=Vertical] UniformGrid#ButtonsGrid">
             <Setter Property="Rows" Value="7"/>
@@ -47,10 +53,10 @@
     </UserControl.Styles>
 
 
-    <Border CornerRadius="28" BorderThickness="1" Background="#10FFFFFF" Padding="4">
-        <Grid>
+    <Border CornerRadius="28" BorderThickness="1" Background="#10FFFFFF" Padding="4" ClipToBounds="False">
+        <Grid ClipToBounds="False">
 
-            <Grid x:Name="SelectionGrid" HorizontalAlignment="Left" VerticalAlignment="Top"  ClipToBounds="True">
+            <Grid x:Name="SelectionGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ClipToBounds="False">
                 <Border x:Name="Selector" Background="#20FFFFFF" CornerRadius="24"/>
                 <Border x:Name="Pill" Background="White" CornerRadius="4" Margin="2"/>
             </Grid>

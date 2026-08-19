@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -44,14 +44,16 @@ internal partial class MainViewModel : ViewModelBase {
         CurrentPage = new LoginViewModel(this, _settings, _webAccount);
     }
 
-    partial void OnCurrentPageIndexChanged(int value) {
-        NavigateToPage(value);
+    [RelayCommand]
+    private void OnTabClicked(int index) {
+        CurrentPageIndex = index;
+        NavigateToPage(index);
     }
 
     internal void Login() {
         IsAuthenticated = true;
-        CurrentPageIndex = -1;
         CurrentPageIndex = 0;
+        NavigateToPage(CurrentPageIndex);
     }
 
     internal void Logout() {

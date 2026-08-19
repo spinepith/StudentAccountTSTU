@@ -20,6 +20,7 @@ using StudentAccountTSTU.Views.Mobile;
 namespace StudentAccountTSTU {
     public partial class App : Application {
         public static IServiceProvider Services { get; private set; } = null!;
+        public static Avalonia.Controls.TopLevel? TopLevel { get; set; }
 
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);

@@ -16,9 +16,9 @@ namespace StudentAccountTSTU.ViewModels;
 
 internal partial class HomeViewModel : ViewModelBase {
     private readonly Dictionary<string, Task?> _activeLoadingTasks;
+    private readonly Settings _settings;
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
-    private readonly Settings _settings;
 
     [ObservableProperty]
     private bool _isLoading = true;

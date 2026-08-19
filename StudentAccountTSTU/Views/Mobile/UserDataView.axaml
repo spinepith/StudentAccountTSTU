@@ -1,0 +1,207 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Mobile.UserDataView"
+             x:DataType="vm:UserDataViewModel">
+
+    <Grid>
+
+        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Grid RowDefinitions="Auto, 15*, *" RowSpacing="8">
+
+                <TextBlock Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{CompiledBinding LastUpdated}"
+                           TextWrapping="Wrap"
+                           Foreground="#90FFFFFF"
+                           FontSize="10"
+                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                <ScrollViewer Grid.Row="1" VerticalAlignment="Center">
+                    <StackPanel Spacing="4">
+                        
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                            <StackPanel>
+
+                                <Grid Height="128" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNull}}">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"
+                                               Text="ФОТО"
+                                               TextWrapping="Wrap"
+                                               Foreground="#90FFFFFF"/>
+                                </Grid>
+                            
+                                <Border MinHeight="256" IsVisible="{CompiledBinding UserImage, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="20" ClipToBounds="True">
+                                    <Image Source="{CompiledBinding UserImage}" Stretch="Uniform"/>
+                                </Border>
+
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                            <StackPanel>
+
+                                <Grid Height="128" IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNull}}">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center"
+                                               Text="ОСНОВНАЯ ИНФОРМАЦИЯ"
+                                               TextWrapping="Wrap"
+                                               Foreground="#90FFFFFF"/>
+                                </Grid>
+
+                                <ScrollViewer IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[1]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.PersonalCode}"/>
+                                            </Grid>
+                                        </Border>
+                                
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[2]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.FioGroup}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[3]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Contract}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[4]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Email}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Headers[5]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.PhoneNumber}"/>
+                                            </Grid>
+                                        </Border>
+
+                                    </StackPanel>
+                                </ScrollViewer>
+
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                            <Grid>
+
+                                <Grid Height="128" IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNull}}">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center" 
+                                               Text="ФИНАНСИРОВАНИЕ"
+                                               TextWrapping="Wrap"
+                                               Foreground="#90FFFFFF"/>
+                                </Grid>
+
+                                <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4" VerticalAlignment="Center">
+
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Funding.Headers[0]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Funding.Faculty}"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border>
+                                            <Grid ColumnDefinitions="*, *">
+                                                <TextBlock Grid.Column="0" Classes="Label" Text="{CompiledBinding UserData.Funding.Headers[1]}"/>
+                                                <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding UserData.Funding.Type}"/>
+                                            </Grid>
+                                        </Border>
+
+                                    </StackPanel>
+                                </ScrollViewer>
+
+                            </Grid>
+                        </Border>
+
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                            <Grid>
+                        
+                                <Grid Height="128" IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNull}}">
+                                    <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center" 
+                                           Text="ПРИКАЗЫ"
+                                           TextWrapping="Wrap"
+                                           Foreground="#90FFFFFF"/>
+                                </Grid>
+
+                                <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4" VerticalAlignment="Center">
+                                
+                                        <Border Classes="TableLabel">
+                                            <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
+                                                <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[0]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[1]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[3]}" TextWrapping="Wrap"/>
+                                            </Grid>
+                                        </Border>
+
+                                        <ItemsControl ItemsSource="{CompiledBinding UserData.Orders}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border>
+                                                        <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
+                                                            <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Columns="1" RowSpacing="16"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+
+                                    </StackPanel>
+                                </ScrollViewer>
+
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Button Grid.Row="2" VerticalAlignment="Stretch" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
+
+</UserControl>

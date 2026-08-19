@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -57,9 +57,10 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
 
     [RelayCommand]
     private async Task SelectImage() {
-        var lifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-        var topLevel = lifetime?.MainWindow;
-
+        Avalonia.Controls.TopLevel? topLevel = App.TopLevel;
+        if (topLevel == null && Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            topLevel = desktop.MainWindow;
+        
         if (topLevel?.StorageProvider is not { } storageProvider)
             return;
 
@@ -68,7 +69,8 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
             AllowMultiple = false,
             FileTypeFilter = new[] {
                 new FilePickerFileType("Изображения") {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" },
+                    MimeTypes = new[] { "image/*" }
                 }
             }
         };
@@ -76,7 +78,13 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
         var result = await storageProvider.OpenFilePickerAsync(options);
 
         if (result.Count > 0) {
-            TempImagePath = result[0].Path.LocalPath;
+            var file = result[0];
+            var tempFile = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString() + ".img");
+            using (var stream = await file.OpenReadAsync())
+            using (var outStream = File.Create(tempFile)) {
+                await stream.CopyToAsync(outStream);
+            }
+            TempImagePath = tempFile;
             LoadBitmap(TempImagePath);
         }
     }

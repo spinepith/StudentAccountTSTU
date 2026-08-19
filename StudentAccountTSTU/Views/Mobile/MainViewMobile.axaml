@@ -14,7 +14,7 @@
 
         <Grid RowDefinitions="*, 64" RowSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">
             <ContentControl Grid.Row="0" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
-            <local:NavigationBar Grid.Row="1" Orientation="Horizontal" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=TwoWay}"/>
+            <local:NavigationBar Grid.Row="1" Orientation="Horizontal" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=OneWay}" TabClickedCommand="{CompiledBinding TabClickedCommand}"/>
         </Grid>
     </Grid>
 

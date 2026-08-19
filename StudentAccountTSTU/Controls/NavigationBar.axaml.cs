@@ -18,6 +18,7 @@ public partial class NavigationBar : UserControl {
     #region FIELDS
     public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<NavigationBar, Orientation>(nameof(Orientation), Orientation.Horizontal);
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<NavigationBar, int>(nameof(SelectedIndex), 0, defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+    public static readonly StyledProperty<System.Windows.Input.ICommand?> TabClickedCommandProperty = AvaloniaProperty.Register<NavigationBar, System.Windows.Input.ICommand?>(nameof(TabClickedCommand));
 
     private readonly TranslateTransform _selectionTransform = new(0, 0);
     private readonly ScaleTransform _scaleTransform = new(1, 1);
@@ -37,6 +38,11 @@ public partial class NavigationBar : UserControl {
     public int SelectedIndex {
         get => GetValue(SelectedIndexProperty);
         set => SetValue(SelectedIndexProperty, value);
+    }
+
+    public System.Windows.Input.ICommand? TabClickedCommand {
+        get => GetValue(TabClickedCommandProperty);
+        set => SetValue(TabClickedCommandProperty, value);
     }
 
     public NavigationBar() {
@@ -116,7 +122,7 @@ public partial class NavigationBar : UserControl {
         if (ButtonsGrid.Children[index] is RadioButton targetButton)
             targetButton.IsChecked = true;
 
-        if (ButtonsGrid.Bounds.Width is 0 || ButtonsGrid.Bounds.Height == 0)
+        if (ButtonsGrid.Bounds.Width is 0 || ButtonsGrid.Bounds.Height is 0)
             return;
 
         var count = ButtonsGrid.Children.Count;
@@ -252,6 +258,9 @@ public partial class NavigationBar : UserControl {
             SnapToTarget(targetIndex, cellWidth, cellHeight);
         else
             SelectedIndex = targetIndex;
+
+        if (TabClickedCommand?.CanExecute(targetIndex) is true)
+            TabClickedCommand.Execute(targetIndex);
     }
 
     private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) {

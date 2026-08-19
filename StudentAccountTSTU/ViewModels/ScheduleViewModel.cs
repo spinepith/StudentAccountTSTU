@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -41,6 +41,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private IEnumerable<DayGroup>? _currentWeekSchedule;
 
     [ObservableProperty]
+    private string? _currentWeek;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
@@ -70,12 +73,16 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     partial void OnScheduleChanged(Schedule? value) {
         if (value is not null) {
-            var isOddWeek = value.CurrentWeek!.Split()[^1].Trim() is "НЕЧЕТНАЯ";
+            var week = value.CurrentWeek!.Split()[^1].Trim();
+            var isOddWeek = week is "НЕЧЕТНАЯ";
+
+            CurrentWeek = isOddWeek ? "НЕЧЕТНАЯ" : "ЧЕТНАЯ";
             GroupedOddWeek = GroupLessonsByDay(value.OddWeek, isOddWeek);
             GroupedEvenWeek = GroupLessonsByDay(value.EvenWeek, !isOddWeek);
             CurrentWeekSchedule = isOddWeek ? GroupedOddWeek : GroupedEvenWeek;
         }
         else {
+            CurrentWeek = null;
             GroupedOddWeek = null;
             GroupedEvenWeek = null;
             CurrentWeekSchedule = null;
@@ -132,17 +139,22 @@ internal partial class ScheduleViewModel : ViewModelBase {
             ShowCustomSchedule = true;
             FirstTypeImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
         }
-        else {
+        else
             ShowCustomSchedule = false;
+
+        var path = Path.Combine("Data", "Schedule.json");
+        bool hasCache = FileStorage.CheckExists(path);
+
+        if (hasCache) {
+            await LoadFromCacheAsync();
         }
 
-        // Всегда загружаем обычное расписание
-        var path = Path.Combine("Data", "Schedule.json");
+        // Only run parser if cache is missing and we don't have a custom schedule that overrides it
+        bool needParser = !hasCache && !ShowCustomSchedule;
 
-        if (!FileStorage.CheckExists(path))
+        if (needParser) {
             await GetScheduleDataAsync();
-        else
-            await LoadFromCacheAsync();
+        }
     }
 
     private async Task LoadFromCacheAsync() {
@@ -156,7 +168,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = Services.FileStorage.GetLastModified(filePath);
-        if (lastModified.HasValue)
+        if (lastModified.HasValue && !ShowCustomSchedule)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
             LastUpdated = null;

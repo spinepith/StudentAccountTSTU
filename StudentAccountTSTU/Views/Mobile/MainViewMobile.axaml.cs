@@ -10,4 +10,9 @@ public partial class MainViewMobile : UserControl
     {
         InitializeComponent();
     }
+
+    protected override void OnAttachedToVisualTree(Avalonia.VisualTreeAttachmentEventArgs e) {
+        base.OnAttachedToVisualTree(e);
+        App.TopLevel = Avalonia.Controls.TopLevel.GetTopLevel(this);
+    }
 }

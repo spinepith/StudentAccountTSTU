@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 
 using Avalonia;
@@ -106,8 +106,11 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     }
 
     private async Task<string?> SelectImage(string title) {
-        var lifetime = Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
-        if (lifetime?.MainWindow?.StorageProvider is not { } storageProvider)
+        Avalonia.Controls.TopLevel? topLevel = App.TopLevel;
+        if (topLevel == null && Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            topLevel = desktop.MainWindow;
+        
+        if (topLevel?.StorageProvider is not { } storageProvider)
             return null;
 
         var options = new FilePickerOpenOptions {
@@ -115,13 +118,24 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
             AllowMultiple = false,
             FileTypeFilter = new[] {
                 new FilePickerFileType("Изображения") {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" }
+                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" },
+                    MimeTypes = new[] { "image/*" }
                 }
             }
         };
 
         var result = await storageProvider.OpenFilePickerAsync(options);
-        return result.Count > 0 ? result[0].Path.LocalPath : null;
+        
+        if (result.Count > 0) {
+            var file = result[0];
+            var tempFile = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString() + ".img");
+            using (var stream = await file.OpenReadAsync())
+            using (var outStream = File.Create(tempFile)) {
+                await stream.CopyToAsync(outStream);
+            }
+            return tempFile;
+        }
+        return null;
     }
 
     [RelayCommand]

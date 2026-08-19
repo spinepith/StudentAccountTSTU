@@ -16,7 +16,7 @@
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
 
         <Grid ColumnDefinitions="64, *" ColumnSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">
-            <local:NavigationBar Grid.Column="0" Orientation="Vertical" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=TwoWay}"/>
+            <local:NavigationBar Grid.Column="0" Orientation="Vertical" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=OneWay}" TabClickedCommand="{CompiledBinding TabClickedCommand}"/>
             <ContentControl Grid.Column="1" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
         </Grid>
     </Grid>

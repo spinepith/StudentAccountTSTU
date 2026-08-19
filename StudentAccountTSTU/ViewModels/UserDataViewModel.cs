@@ -63,7 +63,6 @@ internal partial class UserDataViewModel : ViewModelBase {
     private async Task GetUserDataAsync() {
         var userDataPath = Path.Combine("Data", "UserData.json");
         var fullPath = FileStorage.GetFullPath(userDataPath);
-        System.Diagnostics.Debug.WriteLine($"[UserData] Saving to: {fullPath}");
 
         FileStorage.RemoveFile(Path.Combine("Data", "UserData.json"));
         FileStorage.RemoveFile(Path.Combine("Data", "UserImage.jpg"));

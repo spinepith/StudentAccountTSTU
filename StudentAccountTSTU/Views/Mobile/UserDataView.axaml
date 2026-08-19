@@ -8,7 +8,7 @@
              x:Class="StudentAccountTSTU.Views.Mobile.UserDataView"
              x:DataType="vm:UserDataViewModel">
 
-    <Grid>
+    <Grid Grid.IsSharedSizeScope="True">
 
         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
             <Grid RowDefinitions="Auto, 15*, *" RowSpacing="8">
@@ -44,7 +44,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="8" ClipToBounds="True">
                             <StackPanel>
 
                                 <Grid Height="128" IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNull}}">
@@ -100,7 +100,7 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="8" ClipToBounds="True">
                             <Grid>
 
                                 <Grid Height="128" IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNull}}">
@@ -135,7 +135,7 @@
                             </Grid>
                         </Border>
 
-                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="8" ClipToBounds="True">
                             <Grid>
                         
                                 <Grid Height="128" IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNull}}">
@@ -147,16 +147,26 @@
                                            Foreground="#90FFFFFF"/>
                                 </Grid>
 
-                                <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNotNull}}">
                                     <StackPanel Spacing="4" VerticalAlignment="Center">
                                 
                                         <Border Classes="TableLabel">
-                                            <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
-                                                <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[0]}" TextWrapping="Wrap"/>
-                                                <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[1]}" TextWrapping="Wrap"/>
-                                                <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
-                                                <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
-                                                <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[3]}" TextWrapping="Wrap"/>
+                                            <Grid ColumnSpacing="4">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Col0"/>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Col1"/>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Col2"/>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Col3"/>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Col4"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" MaxWidth="64" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[0]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="1" MaxWidth="128" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[1]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="2" MaxWidth="128" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="3" MaxWidth="512" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[2]}" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Column="4" MaxWidth="512" Classes="Label" TextAlignment="Center" Text="{CompiledBinding UserData.Orders[0].Headers[3]}" TextWrapping="Wrap"/>
+                                            
                                             </Grid>
                                         </Border>
 
@@ -165,12 +175,22 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border>
-                                                        <Grid ColumnDefinitions="*, *, *, 5*, 3*" ColumnSpacing="4">
-                                                            <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
-                                                            <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
-                                                            <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
-                                                            <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
-                                                            <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
+                                                        <Grid ColumnSpacing="4">
+
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="Col0"/>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="Col1"/>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="Col2"/>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="Col3"/>
+                                                                <ColumnDefinition Width="Auto" SharedSizeGroup="Col4"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Grid.Column="0" MaxWidth="64" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Number}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="1" MaxWidth="128" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Date}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="2" MaxWidth="128" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Faculty}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="3" MaxWidth="512" Classes="Value" TextAlignment="Center" Text="{CompiledBinding CodeName}" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="4" MaxWidth="512" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Description}" TextWrapping="Wrap"/>
+                                                        
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>

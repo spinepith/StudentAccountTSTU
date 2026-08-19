@@ -14,28 +14,39 @@
         <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
             <Grid RowDefinitions="Auto, 15*, *" RowSpacing="4">
 
-                <Grid Grid.RowSpan="3" IsVisible="{CompiledBinding ShowCustomSchedule}" RowSpacing="4">
-                    <Border  Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                        <ScrollViewer VerticalAlignment="Center">
+                <ScrollViewer Grid.RowSpan="3" VerticalAlignment="Center" IsVisible="{CompiledBinding ShowCustomSchedule}">
+                    <StackPanel Spacing="4">
+                        
+                        <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Border CornerRadius="24" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image Source="{CompiledBinding FirstTypeImage}" Stretch="Uniform"/>
+                            </Border>
+                        </Border>
+                        
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding SecondTypeFirstImage, Converter={x:Static ObjectConverters.IsNotNull}}">
                             <StackPanel Spacing="4">
-                                
-                                <Image Source="{CompiledBinding FirstTypeImage}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                                
-                                <StackPanel IsVisible="{CompiledBinding SecondTypeFirstImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Grid Classes.loading="{CompiledBinding IsLoading}">
                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="НЕЧЕТНАЯ НЕДЕЛЯ" TextWrapping="Wrap" Foreground="#90FFFFFF"/>
-                                    <Image Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                
-                                <StackPanel  IsVisible="{CompiledBinding SecondTypeSecondImage, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="ЧЕТНАЯ НЕДЕЛЯ" TextWrapping="Wrap" Foreground="#90FFFFFF"/>
-                                    <Image Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </StackPanel>
-
+                                </Grid>
+                                <Border CornerRadius="20" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform"/>
+                                </Border>
                             </StackPanel>
-                        </ScrollViewer>
-                    </Border>
+                        </Border>
+                        
+                        <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding SecondTypeSecondImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4">
+                                <Grid Classes.loading="{CompiledBinding IsLoading}">
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="ЧЕТНАЯ НЕДЕЛЯ" TextWrapping="Wrap" Foreground="#90FFFFFF"/>
+                                </Grid>
+                                <Border CornerRadius="20" ClipToBounds="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
 
-                </Grid>
+                    </StackPanel>
+                </ScrollViewer>
 
                 <TextBlock Grid.Row="0"
                            HorizontalAlignment="Center"

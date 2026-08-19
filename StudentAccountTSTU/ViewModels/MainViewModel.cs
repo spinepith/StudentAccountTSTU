@@ -46,6 +46,21 @@ internal partial class MainViewModel : ViewModelBase {
 
     [RelayCommand]
     private void OnTabClicked(int index) {
+        // ТАКОЙ ВАРИАНТ ИСПОЛЬЗУЕТСЯ, ПОТОМУ ЧТО СТРАНИЦЫ ВСЕГО ДВЕ
+        // КОГДА СТРАНИЦ СТАНЕТ БОЛЬШЕ, НУЖНО ИСПОЛЬЗОВАТЬ ДРУГОЙ ПОДХОД
+        if (CurrentPageIndex == index) {
+            if (CurrentPage is LessonsViewModel lessonsVm && lessonsVm.CurrentPage != null) {
+                lessonsVm.BackToLessons();
+                return;
+            }
+            if (CurrentPage is GroupsViewModel groupsVm && groupsVm.CurrentPage != null) {
+                groupsVm.BackToGroups();
+                return;
+            }
+            
+            return;
+        }
+
         CurrentPageIndex = index;
         NavigateToPage(index);
     }

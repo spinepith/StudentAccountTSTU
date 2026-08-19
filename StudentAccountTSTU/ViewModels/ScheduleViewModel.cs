@@ -62,6 +62,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [ObservableProperty]
     private bool _showCustomSchedule;
 
+    [ObservableProperty]
+    private bool _showWeeksHeader;
+
     internal ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount, Settings settings) {
         _activeLoadingTasks = activeLoadingTasks;
         _webAccount = webAccount;
@@ -130,6 +133,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
         if (hasSecondType) {
             ShowCustomSchedule = true;
+            ShowWeeksHeader = true;
             if (secondType1Exists)
                 SecondTypeFirstImage = new Bitmap(FileStorage.GetFullPath(secondType1Path));
             if (secondType2Exists)
@@ -137,10 +141,13 @@ internal partial class ScheduleViewModel : ViewModelBase {
         }
         else if (hasFirstType) {
             ShowCustomSchedule = true;
+            ShowWeeksHeader = false;
             FirstTypeImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
         }
-        else
+        else {
             ShowCustomSchedule = false;
+            ShowWeeksHeader = true;
+        }
 
         var path = Path.Combine("Data", "Schedule.json");
         bool hasCache = FileStorage.CheckExists(path);

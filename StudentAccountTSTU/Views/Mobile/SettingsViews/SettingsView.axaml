@@ -16,32 +16,32 @@
                     <StackPanel Spacing="12">
 
                         <!-- ОСНОВНЫЕ -->
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleSaveDataCommand}">
+                        <Button MinHeight="64" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleSaveDataCommand}">
                             <Grid ColumnDefinitions="*, Auto">
                                 <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.SaveData}" VerticalAlignment="Center"/>
                                 <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.SaveData}" OffContent="" OnContent="" IsHitTestVisible="False"/>
                             </Grid>
                         </Button>
 
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                        <Button MinHeight="64" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
                             <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
                                 <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.RemoveData}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="*" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
 
-                        <Button MinHeight="32" HorizontalContentAlignment="Center" Content="ПОДТВЕРДИТЬ" Foreground="IndianRed" Padding="16, 0" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
+                        <Button MinHeight="64" HorizontalContentAlignment="Center" Content="ПОДТВЕРДИТЬ" Foreground="IndianRed" Padding="16, 0" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
 
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                        <Button MinHeight="64" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
                             <Grid ColumnDefinitions="*, *">
                                 <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomSchedule}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
 
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
+                        <Button MinHeight="64" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
                             <Grid ColumnDefinitions="*, *">
                                 <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.LoginAndPassword}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
@@ -51,7 +51,7 @@
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                         <!-- ИНТЕРФЕЙС -->
-                        <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
+                        <Button MinHeight="64" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
                             <Grid ColumnDefinitions="*, *">
                                 <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.AccentColor}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
@@ -61,7 +61,7 @@
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                         <!-- ВЫХОД -->
-                        <Button MinHeight="32" VerticalAlignment="Stretch" CornerRadius="24" Content="{x:Static pages:SettingsPages.Logout}" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
+                        <Button MinHeight="64" VerticalAlignment="Stretch" CornerRadius="24" Content="{x:Static pages:SettingsPages.Logout}" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
 
                     </StackPanel>
                 </ScrollViewer>

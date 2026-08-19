@@ -100,12 +100,17 @@ public partial class NavigationBar : UserControl {
         ButtonsGrid.AddHandler(PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel);
         ButtonsGrid.AddHandler(PointerCaptureLostEvent, OnPointerCaptureLost, RoutingStrategies.Tunnel);
 
-        SelectedIndexProperty.Changed.AddClassHandler<NavigationBar>((control, e) => control.OnSelectedIndexChanged(e));
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
+        base.OnPropertyChanged(change);
+        if (change.Property == SelectedIndexProperty) {
+            OnSelectedIndexChanged(change);
+        }
     }
 
     private void OnSelectedIndexChanged(AvaloniaPropertyChangedEventArgs e) {
         var newIndex = (int)e.NewValue!;
-        System.Diagnostics.Debug.WriteLine($"OnSelectedIndexChanged: NewIndex={newIndex}");
         UpdateUIForIndex(newIndex);
     }
 
@@ -232,22 +237,16 @@ public partial class NavigationBar : UserControl {
             else if (Orientation is Orientation.Vertical && cellHeight > 0) {
                 var selectorCenterY = _selectionTransform.Y + SelectionGrid.Height / 2;
                 targetIndex = (int)(selectorCenterY / cellHeight);
-
-                System.Diagnostics.Debug.WriteLine($"DRAG: CenterY={selectorCenterY}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
             }
             else
                 targetIndex = 0;
         }
         else {
             var point = e.GetPosition(ButtonsGrid);
-            if (Orientation is Orientation.Horizontal && cellWidth > 0) {
+            if (Orientation is Orientation.Horizontal && cellWidth > 0)
                 targetIndex = (int)(point.X / cellWidth);
-            }
-            else if (Orientation is Orientation.Vertical && cellHeight > 0) {
+            else if (Orientation is Orientation.Vertical && cellHeight > 0)
                 targetIndex = (int)(point.Y / cellHeight);
-
-                System.Diagnostics.Debug.WriteLine($"CLICK: PointY={point.Y}, CellHeight={cellHeight}, TargetIndex={targetIndex}");
-            }
             else
                 targetIndex = 0;
         }
@@ -259,8 +258,13 @@ public partial class NavigationBar : UserControl {
         else
             SelectedIndex = targetIndex;
 
-        if (TabClickedCommand?.CanExecute(targetIndex) is true)
-            TabClickedCommand.Execute(targetIndex);
+        if (TabClickedCommand?.CanExecute(targetIndex) is true) {
+            System.Threading.Tasks.Task.Delay(150).ContinueWith(_ => {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => {
+                    TabClickedCommand.Execute(targetIndex);
+                });
+            });
+        }
     }
 
     private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) {
@@ -316,8 +320,6 @@ public partial class NavigationBar : UserControl {
     private void SnapToTarget(int index, double cellWidth, double cellHeight) {
         double targetX = Orientation is Orientation.Horizontal ? index * cellWidth : 0;
         double targetY = Orientation is Orientation.Vertical ? index * cellHeight : 0;
-
-        System.Diagnostics.Debug.WriteLine($"SnapToTarget: Orientation={Orientation}, Index={index}, CurrentY={_selectionTransform.Y}, TargetY={targetY}");
 
         _selectionTransform.X = targetX;
         _selectionTransform.Y = targetY;

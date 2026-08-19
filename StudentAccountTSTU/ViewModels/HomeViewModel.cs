@@ -24,6 +24,18 @@ internal partial class HomeViewModel : ViewModelBase {
     private bool _isLoading = true;
 
     [ObservableProperty]
+    private Bitmap? _homeCustomImage;
+
+    [ObservableProperty]
+    private bool _showHomeCustomImage;
+
+    [ObservableProperty]
+    private bool _showHomeCustomImageWeek;
+
+    [ObservableProperty]
+    private string? _currentWeek;
+
+    [ObservableProperty]
     private UserDataViewModel? _userDataViewModel;
 
     [ObservableProperty]
@@ -68,6 +80,12 @@ internal partial class HomeViewModel : ViewModelBase {
 
         UserDataViewModel = new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount);
         ScheduleViewModel = new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings);
+        ScheduleViewModel.PropertyChanged += (s, e) => {
+            if (e.PropertyName == nameof(ScheduleViewModel.CurrentWeek)) {
+                UpdateHomeCustomImage();
+            }
+        };
+        UpdateHomeCustomImage();
         ReportCardViewModel = new ReportCardViewModel(_activeLoadingTasks, _webAccount);
         LessonsViewModel = new LessonsViewModel(_activeLoadingTasks, _webAccount);
         GroupsViewModel = new GroupsViewModel(_activeLoadingTasks, _webAccount);
@@ -181,5 +199,54 @@ internal partial class HomeViewModel : ViewModelBase {
                 return false;
 
         return true;
+    }
+
+    private void UpdateHomeCustomImage() {
+        var firstTypePath = Path.Combine("Data", "ScheduleFirstType.jpg");
+        var secondType1Path = Path.Combine("Data", "ScheduleSecondType1.jpg");
+        var secondType2Path = Path.Combine("Data", "ScheduleSecondType2.jpg");
+
+        var firstTypeExists = FileStorage.CheckExists(firstTypePath);
+        var secondType1Exists = FileStorage.CheckExists(secondType1Path);
+        var secondType2Exists = FileStorage.CheckExists(secondType2Path);
+
+        var hasSecondType = secondType1Exists || secondType2Exists;
+        var hasFirstType = firstTypeExists;
+
+        if (hasSecondType) {
+            var currentWeek = ScheduleViewModel?.CurrentWeek;
+            if (currentWeek != null) {
+                if (currentWeek == "НЕЧЕТНАЯ" && secondType1Exists) {
+                    try {
+                        HomeCustomImage = new Bitmap(FileStorage.GetFullPath(secondType1Path));
+                        ShowHomeCustomImage = true;
+                        ShowHomeCustomImageWeek = true;
+                        CurrentWeek = currentWeek;
+                    } catch { }
+                } else if (currentWeek == "ЧЕТНАЯ" && secondType2Exists) {
+                    try {
+                        HomeCustomImage = new Bitmap(FileStorage.GetFullPath(secondType2Path));
+                        ShowHomeCustomImage = true;
+                        ShowHomeCustomImageWeek = true;
+                        CurrentWeek = currentWeek;
+                    } catch { }
+                } else {
+                    ShowHomeCustomImage = false;
+                    ShowHomeCustomImageWeek = false;
+                }
+            } else {
+                ShowHomeCustomImage = false;
+                ShowHomeCustomImageWeek = false;
+            }
+        } else if (hasFirstType) {
+            try {
+                HomeCustomImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
+                ShowHomeCustomImage = true;
+                ShowHomeCustomImageWeek = false;
+            } catch { }
+        } else {
+            ShowHomeCustomImage = false;
+            ShowHomeCustomImageWeek = false;
+        }
     }
 }

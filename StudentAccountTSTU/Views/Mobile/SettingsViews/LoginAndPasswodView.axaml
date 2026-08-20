@@ -8,32 +8,36 @@
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.LoginAndPasswordView"
              x:DataType="vm:LoginAndPasswordViewModel">
 
-    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-        <Grid RowDefinitions="*, 12*, Auto" RowSpacing="4">
-                 
-            <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+    <Grid RowDefinitions="*, 15*, *" RowSpacing="4">
+        
+        <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
                 <TextBlock Classes="Label"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        TextAlignment="Center"
-                        Text="{x:Static pages:SettingsPages.LoginAndPassword}"
-                        TextWrapping="Wrap"
-                        Margin="8"/>
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{x:Static pages:SettingsPages.LoginAndPassword}"
+                           TextWrapping="Wrap"/>
             </Border>
+        </Border>
 
+        <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
             <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                 <ScrollViewer>
                     <StackPanel MinWidth="256" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
                         <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Login}" CornerRadius="26"/>
                         <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Password}" CornerRadius="26"/>
-                        <Button Content="{CompiledBinding ShowHideText}" Command="{CompiledBinding ShowHideCommand}"/>
+                        <Button MinHeight="32" Content="{CompiledBinding ShowHideText}" Command="{CompiledBinding ShowHideCommand}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>
+        </Border>
 
-            <Button Grid.Row="2" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+        <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+        </Border>
 
-        </Grid>
-    </Border>
+    </Grid>
+    
 
 </UserControl>

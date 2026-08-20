@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -53,11 +53,11 @@
     </UserControl.Styles>
 
 
-    <Border CornerRadius="28" BorderThickness="1" Background="#10FFFFFF" Padding="4" ClipToBounds="False" BoxShadow="0 8 24 0 #20000000">
+    <Border CornerRadius="28" BorderThickness="1" Background="#10FFFFFF" Padding="4" ClipToBounds="False">
         <Grid ClipToBounds="False">
 
             <Grid x:Name="SelectionGrid" HorizontalAlignment="Left" VerticalAlignment="Top" ClipToBounds="False">
-                <Border x:Name="Selector" Background="#20FFFFFF" CornerRadius="24" BoxShadow="0 4 12 0 #20000000"/>
+                <Border x:Name="Selector" Background="#20FFFFFF" CornerRadius="24"/>
                 <Border x:Name="Pill" Background="White" CornerRadius="4" Margin="2"/>
             </Grid>
 

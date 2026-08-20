@@ -4,26 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.AccentColorView"
              x:DataType="vm:AccentColorViewModel">
 
-    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-        <Grid RowDefinitions="*, 12*, Auto" RowSpacing="4">
-            
-            <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
-                <TextBlock Classes="Label"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            TextAlignment="Center"
-                            Text="{x:Static pages:SettingsPages.AccentColor}"
-                            TextWrapping="Wrap"
-                            Margin="8"/>
-            </Border>
+    <Grid RowDefinitions="*, 15*, *" RowSpacing="4">
 
-            <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+        <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                <TextBlock Classes="Label"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{x:Static pages:SettingsPages.AccentColor}"
+                           TextWrapping="Wrap"/>
+            </Border>
+        </Border>
+
+        <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+            <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                 <ScrollViewer>
-                    <Grid Grid.Row="1" RowDefinitions="*, Auto" HorizontalAlignment="Center" VerticalAlignment="Center" RowSpacing="16">
+                    <Grid RowDefinitions="*, Auto" HorizontalAlignment="Center" VerticalAlignment="Center" RowSpacing="16">
                 
                         <StackPanel Grid.Row="0" Spacing="4" MinWidth="256">
 
@@ -60,23 +61,26 @@
                             </Border>
 
                             <TextBox HorizontalContentAlignment="Center"
-                                        Background="#10FFFFFF"
-                                        BorderBrush="Transparent"
-                                        CornerRadius="26"
-                                        PlaceholderText="ЦВЕТ"
-                                        Text="{CompiledBinding ColorInput}"/>
+                                     Background="#10FFFFFF"
+                                     BorderBrush="Transparent"
+                                     CornerRadius="26"
+                                     PlaceholderText="ЦВЕТ"
+                                     Text="{CompiledBinding ColorInput}"/>
                                 
-                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}"/>
+                            <Button MinHeight="32" Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}"/>
                             
                         </StackPanel>
 
                     </Grid>
                 </ScrollViewer>
             </Border>
+        </Border>
 
-            <Button Grid.Row="2" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+        <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/> 
+        </Border>
 
-        </Grid>
-    </Border>
+    </Grid>
+    
 
 </UserControl>

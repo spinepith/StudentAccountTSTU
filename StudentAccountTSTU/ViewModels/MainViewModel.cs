@@ -49,12 +49,18 @@ internal partial class MainViewModel : ViewModelBase {
         // ТАКОЙ ВАРИАНТ ИСПОЛЬЗУЕТСЯ, ПОТОМУ ЧТО СТРАНИЦЫ ВСЕГО ДВЕ
         // КОГДА СТРАНИЦ СТАНЕТ БОЛЬШЕ, НУЖНО ИСПОЛЬЗОВАТЬ ДРУГОЙ ПОДХОД
         if (CurrentPageIndex == index) {
-            if (CurrentPage is LessonsViewModel lessonsVm && lessonsVm.CurrentPage != null) {
-                lessonsVm.BackToLessons();
+            if (CurrentPage is LessonsViewModel lessonsViewModel && lessonsViewModel.CurrentPage is not null) {
+                lessonsViewModel.BackToLessons();
                 return;
             }
-            if (CurrentPage is GroupsViewModel groupsVm && groupsVm.CurrentPage != null) {
-                groupsVm.BackToGroups();
+            
+            if (CurrentPage is GroupsViewModel groupsViewModel && groupsViewModel.CurrentPage is not null) {
+                groupsViewModel.BackToGroups();
+                return;
+            }
+
+            if (CurrentPage is SettingsViewModel settingsViewModel && settingsViewModel.CurrentPage is not null) {
+                settingsViewModel.BackToAllSettings();
                 return;
             }
             

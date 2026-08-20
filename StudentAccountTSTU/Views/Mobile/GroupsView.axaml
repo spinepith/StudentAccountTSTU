@@ -9,64 +9,71 @@
              x:DataType="vm:GroupsViewModel">
 
     <Grid>
+        
+        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 15*, *" RowSpacing="8" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
 
-        <!-- Список групп -->
-        <Border Classes.Blurred="{CompiledBinding IsLoading}"
-                Background="#10FFFFFF"
-                CornerRadius="28"
-                Padding="4"
-                ClipToBounds="True"
-                IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
-            <Grid RowDefinitions="Auto, 15*, *" RowSpacing="8">
+            <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                    <TextBlock VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               Text="{CompiledBinding LastUpdated}"
+                               TextWrapping="Wrap"
+                               Foreground="#90FFFFFF"
+                               IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </Border>
+            </Border>
 
-                <TextBlock Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"
-                           Text="{CompiledBinding LastUpdated}"
-                           TextWrapping="Wrap"
-                           Foreground="#90FFFFFF"
-                           FontSize="10"
-                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Border Grid.Row="1"
+                    Background="#10FFFFFF"
+                    CornerRadius="28"
+                    Padding="4"
+                    ClipToBounds="True">
+                <Border CornerRadius="24" ClipToBounds="True">
+                    <Grid>
+                    
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="ГРУППЫ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
+                                   IsVisible="{CompiledBinding Groups, Converter={x:Static ObjectConverters.IsNull}}"/>
 
-                <TextBlock Grid.Row="1"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           TextAlignment="Center"
-                           Text="ГРУППЫ"
-                           TextWrapping="Wrap"
-                           Foreground="#90FFFFFF"
-                           IsVisible="{CompiledBinding Groups, Converter={x:Static ObjectConverters.IsNull}}"/>
+                        <ScrollViewer IsVisible="{CompiledBinding Groups, Converter={x:Static ObjectConverters.IsNotNull}}">
+                             <ItemsControl ItemsSource="{CompiledBinding Groups}">
 
-                <ScrollViewer Grid.Row="1" IsVisible="{CompiledBinding Groups, Converter={x:Static ObjectConverters.IsNotNull}}">
-                     <ItemsControl ItemsSource="{CompiledBinding Groups}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="x:String">
+                                        <Button MinHeight="64"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                Content="{CompiledBinding .}"
+                                                CornerRadius="24"
+                                                CommandParameter="{CompiledBinding .}"
+                                                Command="{CompiledBinding $parent[UserControl].((vm:GroupsViewModel)DataContext).SelectGroupCommand}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="x:String">
-                                <Button MinHeight="64"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Content="{CompiledBinding .}"
-                                        CornerRadius="24"
-                                        CommandParameter="{CompiledBinding .}"
-                                        Command="{CompiledBinding $parent[UserControl].((vm:GroupsViewModel)DataContext).SelectGroupCommand}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Spacing="4"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                         </ScrollViewer>
 
-                    </ItemsControl>
-                 </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Border>
 
-                 <Button Grid.Row="2" VerticalAlignment="Stretch" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+            <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+            </Border>
 
-            </Grid>
-        </Border>
+        </Grid>
 
-        <!-- Вложенная страница с рейтингом -->
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
         <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">

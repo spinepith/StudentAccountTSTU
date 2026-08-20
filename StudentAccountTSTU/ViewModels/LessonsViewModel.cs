@@ -1,4 +1,4 @@
-Ôªøusing System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -46,7 +46,7 @@ internal partial class LessonsViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Refresh", GetLessonsDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Refresh", GetLessonsDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -69,7 +69,7 @@ internal partial class LessonsViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Init", LoadLessonsAsync(), LoadFromCacheAsync, "Lessons_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Lessons_Init", LoadLessonsAsync, LoadFromCacheAsync, "Lessons_Refresh");
         IsLoading = false;
     }
 
@@ -87,7 +87,7 @@ internal partial class LessonsViewModel : ViewModelBase {
 
         if (FileStorage.CheckExists(path)) {
             var allLessonsButton = await FileStorage.GetAsync<List<string>>(path);
-            allLessonsButton?.Add("–í—Å–µ");
+            allLessonsButton?.Add("¬ÒÂ");
             Lessons = allLessonsButton;
             UpdateLastModifiedDate(path);
         }
@@ -96,7 +96,7 @@ internal partial class LessonsViewModel : ViewModelBase {
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = FileStorage.GetLastModified(filePath);
         if (lastModified.HasValue)
-            LastUpdated = $"–û–ë–ù–û–í–õ–ï–ù–û {lastModified.Value:dd.MM.yyyy HH:mm}";
+            LastUpdated = $"Œ¡ÕŒ¬À≈ÕŒ {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
             LastUpdated = null;
     }

@@ -58,7 +58,7 @@ internal partial class MarksViewModel : ViewModelBase {
     private string? _lastUpdated;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(GetDataCommand), nameof(BackToLessonsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
     internal MarksViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount, string lessonName, LessonsViewModel parentViewModel) {
@@ -75,7 +75,7 @@ internal partial class MarksViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, $"Marks_{CurrentLesson}_Refresh", GetMarksDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, $"Marks_{CurrentLesson}_Refresh", GetMarksDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -139,7 +139,7 @@ internal partial class MarksViewModel : ViewModelBase {
     private async Task InitializeDataAsync() {
         IsLoading = true;
         CurrentUserName = await _webAccount.GetUserNameAsync();
-        await InitializeWithCacheAsync(_activeLoadingTasks, $"Marks_{CurrentLesson}_Init", LoadMarksAsync(), LoadFromCacheAsync, $"Marks_{CurrentLesson}_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, $"Marks_{CurrentLesson}_Init", LoadMarksAsync, LoadFromCacheAsync, $"Marks_{CurrentLesson}_Refresh");
         IsLoading = false;
     }
 
@@ -205,7 +205,7 @@ internal partial class MarksViewModel : ViewModelBase {
             LastUpdated = null;
     }
 
-    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    [RelayCommand]
     private void BackToLessons() {
         _parentViewModel.BackToLessons();
     }

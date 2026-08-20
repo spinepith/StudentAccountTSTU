@@ -1,4 +1,4 @@
-Ôªøusing System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -45,7 +45,7 @@ internal partial class GroupsViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Refresh", GetGroupsDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Refresh", GetGroupsDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -68,7 +68,7 @@ internal partial class GroupsViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Init", LoadGroupsAsync(), LoadFromCacheAsync, "Groups_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Groups_Init", LoadGroupsAsync, LoadFromCacheAsync, "Groups_Refresh");
         IsLoading = false;
     }
 
@@ -93,7 +93,7 @@ internal partial class GroupsViewModel : ViewModelBase {
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = FileStorage.GetLastModified(filePath);
         if (lastModified.HasValue)
-            LastUpdated = $"–û–ë–ù–û–í–õ–ï–ù–û {lastModified.Value:dd.MM.yyyy HH:mm}";
+            LastUpdated = $"Œ¡ÕŒ¬À≈ÕŒ {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
             LastUpdated = null;
     }

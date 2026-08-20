@@ -56,7 +56,7 @@ internal partial class UserDataViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Refresh", GetUserDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Refresh", GetUserDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -87,7 +87,7 @@ internal partial class UserDataViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Init", LoadUserDataAsync(), LoadFromCacheAsync, "UserData_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, "UserData_Init", LoadUserDataAsync, LoadFromCacheAsync, "UserData_Refresh");
         IsLoading = false;
     }
 

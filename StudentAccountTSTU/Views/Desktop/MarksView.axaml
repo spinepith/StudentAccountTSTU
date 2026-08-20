@@ -8,30 +8,30 @@
              x:Class="StudentAccountTSTU.Views.Desktop.MarksView"
              x:DataType="vm:MarksViewModel">
 
-    <Grid>
-
-        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-            <Grid RowDefinitions="Auto, *, Auto" RowSpacing="8">
+    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+        <Grid RowDefinitions="*, Auto" RowSpacing="4">
+            
+            <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="Auto, *, Auto" RowSpacing="8">
 
                 <TextBlock Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"
-                           Text="{CompiledBinding LastUpdated}"
-                           TextWrapping="Wrap"
-                           Foreground="#90FFFFFF"
-                           FontSize="10"
-                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            Text="{CompiledBinding LastUpdated}"
+                            TextWrapping="Wrap"
+                            Foreground="#90FFFFFF"
+                            FontSize="10"
+                            IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                 <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4">
                     <Grid>
 
                         <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   Text="БАЛЛЫ"
-                                   TextWrapping="Wrap"
-                                   Foreground="#90FFFFFF"
-                                   IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Center"
+                                    Text="БАЛЛЫ"
+                                    TextWrapping="Wrap"
+                                    Foreground="#90FFFFFF"
+                                    IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
 
                         <ScrollViewer IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
                             <StackPanel Spacing="4" VerticalAlignment="Center">
@@ -128,18 +128,17 @@
                     </Grid>
                 </Border>
 
-                <StackPanel Grid.Row="2" Spacing="4">
-                    <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
-                    <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
-                </StackPanel>
-
+                <Button Grid.Row="2" MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                
             </Grid>
-        </Border>
 
-        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
-            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
+            <Border Grid.Row="0" CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+                <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
 
-    </Grid>
+            <Button Grid.Row="1" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
+
+        </Grid>
+    </Border>
 
 </UserControl>

@@ -8,10 +8,10 @@
              x:Class="StudentAccountTSTU.Views.Desktop.RatingView"
              x:DataType="vm:RatingViewModel">
 
-    <Grid>
-
-        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, *, Auto" ColumnSpacing="4" RowSpacing="8">
+    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+        <Grid RowDefinitions="*, Auto" RowSpacing="4">
+            
+            <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, *, Auto" ColumnSpacing="4" RowSpacing="8">
 
                 <TextBlock Grid.ColumnSpan="2"
                            Grid.Row="0"
@@ -28,24 +28,24 @@
 
                         <!--Text="{CompiledBinding GroupRating.Name}"-->
                         <TextBlock Grid.Column="0"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   Text="Рейтинг группы"
-                                   TextWrapping="Wrap"
-                                   Foreground="#90FFFFFF"
-                                   Margin="8"/>
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Center"
+                                    Text="Рейтинг группы"
+                                    TextWrapping="Wrap"
+                                    Foreground="#90FFFFFF"
+                                    Margin="8"/>
 
                         <Border Grid.Column="1" Width="2" VerticalAlignment="Stretch" CornerRadius="8" Background="#90FFFFFF"/>
 
                         <!--Text="{CompiledBinding InstituteRating.Name}"-->
                         <TextBlock Grid.Column="2"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   Text="Рейтинг института"
-                                   TextWrapping="Wrap"
-                                   Foreground="#90FFFFFF"/>
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Center"
+                                    Text="Рейтинг института"
+                                    TextWrapping="Wrap"
+                                    Foreground="#90FFFFFF"/>
 
                     </Grid>
                 </Border>
@@ -114,18 +114,18 @@
                     </ScrollViewer>
                 </Border>
 
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="3" Spacing="4">
-                    <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
-                    <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToGroupsCommand}"/>
-                </StackPanel>
+                <Button Grid.Row="3" Grid.ColumnSpan="2" MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
 
             </Grid>
-        </Border>
 
-        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
-            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
+            <Border Grid.Row="0" CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+                <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
 
-    </Grid>
+            <Button Grid.Row="1" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToGroupsCommand}"/>
+            
+        </Grid>
+    </Border>
+
 
 </UserControl>

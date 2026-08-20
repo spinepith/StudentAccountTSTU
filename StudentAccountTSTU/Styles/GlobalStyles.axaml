@@ -204,7 +204,7 @@
         <Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
     </Style>
 
-    <Style Selector="Border.Blurred">
+    <Style Selector="Border.Blurred, Grid.Blurred">
         <Setter Property="Effect">
             <BlurEffect Radius="2"/>
         </Setter>

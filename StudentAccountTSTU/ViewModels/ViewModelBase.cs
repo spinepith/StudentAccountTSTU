@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace StudentAccountTSTU.ViewModels {
     internal abstract class ViewModelBase : ObservableObject {
-        protected async Task InitializeWithCacheAsync(Dictionary<string, Task?> activeLoadingTasks, string taskKey, Task initTask, Func<Task> loadFromCache, string? alternativeTaskKey = null) {
+        protected async Task InitializeWithCacheAsync(Dictionary<string, Task?> activeLoadingTasks, string taskKey, Func<Task> initTaskFactory, Func<Task> loadFromCache, string? alternativeTaskKey = null) {
             if (alternativeTaskKey is not null && activeLoadingTasks.TryGetValue(alternativeTaskKey, out var altTask) && altTask is not null && !altTask.IsCompleted) {
                 await altTask;
                 await loadFromCache();
@@ -19,6 +19,7 @@ namespace StudentAccountTSTU.ViewModels {
                 return;
             }
 
+            var initTask = initTaskFactory();
             activeLoadingTasks[taskKey] = initTask;
             await initTask;
             activeLoadingTasks[taskKey] = null;

@@ -64,7 +64,7 @@ internal partial class RatingViewModel : ViewModelBase {
     private string? _lastUpdated;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(GetDataCommand), nameof(BackToGroupsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
     private bool _isLoading;
 
     internal RatingViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount, string groupName, GroupsViewModel parentViewModel) {
@@ -81,7 +81,7 @@ internal partial class RatingViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, $"Rating_{CurrentGroup}_Refresh", GetRatingDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, $"Rating_{CurrentGroup}_Refresh", GetRatingDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -128,7 +128,7 @@ internal partial class RatingViewModel : ViewModelBase {
     private async Task InitializeDataAsync() {
         IsLoading = true;
         CurrentUserName = await _webAccount.GetUserNameAsync();
-        await InitializeWithCacheAsync(_activeLoadingTasks, $"Rating_{CurrentGroup}_Init", LoadRatingAsync(), LoadFromCacheAsync, $"Rating_{CurrentGroup}_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, $"Rating_{CurrentGroup}_Init", LoadRatingAsync, LoadFromCacheAsync, $"Rating_{CurrentGroup}_Refresh");
         IsLoading = false;
     }
 
@@ -162,7 +162,7 @@ internal partial class RatingViewModel : ViewModelBase {
             LastUpdated = null;
     }
 
-    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    [RelayCommand]
     private void BackToGroups() {
         _parentViewModel.BackToGroups();
     }

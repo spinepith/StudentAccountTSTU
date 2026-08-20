@@ -95,7 +95,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private async Task GetData() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Refresh", GetScheduleDataAsync(), LoadFromCacheAsync);
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Refresh", GetScheduleDataAsync, LoadFromCacheAsync);
         IsLoading = false;
     }
 
@@ -115,7 +115,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
 
     private async Task InitializeDataAsync() {
         IsLoading = true;
-        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Init", LoadScheduleAsync(), LoadFromCacheAsync, "Schedule_Refresh");
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Init", LoadScheduleAsync, LoadFromCacheAsync, "Schedule_Refresh");
         IsLoading = false;
     }
 

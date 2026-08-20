@@ -8,21 +8,24 @@
              x:Class="StudentAccountTSTU.Views.Mobile.MarksView"
              x:DataType="vm:MarksViewModel">
 
-    <Grid>
+    <Grid RowDefinitions="16*, *" RowSpacing="4">
 
-        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
-            <Grid RowDefinitions="Auto, *, Auto" RowSpacing="8">
+        <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 14*, *" RowSpacing="4">
 
-                <TextBlock Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"
-                           Text="{CompiledBinding LastUpdated}"
-                           TextWrapping="Wrap"
-                           Foreground="#90FFFFFF"
-                           FontSize="10"
-                           IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                    <TextBlock VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               Text="{CompiledBinding LastUpdated}"
+                               TextWrapping="Wrap"
+                               Foreground="#90FFFFFF"
+                               IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </Border>
+            </Border>
 
-                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4">
+            <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+                <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                     <Grid>
 
                         <TextBlock HorizontalAlignment="Center"
@@ -127,17 +130,20 @@
 
                     </Grid>
                 </Border>
+            </Border>
 
-                <StackPanel Grid.Row="2" Spacing="4">
-                    <Button MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
-                    <Button MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
-                </StackPanel>
+            <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+            </Border>
 
-            </Grid>
+        </Grid>
+
+        <Border Grid.Row="0" CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
 
-        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
-            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
         </Border>
 
     </Grid>

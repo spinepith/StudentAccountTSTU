@@ -5,8 +5,9 @@
     See https://docs.avaloniaui.net/docs/guides/platforms/platform-specific-code/dotnet for more details.-->
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-	<AssemblyName>Student Account TSTU</AssemblyName>
-	<ApplicationIcon>..\StudentAccountTSTU\Assets\icon-white.ico</ApplicationIcon>
+    <UseMacOSAppBundle>true</UseMacOSAppBundle>
+    <AssemblyName>Student Account TSTU</AssemblyName>
+    <ApplicationIcon>..\StudentAccountTSTU\Assets\icon-white.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" />
-    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" >
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>

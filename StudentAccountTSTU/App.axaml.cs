@@ -67,4 +67,8 @@ namespace StudentAccountTSTU {
             base.OnFrameworkInitializationCompleted();
         }
     }
+
+    public static class PlatformHooks {
+        public static System.Func<System.Threading.Tasks.Task<string?>>? NativeGaleryAction;
+    }
 }

@@ -1,4 +1,4 @@
-using System.IO;
+Ôªøusing System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -87,7 +87,7 @@ internal partial class LessonsViewModel : ViewModelBase {
 
         if (FileStorage.CheckExists(path)) {
             var allLessonsButton = await FileStorage.GetAsync<List<string>>(path);
-            allLessonsButton?.Add("¬ÒÂ");
+            allLessonsButton?.Add("–í—Å–µ");
             Lessons = allLessonsButton;
             UpdateLastModifiedDate(path);
         }
@@ -96,7 +96,7 @@ internal partial class LessonsViewModel : ViewModelBase {
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = FileStorage.GetLastModified(filePath);
         if (lastModified.HasValue)
-            LastUpdated = $"Œ¡ÕŒ¬À≈ÕŒ {lastModified.Value:dd.MM.yyyy HH:mm}";
+            LastUpdated = $"–û–ë–ù–û–í–õ–ï–ù–û {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
             LastUpdated = null;
     }

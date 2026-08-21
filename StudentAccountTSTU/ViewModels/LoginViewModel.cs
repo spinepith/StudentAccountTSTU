@@ -43,7 +43,7 @@ internal partial class LoginViewModel : ViewModelBase {
                 Username = string.Empty;
                 Password = string.Empty;
             }
-            _ = Login();
+            Avalonia.Threading.Dispatcher.UIThread.Post(() => _ = Login());
         }
         else {
             _settings.DeviceId     = null;

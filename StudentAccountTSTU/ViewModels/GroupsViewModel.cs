@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -93,7 +93,7 @@ internal partial class GroupsViewModel : ViewModelBase {
     private void UpdateLastModifiedDate(string filePath) {
         var lastModified = FileStorage.GetLastModified(filePath);
         if (lastModified.HasValue)
-            LastUpdated = $"Œ¡ÕŒ¬À≈ÕŒ {lastModified.Value:dd.MM.yyyy HH:mm}";
+            LastUpdated = $"–û–ë–ù–û–í–õ–ï–ù–û {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
             LastUpdated = null;
     }

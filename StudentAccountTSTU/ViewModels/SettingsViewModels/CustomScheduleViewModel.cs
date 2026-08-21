@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -106,36 +107,48 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     }
 
     private async Task<string?> SelectImage(string title) {
-        Avalonia.Controls.TopLevel? topLevel = App.TopLevel;
-        if (topLevel == null && Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            topLevel = desktop.MainWindow;
-        
-        if (topLevel?.StorageProvider is not { } storageProvider)
-            return null;
+        if (PlatformHooks.NativeGaleryAction is not null) {
+            var photoPath = await PlatformHooks.NativeGaleryAction.Invoke();
 
-        var options = new FilePickerOpenOptions {
-            Title = title,
-            AllowMultiple = false,
-            FileTypeFilter = new[] {
+            if (photoPath is not null) {
+                var tempFile = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.img");
+                File.Copy(photoPath, tempFile, true);
+                return tempFile;
+            }
+            return null;
+        }
+        else {
+            Avalonia.Controls.TopLevel? topLevel = App.TopLevel;
+            if (topLevel == null && Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                topLevel = desktop.MainWindow;
+
+            if (topLevel?.StorageProvider is not { } storageProvider)
+                return null;
+
+            var options = new FilePickerOpenOptions {
+                Title = title,
+                AllowMultiple = false,
+                FileTypeFilter = new[] {
                 new FilePickerFileType("Изображения") {
                     Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" },
                     MimeTypes = new[] { "image/*" }
                 }
             }
-        };
+            };
 
-        var result = await storageProvider.OpenFilePickerAsync(options);
-        
-        if (result.Count > 0) {
-            var file = result[0];
-            var tempFile = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString() + ".img");
-            using (var stream = await file.OpenReadAsync())
-            using (var outStream = File.Create(tempFile)) {
-                await stream.CopyToAsync(outStream);
+            var result = await storageProvider.OpenFilePickerAsync(options);
+
+            if (result.Count > 0) {
+                var file = result[0];
+                var tempFile = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString() + ".img");
+                using (var stream = await file.OpenReadAsync())
+                using (var outStream = File.Create(tempFile)) {
+                    await stream.CopyToAsync(outStream);
+                }
+                return tempFile;
             }
-            return tempFile;
+            return null;
         }
-        return null;
     }
 
     [RelayCommand]

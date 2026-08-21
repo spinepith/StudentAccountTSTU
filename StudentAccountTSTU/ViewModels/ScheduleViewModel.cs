@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -152,16 +152,13 @@ internal partial class ScheduleViewModel : ViewModelBase {
         var path = Path.Combine("Data", "Schedule.json");
         bool hasCache = FileStorage.CheckExists(path);
 
-        if (hasCache) {
+        if (hasCache)
             await LoadFromCacheAsync();
-        }
 
-        // Only run parser if cache is missing and we don't have a custom schedule that overrides it
         bool needParser = !hasCache && !ShowCustomSchedule;
 
-        if (needParser) {
+        if (needParser)
             await GetScheduleDataAsync();
-        }
     }
 
     private async Task LoadFromCacheAsync() {

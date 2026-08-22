@@ -10,8 +10,8 @@
     <UserControl.Styles>
 
         <Style Selector="local|NavigationBar[Orientation=Horizontal] UniformGrid#ButtonsGrid">
-            <Setter Property="Rows" Value="0"/>
-            <Setter Property="Columns" Value="7"/>
+            <Setter Property="Rows" Value="1"/>
+            <Setter Property="Columns" Value="0"/>
         </Style>
 
         <Style Selector="local|NavigationBar[Orientation=Horizontal] Border#Pill">
@@ -20,15 +20,9 @@
             <Setter Property="Height" Value="2"/>
         </Style>
 
-        <Style Selector="local|NavigationBar[Orientation=Horizontal] RadioButton.Page > Svg">
-            <Setter Property="RenderTransform">
-                <TranslateTransform X="1.4" Y="0"/>
-            </Setter>
-        </Style>
-
         <Style Selector="local|NavigationBar[Orientation=Vertical] UniformGrid#ButtonsGrid">
-            <Setter Property="Rows" Value="7"/>
-            <Setter Property="Columns" Value="0"/>
+            <Setter Property="Rows" Value="0"/>
+            <Setter Property="Columns" Value="1"/>
         </Style>
 
         <Style Selector="local|NavigationBar[Orientation=Vertical] Border#Pill">
@@ -37,10 +31,11 @@
             <Setter Property="Height" Value="20"/>
         </Style>
 
-
         <Style Selector="RadioButton.Page">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="Template">
                 <ControlTemplate>
                     <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
@@ -85,10 +80,6 @@
 
                 <RadioButton x:Name="RatingButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
                     <Svg Path="/Assets/UI/rating_BORDER.svg"/>
-                </RadioButton>
-
-                <RadioButton x:Name="SettingsButton" Classes="Page" GroupName="Menu" Padding="4" IsChecked="False" IsHitTestVisible="False">
-                    <Svg Path="/Assets/UI/settings.svg"/>
                 </RadioButton>
 
             </UniformGrid>

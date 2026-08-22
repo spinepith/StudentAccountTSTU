@@ -133,7 +133,7 @@
             </Border>
 
             <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
             </Border>
 
         </Grid>
@@ -143,7 +143,7 @@
         </Border>
 
         <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
         </Border>
 
     </Grid>

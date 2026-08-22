@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.ViewModels.SettingsViewModels;
 
 using WebAccount.Interfaces;
 
@@ -19,6 +20,10 @@ internal partial class HomeViewModel : ViewModelBase {
     private readonly Settings _settings;
     private readonly IHttpService _httpService;
     private readonly WebAccount.WebAccount _webAccount;
+
+    [ObservableProperty]
+    private ViewModelBase? _currentPage;
+
 
     [ObservableProperty]
     private bool _isLoading = true;
@@ -71,6 +76,20 @@ internal partial class HomeViewModel : ViewModelBase {
         _settings = settings;
 
         _ = InitializeAsync();
+    }
+
+    [RelayCommand]
+    private void OpenInfo() {
+        CurrentPage = new InfoViewModel(this);
+    }
+
+    [RelayCommand]
+    private void OpenSettings() {
+        CurrentPage = new SettingsViewModel(_settings, _webAccount, this);
+    }
+
+    internal void BackToHome() {
+        CurrentPage = null;
     }
 
     private async Task InitializeAsync() {

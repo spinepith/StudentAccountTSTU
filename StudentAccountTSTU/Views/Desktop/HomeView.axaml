@@ -11,7 +11,12 @@
   
     <Grid>
         
-        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+        <Border Classes.Blurred="{CompiledBinding IsLoading}"
+                Background="#10FFFFFF"
+                CornerRadius="28"
+                ClipToBounds="True"
+                Padding="4"
+                IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
             <Grid ColumnDefinitions="2*, *" ColumnSpacing="4">
             
                 <Grid Grid.Column="0" RowDefinitions="*, *" RowSpacing="4">
@@ -214,9 +219,27 @@
 
                 <Grid Grid.Column="1" RowDefinitions="*, 12*" RowSpacing="4">
 
-                    <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                        <TextBlock VerticalAlignment="Center" Text="{CompiledBinding UserDataViewModel.Greeting}" TextAlignment="Center" TextWrapping="Wrap"/>
-                    </Border>
+                    <Grid Grid.Row="0" ColumnDefinitions="6*, *, *" ColumnSpacing="4">
+                        
+
+                        <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                            <TextBlock VerticalAlignment="Center" Text="{CompiledBinding UserDataViewModel.Greeting}" TextAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+
+                        <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                            <Button Padding="4" Command="{CompiledBinding OpenInfoCommand}">
+                                <Svg Path="/Assets/UI/info.svg"/>
+                            </Button>
+                        </Border>
+
+                        <Border Grid.Column="2" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                            <Button Padding="4" Command="{CompiledBinding OpenSettingsCommand}">
+                                <Svg Path="/Assets/UI/settings.svg"/>
+                            </Button>
+                        </Border>
+
+                    </Grid>
+                    
 
                     <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
                         <Panel VerticalAlignment="Stretch">
@@ -254,6 +277,8 @@
             
             </Grid>
         </Border>
+
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
         <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
             <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>

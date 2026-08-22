@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,7 +9,7 @@ using StudentAccountTSTU.Services;
 namespace StudentAccountTSTU.ViewModels.SettingsViewModels;
 
 internal partial class SettingsViewModel : ViewModelBase {
-    private readonly MainViewModel _mainViewModel;
+    private readonly HomeViewModel _parentViewModel;
     private readonly WebAccount.WebAccount _webAccount;
 
     [ObservableProperty]
@@ -21,8 +21,8 @@ internal partial class SettingsViewModel : ViewModelBase {
     [ObservableProperty]
     private bool _removeDataButtonVisible = false;
 
-    internal SettingsViewModel(MainViewModel mainViewModel, Settings settings, WebAccount.WebAccount webAccount) {
-        _mainViewModel = mainViewModel;
+    internal SettingsViewModel(Settings settings, WebAccount.WebAccount webAccount, HomeViewModel parentViewModel) {
+        _parentViewModel = parentViewModel;
         _webAccount = webAccount;
 
         Settings = settings;
@@ -65,7 +65,13 @@ internal partial class SettingsViewModel : ViewModelBase {
             Settings.UserLogin    = null;
             Settings.UserPassword = null;
 
-            _mainViewModel.Logout();
+            if (Avalonia.Application.Current?.DataContext is MainViewModel mainViewModel)
+                mainViewModel.Logout();
         }
+    }
+
+    [RelayCommand]
+    private void BackToHome() {
+        _parentViewModel.BackToHome();
     }
 }

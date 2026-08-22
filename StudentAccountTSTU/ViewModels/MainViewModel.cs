@@ -46,7 +46,7 @@ internal partial class MainViewModel : ViewModelBase {
 
     [RelayCommand]
     private void OnTabClicked(int index) {
-        // ТАКОЙ ВАРИАНТ ИСПОЛЬЗУЕТСЯ, ПОТОМУ ЧТО СТРАНИЦЫ ВСЕГО ДВЕ
+        // ТАКОЙ ВАРИАНТ ИСПОЛЬЗУЕТСЯ, ПОТОМУ ЧТО СТРАНИЦЫ ВСЕГО ТРИ
         // КОГДА СТРАНИЦ СТАНЕТ БОЛЬШЕ, НУЖНО ИСПОЛЬЗОВАТЬ ДРУГОЙ ПОДХОД
         if (CurrentPageIndex == index) {
             if (CurrentPage is LessonsViewModel lessonsViewModel && lessonsViewModel.CurrentPage is not null) {
@@ -95,7 +95,6 @@ internal partial class MainViewModel : ViewModelBase {
             3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings),
             4 => new ReportCardViewModel(_activeLoadingTasks, _webAccount),
             5 => new GroupsViewModel(_activeLoadingTasks, _webAccount),
-            6 => new SettingsViewModel(this, _settings, _webAccount),
             _ => CurrentPage
         };
     }

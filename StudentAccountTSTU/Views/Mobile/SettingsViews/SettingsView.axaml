@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="650"
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
@@ -24,67 +24,79 @@
             <Setter Property="Background" Value="#15FFFFFF"/>
         </Style>
 
+        <Style Selector="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
     </UserControl.Styles>
 
     <Grid>
 
-        <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
-            <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                <ScrollViewer Padding="12">
-                    <StackPanel Spacing="12">
+        <Grid RowDefinitions="16*, 1.4*" RowSpacing="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+            
+            <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                    <ScrollViewer Padding="12">
+                        <StackPanel Spacing="12">
 
-                        <!-- ОСНОВНЫЕ -->
-                        <Button Classes="SettingsRadioButton" Command="{CompiledBinding ToggleSaveDataCommand}">
-                            <Grid ColumnDefinitions="*, Auto">
-                                <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.SaveData}" VerticalAlignment="Center"/>
-                                <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.SaveData}" OffContent="" OnContent="" IsHitTestVisible="False"/>
-                            </Grid>
-                        </Button>
+                            <!-- ОСНОВНЫЕ -->
+                            <Button Classes="SettingsRadioButton" Command="{CompiledBinding ToggleSaveDataCommand}">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.SaveData}" VerticalAlignment="Center"/>
+                                    <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.SaveData}" OffContent="" OnContent="" IsHitTestVisible="False"/>
+                                </Grid>
+                            </Button>
 
-                        <Button Classes="SettingsButton" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
-                            <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
-                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.RemoveData}" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="*" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Button>
+                            <Button Classes="SettingsButton" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                                <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.RemoveData}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="*" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
 
-                        <Button Classes="SettingsButton" Content="ПОДТВЕРДИТЬ" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
+                            <Button Classes="SettingsButton" Content="ПОДТВЕРДИТЬ" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
 
-                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
+                            <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                        <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
-                            <Grid ColumnDefinitions="*, *">
-                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomSchedule}" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Button>
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomSchedule}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
 
-                        <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
-                            <Grid ColumnDefinitions="*, *">
-                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.LoginAndPassword}" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Button>
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.LoginAndPassword}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
 
-                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
+                            <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                        <!-- ИНТЕРФЕЙС -->
-                        <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
-                            <Grid ColumnDefinitions="*, *">
-                                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.AccentColor}" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Button>
+                            <!-- ИНТЕРФЕЙС -->
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.AccentColor}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
 
-                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
+                            <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                        <!-- ВЫХОД -->
-                        <Button Classes="SettingsButton" Content="{x:Static pages:SettingsPages.Logout}" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
+                            <!-- ВЫХОД -->
+                            <Button Classes="SettingsButton" Content="{x:Static pages:SettingsPages.Logout}" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
 
-                    </StackPanel>
-                </ScrollViewer>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
             </Border>
-        </Border>
+
+            <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}"/>
+            </Border>
+
+        </Grid>
 
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         

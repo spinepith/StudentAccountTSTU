@@ -95,7 +95,7 @@
         </Border>
 
         <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
         </Border>
 
     </Grid>

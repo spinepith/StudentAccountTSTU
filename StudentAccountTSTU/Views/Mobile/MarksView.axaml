@@ -53,7 +53,7 @@
 
                                                 <TextBlock Classes="Label" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
 
-                                                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                                                     <StackPanel>
 
                                                         <Border Classes="TableLabel">

@@ -90,6 +90,7 @@ internal partial class HomeViewModel : ViewModelBase {
 
     internal void BackToHome() {
         CurrentPage = null;
+        UpdateHomeCustomImage();
     }
 
     private async Task InitializeAsync() {
@@ -269,3 +270,4 @@ internal partial class HomeViewModel : ViewModelBase {
         }
     }
 }
+

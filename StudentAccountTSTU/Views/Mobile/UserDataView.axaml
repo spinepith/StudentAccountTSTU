@@ -60,8 +60,7 @@
                                                     Foreground="#90FFFFFF"/>
                                     </Grid>
 
-                                    <ScrollViewer IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                        <StackPanel Spacing="4" VerticalAlignment="Center">
+                                    <StackPanel IsVisible="{CompiledBinding UserData, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="4" VerticalAlignment="Center">
                                 
                                             <Border>
                                                 <Grid ColumnDefinitions="*, *">
@@ -99,7 +98,6 @@
                                             </Border>
 
                                         </StackPanel>
-                                    </ScrollViewer>
 
                                 </StackPanel>
                             </Border>
@@ -116,8 +114,7 @@
                                                     Foreground="#90FFFFFF"/>
                                     </Grid>
 
-                                    <ScrollViewer IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                        <StackPanel Spacing="4" VerticalAlignment="Center">
+                                    <StackPanel IsVisible="{CompiledBinding UserData?.Funding, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="4" VerticalAlignment="Center">
 
                                             <Border>
                                                 <Grid ColumnDefinitions="*, *">
@@ -134,7 +131,6 @@
                                             </Border>
 
                                         </StackPanel>
-                                    </ScrollViewer>
 
                                 </Grid>
                             </Border>
@@ -151,7 +147,7 @@
                                                 Foreground="#90FFFFFF"/>
                                     </Grid>
 
-                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" IsVisible="{CompiledBinding UserData?.Orders, Converter={x:Static ObjectConverters.IsNotNull}}">
                                         <StackPanel Spacing="4" VerticalAlignment="Center">
                                 
                                             <Border Classes="TableLabel">

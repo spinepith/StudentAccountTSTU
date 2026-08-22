@@ -51,7 +51,7 @@
                                         </Grid>
 
                                         <StackPanel Spacing="4" VerticalAlignment="Center" IsVisible="{CompiledBinding GrouppedExams, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                                                 <StackPanel Spacing="4">
                                             
                                                     <Border Classes="TableLabel">
@@ -145,7 +145,7 @@
                                         </Grid>
 
                                         <StackPanel Spacing="4" VerticalAlignment="Center" IsVisible="{CompiledBinding GrouppedTests, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                                                 <StackPanel Spacing="4">
 
                                                     <Border Classes="TableLabel">

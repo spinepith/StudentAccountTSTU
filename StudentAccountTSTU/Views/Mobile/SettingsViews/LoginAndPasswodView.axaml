@@ -8,7 +8,13 @@
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.LoginAndPasswordView"
              x:DataType="vm:LoginAndPasswordViewModel">
 
-    <Grid RowDefinitions="*, 15*, *" RowSpacing="4">
+    <UserControl.Styles>
+        <Style Selector="Button.DataButton, Label.DataLabel">
+            <Setter Property="MinHeight" Value="48" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
         
         <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
             <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
@@ -25,9 +31,9 @@
             <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
                 <ScrollViewer>
                     <StackPanel MinWidth="256" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
-                        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Login}" CornerRadius="26"/>
-                        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Password}" CornerRadius="26"/>
-                        <Button MinHeight="32" Content="{CompiledBinding ShowHideText}" Command="{CompiledBinding ShowHideCommand}"/>
+                        <Label Classes="DataLabel" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Login}" CornerRadius="26"/>
+                        <Label Classes="DataLabel" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#10FFFFFF" Content="{CompiledBinding Password}" CornerRadius="26"/>
+                        <Button Classes="DataButton" HorizontalAlignment="Stretch" Content="{CompiledBinding ShowHideText}" Command="{CompiledBinding ShowHideCommand}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

@@ -3,13 +3,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:StudentAccountTSTU.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="StudentAccountTSTU.Views.Mobile.LoginView"
              x:DataType="vm:LoginViewModel">
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch" RowDefinitions="*, *" RowSpacing="4" MinWidth="200">
+    <UserControl.Styles>
+        <Style Selector="TextBox.DataTextBox">
+            <Setter Property="MinHeight" Value="48" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="26" />
+        </Style>
+    </UserControl.Styles>
 
-        <Svg Path="/Assets/logo-white.svg" VerticalAlignment="Top"/>
+    <Grid RowDefinitions="*, 1.4*" HorizontalAlignment="Center" VerticalAlignment="Stretch" RowSpacing="4" MinWidth="200">
+
+        <Svg Grid.Row="0" Path="/Assets/logo-white.svg" VerticalAlignment="Top"/>
 
         <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="4" MaxWidth="300" VerticalAlignment="Top">
             
@@ -17,9 +28,9 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" Text="{CompiledBinding AuthMessage}" Foreground="White" Margin="0, 0, 0, 20"/>
             </ScrollViewer>
             
-            <TextBox Grid.Row="1" Text="{CompiledBinding Username}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ЛОГИН"/>
-            <TextBox Grid.Row="2" Text="{CompiledBinding Password}" IsEnabled="{CompiledBinding !IsLoading}" HorizontalContentAlignment="Center" Background="#10FFFFFF" BorderBrush="Transparent" CornerRadius="26" PlaceholderText="ПАРОЛЬ" PasswordChar="*"/>
-            <Button Grid.Row="3" Content="ВОЙТИ" Command="{CompiledBinding LoginCommand}"/>
+            <TextBox Grid.Row="1" Classes="DataTextBox" Text="{CompiledBinding Username}" IsEnabled="{CompiledBinding !IsLoading}" PlaceholderText="ЛОГИН"/>
+            <TextBox Grid.Row="2" Classes="DataTextBox" Text="{CompiledBinding Password}" IsEnabled="{CompiledBinding !IsLoading}" PlaceholderText="ПАРОЛЬ" PasswordChar="*"/>
+            <Button Grid.Row="3" MinHeight="48" Content="ВОЙТИ" Command="{CompiledBinding LoginCommand}"/>
         
         </Grid>
 

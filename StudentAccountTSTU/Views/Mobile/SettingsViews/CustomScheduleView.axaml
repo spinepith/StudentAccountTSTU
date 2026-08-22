@@ -8,7 +8,13 @@
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.CustomScheduleView"
              x:DataType="vm:CustomScheduleViewModel">
 
-    <Grid RowDefinitions="*, 15*, *" RowSpacing="4">
+    <UserControl.Styles>
+        <Style Selector="Button.ScheduleButton">
+            <Setter Property="MinHeight" Value="48" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
         
         <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
             <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
@@ -68,19 +74,19 @@
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4"/>
 
                         <StackPanel Spacing="8" IsVisible="{CompiledBinding IsFirstTypeSelected}">
-                            <Button MinHeight="32" Content="НЕЧЕТНАЯ И ЧЕТНАЯ НЕДЕЛИ" Command="{CompiledBinding SelectFirstTypeImageCommand}"/>
+                            <Button Classes="ScheduleButton" Content="НЕЧЕТНАЯ И ЧЕТНАЯ НЕДЕЛИ" Command="{CompiledBinding SelectFirstTypeImageCommand}"/>
                         </StackPanel>
 
                         <Grid ColumnDefinitions="*, *" ColumnSpacing="16" IsVisible="{CompiledBinding IsSecondTypeSelected}">
-                            <Button Grid.Column="0" MinHeight="32" Content="НЕЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeFirstImageCommand}"/>
-                            <Button Grid.Column="1" MinHeight="32" Content="ЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeSecondImageCommand}"/>
+                            <Button Grid.Column="0" Classes="ScheduleButton" Content="НЕЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeFirstImageCommand}"/>
+                            <Button Grid.Column="1" Classes="ScheduleButton" Content="ЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeSecondImageCommand}"/>
                         </Grid>
 
                         <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4"/>
 
                         <StackPanel Spacing="8">
-                            <Button MinHeight="32" Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding CanApply}"/>
-                            <Button MinHeight="32" Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding CanDelete}"/>
+                            <Button Classes="ScheduleButton" Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding CanApply}"/>
+                            <Button Classes="ScheduleButton" Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding CanDelete}"/>
                         </StackPanel>
 
                     </StackPanel>

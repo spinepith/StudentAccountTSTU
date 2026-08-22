@@ -8,9 +8,9 @@
              x:Class="StudentAccountTSTU.Views.Mobile.MarksView"
              x:DataType="vm:MarksViewModel">
 
-    <Grid RowDefinitions="16*, *" RowSpacing="4">
+    <Grid RowDefinitions="16*, 1.4*" RowSpacing="4">
 
-        <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 14*, *" RowSpacing="4">
+        <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 14*, 1.4*" RowSpacing="4">
 
             <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
                 <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">

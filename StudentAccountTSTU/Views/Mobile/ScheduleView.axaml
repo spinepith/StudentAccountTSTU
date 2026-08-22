@@ -11,7 +11,7 @@
 
     <Grid>
         
-        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 15*, *" RowSpacing="4">
+        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
 
             <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}">
                     <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">

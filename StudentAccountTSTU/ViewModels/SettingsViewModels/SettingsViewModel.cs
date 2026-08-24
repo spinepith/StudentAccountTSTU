@@ -35,6 +35,7 @@ internal partial class SettingsViewModel : ViewModelBase {
             SettingsPages.LoginAndPassword => new LoginAndPasswordViewModel(this, Settings),
             SettingsPages.AccentColor      => new AccentColorViewModel(this, Settings),
             SettingsPages.CustomAvatar     => new CustomAvatarViewModel(this, Settings),
+            SettingsPages.Info             => new InfoViewModel(this),
             _ => CurrentPage
         };
     }
@@ -52,10 +53,13 @@ internal partial class SettingsViewModel : ViewModelBase {
         RemoveDataButtonVisible = !RemoveDataButtonVisible;
     }
 
+    public bool DataRemoved { get; private set; } = false;
+
     [RelayCommand]
     private void RemoveSavedData() {
         FileStorage.RemoveDirectory("Data");
         RemoveDataButtonVisible = false;
+        DataRemoved = true;
     }
 
     [RelayCommand]
@@ -71,7 +75,12 @@ internal partial class SettingsViewModel : ViewModelBase {
     }
 
     [RelayCommand]
+    private void OpenInfo() {
+        CurrentPage = new InfoViewModel(this);
+    }
+
+    [RelayCommand]
     private void BackToHome() {
-        _parentViewModel.BackToHome();
+        _parentViewModel.BackToHome(DataRemoved);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -134,15 +134,20 @@ internal partial class ScheduleViewModel : ViewModelBase {
         if (hasSecondType) {
             ShowCustomSchedule = true;
             ShowWeeksHeader = true;
-            if (secondType1Exists)
-                SecondTypeFirstImage = new Bitmap(FileStorage.GetFullPath(secondType1Path));
-            if (secondType2Exists)
-                SecondTypeSecondImage = new Bitmap(FileStorage.GetFullPath(secondType2Path));
+            if (secondType1Exists) {
+                using var stream1 = FileStorage.GetFileStreamAsync(secondType1Path);
+                SecondTypeFirstImage = new Bitmap(stream1);
+            }
+            if (secondType2Exists) {
+                using var stream2 = FileStorage.GetFileStreamAsync(secondType2Path);
+                SecondTypeSecondImage = new Bitmap(stream2);
+            }
         }
         else if (hasFirstType) {
             ShowCustomSchedule = true;
             ShowWeeksHeader = false;
-            FirstTypeImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
+            using var stream = FileStorage.GetFileStreamAsync(firstTypePath);
+            FirstTypeImage = new Bitmap(stream);
         }
         else {
             ShowCustomSchedule = false;

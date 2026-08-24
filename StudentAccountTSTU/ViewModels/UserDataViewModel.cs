@@ -128,8 +128,8 @@ internal partial class UserDataViewModel : ViewModelBase {
                 await FileStorage.SaveStreamAsync(networkStream, path);
             }
 
-            var loadPath = FileStorage.GetFullPath(path);
-            return new Bitmap(loadPath);
+            using var fileStream = FileStorage.GetFileStreamAsync(path);
+            return new Bitmap(fileStream);
         }
         catch {
             if (FileStorage.CheckExists(path))

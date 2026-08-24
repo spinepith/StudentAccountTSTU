@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using StudentAccountTSTU.ViewModels.SettingsViewModels;
+
 namespace StudentAccountTSTU.ViewModels;
 
 internal partial class InfoViewModel : ViewModelBase {
-    private readonly HomeViewModel _parentViewModel;
+    private readonly SettingsViewModel _parentViewModel;
 
     [ObservableProperty]
     private ViewModelBase? _currentPage;
@@ -15,7 +17,7 @@ internal partial class InfoViewModel : ViewModelBase {
     [ObservableProperty]
     private string _author;
 
-    internal InfoViewModel(HomeViewModel parentViewModel) {
+    internal InfoViewModel(SettingsViewModel parentViewModel) {
         _parentViewModel = parentViewModel;
 
         _description =
@@ -28,7 +30,7 @@ internal partial class InfoViewModel : ViewModelBase {
     }
 
     [RelayCommand]
-    private void BackToHome() {
-        _parentViewModel.BackToHome();
+    private void BackToSettings() {
+        _parentViewModel.BackToAllSettings();
     }
 }

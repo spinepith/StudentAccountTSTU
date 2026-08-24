@@ -22,7 +22,7 @@ namespace StudentAccountTSTU {
             var viewModelTypeName = viewModelType.FullName!;
 
             string viewTypeName;
-            if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+            if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS() || OperatingSystem.IsBrowser())
                 viewTypeName = viewModelTypeName
                     .Replace("SettingsViewModels", "SettingsViews", StringComparison.Ordinal)
                     .Replace("ViewModels", "Views.Mobile", StringComparison.Ordinal)

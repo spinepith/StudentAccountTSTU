@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -69,18 +70,16 @@ internal partial class HomeViewModel : ViewModelBase {
     [ObservableProperty]
     private MarksViewModel? _marksViewModel;
 
-    internal HomeViewModel(Dictionary<string, Task?> activeLoadingTasks, IHttpService httpService, WebAccount.WebAccount webAccount, Settings settings) {
+    private readonly MainViewModel _mainViewModel;
+
+    internal HomeViewModel(Dictionary<string, Task?> activeLoadingTasks, IHttpService httpService, WebAccount.WebAccount webAccount, Settings settings, MainViewModel mainViewModel) {
         _activeLoadingTasks = activeLoadingTasks;
         _httpService = httpService;
         _webAccount = webAccount;
         _settings = settings;
+        _mainViewModel = mainViewModel;
 
         _ = InitializeAsync();
-    }
-
-    [RelayCommand]
-    private void OpenInfo() {
-        CurrentPage = new InfoViewModel(this);
     }
 
     [RelayCommand]
@@ -88,7 +87,12 @@ internal partial class HomeViewModel : ViewModelBase {
         CurrentPage = new SettingsViewModel(_settings, _webAccount, this);
     }
 
-    internal void BackToHome() {
+    internal void BackToHome(bool dataRemoved = false) {
+        if (dataRemoved || !HasAnyData()) {
+            _mainViewModel.NavigateToPage(0);
+            return;
+        }
+
         CurrentPage = null;
         UpdateHomeCustomImage();
     }
@@ -101,20 +105,17 @@ internal partial class HomeViewModel : ViewModelBase {
         UserDataViewModel = new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount);
         ScheduleViewModel = new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings);
         ScheduleViewModel.PropertyChanged += (s, e) => {
-            if (e.PropertyName == nameof(ScheduleViewModel.CurrentWeek)) {
+            if (e.PropertyName == nameof(ScheduleViewModel.CurrentWeek))
                 UpdateHomeCustomImage();
-            }
         };
         UpdateHomeCustomImage();
         ReportCardViewModel = new ReportCardViewModel(_activeLoadingTasks, _webAccount);
         LessonsViewModel = new LessonsViewModel(_activeLoadingTasks, _webAccount);
         GroupsViewModel = new GroupsViewModel(_activeLoadingTasks, _webAccount);
         GroupsViewModel.PropertyChanged += (s, e) => {
-            if (e.PropertyName is nameof(GroupsViewModel.Groups)) {
-                if (GroupsViewModel.Groups?.Count is 1 && SelectedGroupName is null) {
+            if (e.PropertyName is nameof(GroupsViewModel.Groups))
+                if (GroupsViewModel.Groups?.Count is 1 && SelectedGroupName is null)
                     SelectGroup(GroupsViewModel.Groups[0]);
-                }
-            }
         };
         if (GroupsViewModel.Groups?.Count is 1 && SelectedGroupName is null)
             SelectGroup(GroupsViewModel.Groups[0]);
@@ -158,10 +159,21 @@ internal partial class HomeViewModel : ViewModelBase {
 
     private async Task MonitorImageLoading() {
         while (DisplayImage is null) {
-            var avatarPath = Path.Combine("Data", "Avatar.jpg");
-            if (FileStorage.CheckExists(avatarPath)) {
+            var customAvatarPath = Path.Combine("Data", "Avatar.jpg");
+            var webAvatarPath = Path.Combine("Data", "UserImage.jpg");
+
+            if (FileStorage.CheckExists(customAvatarPath)) {
                 try {
-                    DisplayImage = new Bitmap(FileStorage.GetFullPath(avatarPath));
+                    using var stream = FileStorage.GetFileStreamAsync(customAvatarPath);
+                    DisplayImage = new Bitmap(stream);
+                    break;
+                }
+                catch { }
+            }
+            else if (FileStorage.CheckExists(webAvatarPath)) {
+                try {
+                    using var stream = FileStorage.GetFileStreamAsync(webAvatarPath);
+                    DisplayImage = new Bitmap(stream);
                     break;
                 }
                 catch { }
@@ -238,36 +250,71 @@ internal partial class HomeViewModel : ViewModelBase {
             if (currentWeek != null) {
                 if (currentWeek == "НЕЧЕТНАЯ" && secondType1Exists) {
                     try {
-                        HomeCustomImage = new Bitmap(FileStorage.GetFullPath(secondType1Path));
+                        using var stream = FileStorage.GetFileStreamAsync(secondType1Path);
+                        HomeCustomImage = new Bitmap(stream);
                         ShowHomeCustomImage = true;
                         ShowHomeCustomImageWeek = true;
                         CurrentWeek = currentWeek;
-                    } catch { }
-                } else if (currentWeek == "ЧЕТНАЯ" && secondType2Exists) {
+                    }
+                    catch { }
+                }
+                else if (currentWeek == "ЧЕТНАЯ" && secondType2Exists) {
                     try {
-                        HomeCustomImage = new Bitmap(FileStorage.GetFullPath(secondType2Path));
+                        using var stream = FileStorage.GetFileStreamAsync(secondType2Path);
+                        HomeCustomImage = new Bitmap(stream);
                         ShowHomeCustomImage = true;
                         ShowHomeCustomImageWeek = true;
                         CurrentWeek = currentWeek;
-                    } catch { }
-                } else {
+                    }
+                    catch { }
+                }
+                else {
+                    HomeCustomImage = null;
                     ShowHomeCustomImage = false;
                     ShowHomeCustomImageWeek = false;
                 }
-            } else {
+            }
+            else {
+                HomeCustomImage = null;
                 ShowHomeCustomImage = false;
                 ShowHomeCustomImageWeek = false;
             }
-        } else if (hasFirstType) {
+        }
+        else if (hasFirstType) {
             try {
-                HomeCustomImage = new Bitmap(FileStorage.GetFullPath(firstTypePath));
+                using var stream = FileStorage.GetFileStreamAsync(firstTypePath);
+                HomeCustomImage = new Bitmap(stream);
                 ShowHomeCustomImage = true;
                 ShowHomeCustomImageWeek = false;
-            } catch { }
-        } else {
+            }
+            catch { }
+        }
+        else {
+            HomeCustomImage = null;
             ShowHomeCustomImage = false;
             ShowHomeCustomImageWeek = false;
         }
+
+        var customAvatarPath = Path.Combine("Data", "Avatar.jpg");
+        var webAvatarPath = Path.Combine("Data", "UserImage.jpg");
+
+        if (FileStorage.CheckExists(customAvatarPath)) {
+            try {
+                using var stream = FileStorage.GetFileStreamAsync(customAvatarPath);
+                DisplayImage = new Bitmap(stream);
+            }
+            catch { }
+        }
+        else if (FileStorage.CheckExists(webAvatarPath)) {
+            try {
+                using var stream = FileStorage.GetFileStreamAsync(webAvatarPath);
+                DisplayImage = new Bitmap(stream);
+            }
+            catch { }
+        }
+        else if (UserDataViewModel?.UserImage is not null)
+            DisplayImage = UserDataViewModel.UserImage;
+        else
+            DisplayImage = null;
     }
 }
-

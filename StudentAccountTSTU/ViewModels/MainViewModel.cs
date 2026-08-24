@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -53,17 +53,17 @@ internal partial class MainViewModel : ViewModelBase {
                 lessonsViewModel.BackToLessons();
                 return;
             }
-            
+
             if (CurrentPage is GroupsViewModel groupsViewModel && groupsViewModel.CurrentPage is not null) {
                 groupsViewModel.BackToGroups();
                 return;
             }
 
-            if (CurrentPage is SettingsViewModel settingsViewModel && settingsViewModel.CurrentPage is not null) {
-                settingsViewModel.BackToAllSettings();
+            if (CurrentPage is HomeViewModel homeViewModel && homeViewModel.CurrentPage is not null) {
+                homeViewModel.BackToHome();
                 return;
             }
-            
+
             return;
         }
 
@@ -84,12 +84,12 @@ internal partial class MainViewModel : ViewModelBase {
         FileStorage.RemoveDirectory("Data");
     }
 
-    private void NavigateToPage(int index) {
+    internal void NavigateToPage(int index) {
         if (!IsAuthenticated)
             return;
 
         CurrentPage = index switch {
-            0 => new HomeViewModel(_activeLoadingTasks, _httpService, _webAccount, _settings),
+            0 => new HomeViewModel(_activeLoadingTasks, _httpService, _webAccount, _settings, this),
             1 => new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount),
             2 => new LessonsViewModel(_activeLoadingTasks, _webAccount),
             3 => new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings),

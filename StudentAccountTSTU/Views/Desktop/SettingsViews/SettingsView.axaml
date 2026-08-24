@@ -8,7 +8,7 @@
              x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
-    <Grid>
+    <Grid RowDefinitions="*">
 
         <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
             <Grid RowDefinitions="*, Auto" RowSpacing="4">
@@ -70,6 +70,15 @@
                             <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomAvatar}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomAvatar}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
+
+                            <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
+
+                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.Info}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.Info}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
                                 </Grid>
                             </Button>

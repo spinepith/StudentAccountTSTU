@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -31,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Desktop\InfoView.axaml.cs">
+    <Compile Update="Views\Desktop\SettingsViews\InfoView.axaml.cs">
       <DependentUpon>InfoView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Desktop\MainViewDesktop.axaml.cs">

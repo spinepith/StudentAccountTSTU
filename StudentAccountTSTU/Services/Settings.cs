@@ -9,6 +9,7 @@ namespace StudentAccountTSTU.Services;
 
 public partial class Settings : ObservableObject {
     private static readonly string Path =
+        OperatingSystem.IsBrowser() ? "Settings.json" :
         OperatingSystem.IsAndroid() || OperatingSystem.IsIOS()
         ? System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Settings.json")
         : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "StudentAccountTSTU", "Settings.json");
@@ -49,6 +50,9 @@ public partial class Settings : ObservableObject {
     }
 
     public static Settings Load() {
+        if (OperatingSystem.IsBrowser())
+            ;
+
         if (File.Exists(Path)) {
             try {
                 var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path)) ?? new Settings();
@@ -67,7 +71,14 @@ public partial class Settings : ObservableObject {
     }
 
     private void Save() {
-        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
-        File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+        try {
+            if (OperatingSystem.IsBrowser())
+                ;
+            else {
+                Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
+                File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+            }
+        }
+        catch { }
     }
 }

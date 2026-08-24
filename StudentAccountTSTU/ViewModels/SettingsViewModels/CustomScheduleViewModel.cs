@@ -75,29 +75,48 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
         }
     }
 
+    private Bitmap? LoadBitmap(string path) {
+        try {
+            return new Bitmap(path);
+        }
+        catch {
+            return null;
+        }
+    }
+
+    private Bitmap? LoadBitmapFromStorage(string path) {
+        try {
+            using var stream = FileStorage.GetFileStreamAsync(path);
+            return new Bitmap(stream);
+        }
+        catch {
+            return null;
+        }
+    }
+
     private void CheckImagesExist() {
         var firstTypeExists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleFirstType.jpg"));
         var secondType1Exists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleSecondType1.jpg"));
         var secondType2Exists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleSecondType2.jpg"));
 
         if (TempFirstTypeImagePath is not null)
-            FirstTypeImage = new Bitmap(TempFirstTypeImagePath);
+            FirstTypeImage = LoadBitmap(TempFirstTypeImagePath);
         else if (firstTypeExists)
-            FirstTypeImage = new Bitmap(FileStorage.GetFullPath(Path.Combine("Data", "ScheduleFirstType.jpg")));
+            FirstTypeImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleFirstType.jpg"));
         else
             FirstTypeImage = null;
 
         if (TempSecondTypeFirstImagePath is not null)
-            SecondTypeFirstImage = new Bitmap(TempSecondTypeFirstImagePath);
+            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImagePath);
         else if (secondType1Exists)
-            SecondTypeFirstImage = new Bitmap(FileStorage.GetFullPath(Path.Combine("Data", "ScheduleSecondType1.jpg")));
+            SecondTypeFirstImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType1.jpg"));
         else
             SecondTypeFirstImage = null;
 
         if (TempSecondTypeSecondImagePath is not null)
-            SecondTypeSecondImage = new Bitmap(TempSecondTypeSecondImagePath);
+            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImagePath);
         else if (secondType2Exists)
-            SecondTypeSecondImage = new Bitmap(FileStorage.GetFullPath(Path.Combine("Data", "ScheduleSecondType2.jpg")));
+            SecondTypeSecondImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType2.jpg"));
         else
             SecondTypeSecondImage = null;
 
@@ -155,7 +174,7 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     private async Task SelectFirstTypeImage() {
         TempFirstTypeImagePath = await SelectImage("Выбрать расписание");
         if (TempFirstTypeImagePath is not null) {
-            FirstTypeImage = new Bitmap(TempFirstTypeImagePath);
+            FirstTypeImage = LoadBitmap(TempFirstTypeImagePath);
             CanApply = true;
         }
     }
@@ -164,7 +183,7 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     private async Task SelectSecondTypeFirstImage() {
         TempSecondTypeFirstImagePath = await SelectImage("Выбрать первое расписание");
         if (TempSecondTypeFirstImagePath is not null) {
-            SecondTypeFirstImage = new Bitmap(TempSecondTypeFirstImagePath);
+            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImagePath);
             ShowSecondTypeDefault = false;
             UpdateCanApply();
         }
@@ -174,7 +193,7 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     private async Task SelectSecondTypeSecondImage() {
         TempSecondTypeSecondImagePath = await SelectImage("Выбрать второе расписание");
         if (TempSecondTypeSecondImagePath is not null) {
-            SecondTypeSecondImage = new Bitmap(TempSecondTypeSecondImagePath);
+            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImagePath);
             ShowSecondTypeDefault = false;
             UpdateCanApply();
         }

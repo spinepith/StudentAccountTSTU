@@ -15,6 +15,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Padding" Value="16, 0"/>
             <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="CornerRadius" Value="20"/>
         </Style>
 
         <Style Selector="Button.SettingsRadioButton">
@@ -22,6 +23,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Padding" Value="16, 0, 0, 0"/>
             <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="CornerRadius" Value="20"/>
         </Style>
 
         <Style Selector="TextBlock">
@@ -30,13 +32,12 @@
 
     </UserControl.Styles>
 
-    <Grid>
-
-        <Grid RowDefinitions="16*, 1.4*" RowSpacing="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+    <Grid RowDefinitions="*">
+        <Grid RowDefinitions="16*, 1.4*" RowSpacing="4" VerticalAlignment="Stretch" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
             
-            <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                    <ScrollViewer Padding="12">
+            <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                    <ScrollViewer>
                         <StackPanel Spacing="12">
 
                             <!-- ОСНОВНЫЕ -->
@@ -82,21 +83,38 @@
                                 </Grid>
                             </Button>
 
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomAvatar}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomAvatar}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
+
+                            <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
+
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.Info}">
+                                <Grid ColumnDefinitions="*, *">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.Info}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
+
                             <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                             <!-- ВЫХОД -->
                             <Button Classes="SettingsButton" Content="{x:Static pages:SettingsPages.Logout}" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
 
-                        </StackPanel>
+                        </StackPanel>                        
                     </ScrollViewer>
                 </Border>
-            </Border>
+            </Border>                
 
             <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
                 <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}"/>
             </Border>
 
         </Grid>
+
 
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         

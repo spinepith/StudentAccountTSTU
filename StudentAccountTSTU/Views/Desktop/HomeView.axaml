@@ -219,7 +219,7 @@
 
                 <Grid Grid.Column="1" RowDefinitions="*, 12*" RowSpacing="4">
 
-                    <Grid Grid.Row="0" ColumnDefinitions="6*, *, *" ColumnSpacing="4">
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto" ColumnSpacing="4">
                         
 
                         <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
@@ -227,13 +227,7 @@
                         </Border>
 
                         <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                            <Button Padding="4" Command="{CompiledBinding OpenInfoCommand}">
-                                <Svg Path="/Assets/UI/info.svg"/>
-                            </Button>
-                        </Border>
-
-                        <Border Grid.Column="2" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                            <Button Padding="4" Command="{CompiledBinding OpenSettingsCommand}">
+                            <Button Padding="4" Command="{CompiledBinding OpenSettingsCommand}" IsEnabled="{CompiledBinding !IsLoading}">
                                 <Svg Path="/Assets/UI/settings.svg"/>
                             </Button>
                         </Border>

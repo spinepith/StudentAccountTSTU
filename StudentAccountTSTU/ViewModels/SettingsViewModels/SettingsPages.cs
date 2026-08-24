@@ -6,6 +6,7 @@ internal static class SettingsPages {
     public const string LoginAndPassword = "ЛОГИН И ПАРОЛЬ";
     public const string AccentColor      = "АКЦЕНТНЫЙ ЦВЕТ";
     public const string CustomAvatar     = "АВАТАРКА";
+    public const string Info             = "О ПРИЛОЖЕНИИ";
 
     /* НЕ ИМЕЮТ ОТДЕЛЬНОЙ СТРАНИЦЫ */
     public const string SaveData   = "СОХРАНЕНИЕ ДАННЫХ";

@@ -1,0 +1,17 @@
+{
+  "name": "Student Account TSTU",
+  "short_name": "TSTU",
+  "description": "Student Account TSTU",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#282C34",
+  "theme_color": "#282C34",
+  "icons": [
+    {
+      "src": "/splash_logo.png",
+      "sizes": "2176x2176",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

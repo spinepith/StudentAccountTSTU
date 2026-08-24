@@ -29,7 +29,7 @@
 
         <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
             <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
-                <ScrollViewer>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel MinWidth="256" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
                         
                         <Grid ColumnDefinitions="*, *" ColumnSpacing="16">

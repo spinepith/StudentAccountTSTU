@@ -8,20 +8,25 @@
     <meta name="theme-color" content="#282C34">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" type="image/png" href="/icon.png" media="(prefers-color-scheme: light)">
-    <link rel="icon" type="image/png" href="/logo.png" media="(prefers-color-scheme: dark)">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="./icon.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="./logo.png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="./icon.png">
+    <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="./app.css" />
 </head>
 
 <body style="margin: 0; overflow: hidden; background-color: #282C34;">
-<div id="out">
-    <div class="avalonia-splash">
-        <img src="./logo.png" alt="Student Account TSTU" style="max-width: 300px;" />
+    <div id="out">
+        <div class="avalonia-splash">
+            <img src="./logo.png" alt="Student Account TSTU" style="max-width: 300px;" />
+        </div>
     </div>
-</div>
-<script type='module' src="./main.js"></script>
+    <script type='module' src="./main.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js');
+        }
+    </script>
 </body>
 
 </html>

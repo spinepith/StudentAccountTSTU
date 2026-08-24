@@ -28,4 +28,8 @@
   <ItemGroup>
     <ProjectReference Include="..\StudentAccountTSTU\StudentAccountTSTU.csproj" />
   </ItemGroup>
+
+  <Target Name="InjectVersionToJS" BeforeTargets="Build">
+  	<WriteLinesToFile File="wwwroot\version.js" Lines="const APP_VERSION = '$(Version)';" Overwrite="true" />
+  </Target>
 </Project>

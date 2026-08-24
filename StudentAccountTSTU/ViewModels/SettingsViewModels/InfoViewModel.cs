@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.ViewModels.SettingsViewModels;
@@ -26,7 +28,7 @@ internal partial class InfoViewModel : ViewModelBase {
             "Программа не взаимодействует напрямую с внутренними системами учебного заведения, поэтому процесс может занимать чуть больше времени.\n\n" +
             "Всё, что программа собирает, остается только на вашем устройстве. Никакие ваши данные никуда не отправляются.";
 
-        _author = "Версия 0.0.2a\nРазработано студентом группы БВТ231\nДубенский Василий";
+        _author = $"Версия {typeof(App).Assembly.GetName().Version}\nРазработано студентом группы БВТ231\nДубенский Василий";
     }
 
     [RelayCommand]

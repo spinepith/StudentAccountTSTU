@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 using StudentAccountTSTU.ViewModels.SettingsViewModels;
 
 using WebAccount.Interfaces;
@@ -87,28 +88,28 @@ internal partial class HomeViewModel : ViewModelBase {
         CurrentPage = new SettingsViewModel(_settings, _webAccount, this);
     }
 
-    internal void BackToHome(bool dataRemoved = false) {
-        if (dataRemoved || !HasAnyData()) {
+    internal async Task BackToHome(bool dataRemoved = false) {
+        if (dataRemoved || !await HasAnyData()) {
             _mainViewModel.NavigateToPage(0);
             return;
         }
 
         CurrentPage = null;
-        UpdateHomeCustomImage();
+        await UpdateHomeCustomImage();
     }
 
     private async Task InitializeAsync() {
         IsLoading = true;
 
-        var hasData = HasAnyData();
+        var hasData = await HasAnyData();
 
         UserDataViewModel = new UserDataViewModel(_activeLoadingTasks, _httpService, _webAccount);
         ScheduleViewModel = new ScheduleViewModel(_activeLoadingTasks, _webAccount, _settings);
-        ScheduleViewModel.PropertyChanged += (s, e) => {
-            if (e.PropertyName == nameof(ScheduleViewModel.CurrentWeek))
-                UpdateHomeCustomImage();
+        ScheduleViewModel.PropertyChanged += async (s, e) => {
+            if (e.PropertyName is nameof(ScheduleViewModel.CurrentWeek))
+                await UpdateHomeCustomImage();
         };
-        UpdateHomeCustomImage();
+        await UpdateHomeCustomImage();
         ReportCardViewModel = new ReportCardViewModel(_activeLoadingTasks, _webAccount);
         LessonsViewModel = new LessonsViewModel(_activeLoadingTasks, _webAccount);
         GroupsViewModel = new GroupsViewModel(_activeLoadingTasks, _webAccount);
@@ -147,7 +148,7 @@ internal partial class HomeViewModel : ViewModelBase {
 
     private void CheckForActiveRatingTask() {
         foreach (var kvp in _activeLoadingTasks) {
-            if (kvp.Value != null && !kvp.Value.IsCompleted && kvp.Key.StartsWith("Rating_") && kvp.Key.EndsWith("_Init")) {
+            if (kvp.Value is not null && !kvp.Value.IsCompleted && kvp.Key.StartsWith("Rating_") && kvp.Key.EndsWith("_Init")) {
                 var groupName = kvp.Key.Substring(7, kvp.Key.Length - 12);
 
                 SelectedGroupName = groupName;
@@ -162,17 +163,17 @@ internal partial class HomeViewModel : ViewModelBase {
             var customAvatarPath = Path.Combine("Data", "Avatar.jpg");
             var webAvatarPath = Path.Combine("Data", "UserImage.jpg");
 
-            if (FileStorage.CheckExists(customAvatarPath)) {
+            if (await FileStorage.CheckExistsAsync(customAvatarPath)) {
                 try {
-                    using var stream = FileStorage.GetFileStreamAsync(customAvatarPath);
+                    using var stream = await FileStorage.GetFileStreamAsync(customAvatarPath);
                     DisplayImage = new Bitmap(stream);
                     break;
                 }
                 catch { }
             }
-            else if (FileStorage.CheckExists(webAvatarPath)) {
+            else if (await FileStorage.CheckExistsAsync(webAvatarPath)) {
                 try {
-                    using var stream = FileStorage.GetFileStreamAsync(webAvatarPath);
+                    using var stream = await FileStorage.GetFileStreamAsync(webAvatarPath);
                     DisplayImage = new Bitmap(stream);
                     break;
                 }
@@ -187,10 +188,10 @@ internal partial class HomeViewModel : ViewModelBase {
         }
     }
 
-    private bool HasAnyData() {
-        var dataPath = FileStorage.GetFullPath("Data");
+    private async Task<bool> HasAnyData() {
+        var allFiles = await FileStorage.GetFilesAsync("Data");
 
-        if (!Directory.Exists(dataPath))
+        if (allFiles is null || allFiles.Length is 0)
             return false;
 
         var excludedFiles = new[] {
@@ -200,9 +201,9 @@ internal partial class HomeViewModel : ViewModelBase {
             "ScheduleSecondType2.jpg"
         };
 
-        var allFiles = Directory.GetFiles(dataPath, "*", SearchOption.AllDirectories);
         foreach (var file in allFiles) {
             var fileName = Path.GetFileName(file);
+
             bool isExcluded = false;
             foreach (var excluded in excludedFiles) {
                 if (fileName == excluded) {
@@ -210,9 +211,11 @@ internal partial class HomeViewModel : ViewModelBase {
                     break;
                 }
             }
+
             if (!isExcluded)
                 return true;
         }
+
         return false;
     }
 
@@ -233,24 +236,24 @@ internal partial class HomeViewModel : ViewModelBase {
         return true;
     }
 
-    private void UpdateHomeCustomImage() {
+    private async Task UpdateHomeCustomImage() {
         var firstTypePath = Path.Combine("Data", "ScheduleFirstType.jpg");
         var secondType1Path = Path.Combine("Data", "ScheduleSecondType1.jpg");
         var secondType2Path = Path.Combine("Data", "ScheduleSecondType2.jpg");
 
-        var firstTypeExists = FileStorage.CheckExists(firstTypePath);
-        var secondType1Exists = FileStorage.CheckExists(secondType1Path);
-        var secondType2Exists = FileStorage.CheckExists(secondType2Path);
+        var firstTypeExists = await FileStorage.CheckExistsAsync(firstTypePath);
+        var secondType1Exists = await FileStorage.CheckExistsAsync(secondType1Path);
+        var secondType2Exists = await FileStorage.CheckExistsAsync(secondType2Path);
 
         var hasSecondType = secondType1Exists || secondType2Exists;
         var hasFirstType = firstTypeExists;
 
         if (hasSecondType) {
             var currentWeek = ScheduleViewModel?.CurrentWeek;
-            if (currentWeek != null) {
-                if (currentWeek == "НЕЧЕТНАЯ" && secondType1Exists) {
+            if (currentWeek is not null) {
+                if (currentWeek is "НЕЧЕТНАЯ" && secondType1Exists) {
                     try {
-                        using var stream = FileStorage.GetFileStreamAsync(secondType1Path);
+                        using var stream = await FileStorage.GetFileStreamAsync(secondType1Path);
                         HomeCustomImage = new Bitmap(stream);
                         ShowHomeCustomImage = true;
                         ShowHomeCustomImageWeek = true;
@@ -258,9 +261,9 @@ internal partial class HomeViewModel : ViewModelBase {
                     }
                     catch { }
                 }
-                else if (currentWeek == "ЧЕТНАЯ" && secondType2Exists) {
+                else if (currentWeek is "ЧЕТНАЯ" && secondType2Exists) {
                     try {
-                        using var stream = FileStorage.GetFileStreamAsync(secondType2Path);
+                        using var stream = await FileStorage.GetFileStreamAsync(secondType2Path);
                         HomeCustomImage = new Bitmap(stream);
                         ShowHomeCustomImage = true;
                         ShowHomeCustomImageWeek = true;
@@ -282,7 +285,7 @@ internal partial class HomeViewModel : ViewModelBase {
         }
         else if (hasFirstType) {
             try {
-                using var stream = FileStorage.GetFileStreamAsync(firstTypePath);
+                using var stream = await FileStorage.GetFileStreamAsync(firstTypePath);
                 HomeCustomImage = new Bitmap(stream);
                 ShowHomeCustomImage = true;
                 ShowHomeCustomImageWeek = false;
@@ -298,16 +301,16 @@ internal partial class HomeViewModel : ViewModelBase {
         var customAvatarPath = Path.Combine("Data", "Avatar.jpg");
         var webAvatarPath = Path.Combine("Data", "UserImage.jpg");
 
-        if (FileStorage.CheckExists(customAvatarPath)) {
+        if (await FileStorage.CheckExistsAsync(customAvatarPath)) {
             try {
-                using var stream = FileStorage.GetFileStreamAsync(customAvatarPath);
+                using var stream = await FileStorage.GetFileStreamAsync(customAvatarPath);
                 DisplayImage = new Bitmap(stream);
             }
             catch { }
         }
-        else if (FileStorage.CheckExists(webAvatarPath)) {
+        else if (await FileStorage.CheckExistsAsync(webAvatarPath)) {
             try {
-                using var stream = FileStorage.GetFileStreamAsync(webAvatarPath);
+                using var stream = await FileStorage.GetFileStreamAsync(webAvatarPath);
                 DisplayImage = new Bitmap(stream);
             }
             catch { }

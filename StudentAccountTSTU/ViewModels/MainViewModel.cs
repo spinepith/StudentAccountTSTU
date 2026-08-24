@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 using StudentAccountTSTU.Stores;
 using StudentAccountTSTU.ViewModels.SettingsViewModels;
 
@@ -45,7 +46,7 @@ internal partial class MainViewModel : ViewModelBase {
     }
 
     [RelayCommand]
-    private void OnTabClicked(int index) {
+    private async Task OnTabClicked(int index) {
         // ТАКОЙ ВАРИАНТ ИСПОЛЬЗУЕТСЯ, ПОТОМУ ЧТО СТРАНИЦЫ ВСЕГО ТРИ
         // КОГДА СТРАНИЦ СТАНЕТ БОЛЬШЕ, НУЖНО ИСПОЛЬЗОВАТЬ ДРУГОЙ ПОДХОД
         if (CurrentPageIndex == index) {
@@ -60,7 +61,7 @@ internal partial class MainViewModel : ViewModelBase {
             }
 
             if (CurrentPage is HomeViewModel homeViewModel && homeViewModel.CurrentPage is not null) {
-                homeViewModel.BackToHome();
+                await homeViewModel.BackToHome();
                 return;
             }
 
@@ -77,11 +78,11 @@ internal partial class MainViewModel : ViewModelBase {
         NavigateToPage(CurrentPageIndex);
     }
 
-    internal void Logout() {
+    internal async Task Logout() {
         IsAuthenticated = false;
         CurrentPageIndex = 0;
         CurrentPage = new LoginViewModel(this, _settings, _webAccount);
-        FileStorage.RemoveDirectory("Data");
+        await FileStorage.RemoveDirectoryAsync("Data");
     }
 
     internal void NavigateToPage(int index) {

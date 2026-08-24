@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Models;
 
@@ -100,14 +101,14 @@ internal partial class ScheduleViewModel : ViewModelBase {
     }
 
     private async Task GetScheduleDataAsync() {
-        FileStorage.RemoveFile(Path.Combine("Data", "Schedule.json"));
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "Schedule.json"));
         Schedule = null;
 
         var schedule = await _webAccount.GetScheduleAsync();
         if (schedule is not null) {
             Schedule = schedule;
             await FileStorage.SaveAsync(Schedule, Path.Combine("Data", "Schedule.json"));
-            UpdateLastModifiedDate(Path.Combine("Data", "Schedule.json"));
+            await UpdateLastModifiedDate(Path.Combine("Data", "Schedule.json"));
         }
     }
 
@@ -124,9 +125,9 @@ internal partial class ScheduleViewModel : ViewModelBase {
         var secondType1Path = Path.Combine("Data", "ScheduleSecondType1.jpg");
         var secondType2Path = Path.Combine("Data", "ScheduleSecondType2.jpg");
 
-        var firstTypeExists = FileStorage.CheckExists(firstTypePath);
-        var secondType1Exists = FileStorage.CheckExists(secondType1Path);
-        var secondType2Exists = FileStorage.CheckExists(secondType2Path);
+        var firstTypeExists = await FileStorage.CheckExistsAsync(firstTypePath);
+        var secondType1Exists = await FileStorage.CheckExistsAsync(secondType1Path);
+        var secondType2Exists = await FileStorage.CheckExistsAsync(secondType2Path);
 
         var hasSecondType = secondType1Exists || secondType2Exists;
         var hasFirstType = firstTypeExists;
@@ -135,18 +136,18 @@ internal partial class ScheduleViewModel : ViewModelBase {
             ShowCustomSchedule = true;
             ShowWeeksHeader = true;
             if (secondType1Exists) {
-                using var stream1 = FileStorage.GetFileStreamAsync(secondType1Path);
+                using var stream1 = await FileStorage.GetFileStreamAsync(secondType1Path);
                 SecondTypeFirstImage = new Bitmap(stream1);
             }
             if (secondType2Exists) {
-                using var stream2 = FileStorage.GetFileStreamAsync(secondType2Path);
+                using var stream2 = await FileStorage.GetFileStreamAsync(secondType2Path);
                 SecondTypeSecondImage = new Bitmap(stream2);
             }
         }
         else if (hasFirstType) {
             ShowCustomSchedule = true;
             ShowWeeksHeader = false;
-            using var stream = FileStorage.GetFileStreamAsync(firstTypePath);
+            using var stream = await FileStorage.GetFileStreamAsync(firstTypePath);
             FirstTypeImage = new Bitmap(stream);
         }
         else {
@@ -155,7 +156,7 @@ internal partial class ScheduleViewModel : ViewModelBase {
         }
 
         var path = Path.Combine("Data", "Schedule.json");
-        bool hasCache = FileStorage.CheckExists(path);
+        bool hasCache = await FileStorage.CheckExistsAsync(path);
 
         if (hasCache)
             await LoadFromCacheAsync();
@@ -169,14 +170,14 @@ internal partial class ScheduleViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "Schedule.json");
 
-        if (FileStorage.CheckExists(path)) {
+        if (await FileStorage.CheckExistsAsync(path)) {
             Schedule = await FileStorage.GetAsync<Schedule>(path);
-            UpdateLastModifiedDate(path);
+            await UpdateLastModifiedDate(path);
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = Services.FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue && !ShowCustomSchedule)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else

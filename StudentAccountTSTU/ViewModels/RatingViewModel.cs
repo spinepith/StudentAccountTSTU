@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Models;
 
@@ -89,7 +89,7 @@ internal partial class RatingViewModel : ViewModelBase {
         var ratingDirectory = Path.Combine("Data", "Ratings");
         var ratingPath = Path.Combine(ratingDirectory, $"{_groupName}.json");
 
-        FileStorage.RemoveFile(ratingPath);
+        await FileStorage.RemoveFileAsync(ratingPath);
         InstituteRating = null;
         GroupRating = null;
 
@@ -100,7 +100,7 @@ internal partial class RatingViewModel : ViewModelBase {
             InstituteRating = ConvertToWrappedRating("Рейтинг института", ratingData.Headers, ratingData.Institute);
             GroupRating = ConvertToWrappedRating("Рейтинг группы", ratingData.Headers, ratingData.Group);
 
-            UpdateLastModifiedDate(ratingPath);
+            await UpdateLastModifiedDate(ratingPath);
         }
     }
 
@@ -135,7 +135,7 @@ internal partial class RatingViewModel : ViewModelBase {
     private async Task LoadRatingAsync() {
         var path = Path.Combine("Data", "Ratings", $"{_groupName}.json");
 
-        if (!FileStorage.CheckExists(path))
+        if (!await FileStorage.CheckExistsAsync(path))
             await GetRatingDataAsync();
         else
             await LoadFromCacheAsync();
@@ -144,18 +144,18 @@ internal partial class RatingViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "Ratings", $"{_groupName}.json");
 
-        if (FileStorage.CheckExists(path)) {
+        if (await FileStorage.CheckExistsAsync(path)) {
             var ratingData = await FileStorage.GetAsync<Rating>(path);
             if (ratingData is not null) {
                 InstituteRating = ConvertToWrappedRating("Рейтинг института", ratingData.Headers, ratingData.Institute);
                 GroupRating = ConvertToWrappedRating("Рейтинг группы", ratingData.Headers, ratingData.Group);
-                UpdateLastModifiedDate(path);
+                await UpdateLastModifiedDate(path);
             }
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else

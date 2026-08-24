@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 namespace StudentAccountTSTU.ViewModels;
 
@@ -51,8 +51,8 @@ internal partial class GroupsViewModel : ViewModelBase {
 
     private async Task GetGroupsDataAsync() {
         var groupsPath = Path.Combine("Data", "Groups.json");
-        FileStorage.RemoveFile(groupsPath);
-        FileStorage.RemoveDirectory(Path.Combine("Data", "Ratings"));
+        await FileStorage.RemoveFileAsync(groupsPath);
+        await FileStorage.RemoveDirectoryAsync(Path.Combine("Data", "Ratings"));
 
         Groups = null;
 
@@ -60,7 +60,7 @@ internal partial class GroupsViewModel : ViewModelBase {
         if (groups is not null) {
             Groups = groups;
             await FileStorage.SaveAsync(Groups, groupsPath);
-            UpdateLastModifiedDate(groupsPath);
+            await UpdateLastModifiedDate(groupsPath);
         }
     }
 
@@ -75,7 +75,7 @@ internal partial class GroupsViewModel : ViewModelBase {
     private async Task LoadGroupsAsync() {
         var path = Path.Combine("Data", "Groups.json");
 
-        if (!FileStorage.CheckExists(path))
+        if (!await FileStorage.CheckExistsAsync(path))
             await GetGroupsDataAsync();
         else
             await LoadFromCacheAsync();
@@ -84,14 +84,14 @@ internal partial class GroupsViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "Groups.json");
 
-        if (FileStorage.CheckExists(path)) {
+        if (await FileStorage.CheckExistsAsync(path)) {
             Groups = await FileStorage.GetAsync<List<string>>(path);
-            UpdateLastModifiedDate(path);
+            await UpdateLastModifiedDate(path);
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else

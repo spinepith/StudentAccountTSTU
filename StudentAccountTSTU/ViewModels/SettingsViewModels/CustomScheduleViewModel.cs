@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 namespace StudentAccountTSTU.ViewModels.SettingsViewModels;
 
@@ -28,6 +29,15 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     private bool _isSecondTypeSelected;
 
     [ObservableProperty]
+    private byte[]? _tempFirstTypeImageBytes;
+
+    [ObservableProperty]
+    private byte[]? _tempSecondTypeFirstImageBytes;
+
+    [ObservableProperty]
+    private byte[]? _tempSecondTypeSecondImageBytes;
+
+    [ObservableProperty]
     private Bitmap? _firstTypeImage;
 
     [ObservableProperty]
@@ -37,16 +47,7 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
     private Bitmap? _secondTypeSecondImage;
 
     [ObservableProperty]
-    private bool _showSecondTypeDefault = true;
-
-    [ObservableProperty]
-    private string? _tempFirstTypeImagePath;
-
-    [ObservableProperty]
-    private string? _tempSecondTypeFirstImagePath;
-
-    [ObservableProperty]
-    private string? _tempSecondTypeSecondImagePath;
+    private bool _showSecondTypeDefault;
 
     [ObservableProperty]
     private bool _canDelete;
@@ -58,35 +59,36 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
         _parentViewModel = parentViewModel;
         Settings = settings;
 
-        CheckImagesExist();
+        _ = CheckImagesExist();
     }
 
     partial void OnIsFirstTypeSelectedChanged(bool value) {
         if (value) {
             IsSecondTypeSelected = false;
-            CheckImagesExist();
+            _ = CheckImagesExist();
         }
     }
 
     partial void OnIsSecondTypeSelectedChanged(bool value) {
         if (value) {
             IsFirstTypeSelected = false;
-            CheckImagesExist();
+            _ = CheckImagesExist();
         }
     }
 
-    private Bitmap? LoadBitmap(string path) {
+    private Bitmap? LoadBitmap(byte[] data) {
         try {
-            return new Bitmap(path);
+            using var ms = new MemoryStream(data);
+            return new Bitmap(ms);
         }
         catch {
             return null;
         }
     }
 
-    private Bitmap? LoadBitmapFromStorage(string path) {
+    private async Task<Bitmap?> LoadBitmapFromStorage(string path) {
         try {
-            using var stream = FileStorage.GetFileStreamAsync(path);
+            using var stream = await FileStorage.GetFileStreamAsync(path);
             return new Bitmap(stream);
         }
         catch {
@@ -94,29 +96,29 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
         }
     }
 
-    private void CheckImagesExist() {
-        var firstTypeExists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleFirstType.jpg"));
-        var secondType1Exists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleSecondType1.jpg"));
-        var secondType2Exists = FileStorage.CheckExists(Path.Combine("Data", "ScheduleSecondType2.jpg"));
+    private async Task CheckImagesExist() {
+        var firstTypeExists = await FileStorage.CheckExistsAsync(Path.Combine("Data", "ScheduleFirstType.jpg"));
+        var secondType1Exists = await FileStorage.CheckExistsAsync(Path.Combine("Data", "ScheduleSecondType1.jpg"));
+        var secondType2Exists = await FileStorage.CheckExistsAsync(Path.Combine("Data", "ScheduleSecondType2.jpg"));
 
-        if (TempFirstTypeImagePath is not null)
-            FirstTypeImage = LoadBitmap(TempFirstTypeImagePath);
+        if (TempFirstTypeImageBytes is not null)
+            FirstTypeImage = LoadBitmap(TempFirstTypeImageBytes);
         else if (firstTypeExists)
-            FirstTypeImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleFirstType.jpg"));
+            FirstTypeImage = await LoadBitmapFromStorage(Path.Combine("Data", "ScheduleFirstType.jpg"));
         else
             FirstTypeImage = null;
 
-        if (TempSecondTypeFirstImagePath is not null)
-            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImagePath);
+        if (TempSecondTypeFirstImageBytes is not null)
+            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImageBytes);
         else if (secondType1Exists)
-            SecondTypeFirstImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType1.jpg"));
+            SecondTypeFirstImage = await LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType1.jpg"));
         else
             SecondTypeFirstImage = null;
 
-        if (TempSecondTypeSecondImagePath is not null)
-            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImagePath);
+        if (TempSecondTypeSecondImageBytes is not null)
+            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImageBytes);
         else if (secondType2Exists)
-            SecondTypeSecondImage = LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType2.jpg"));
+            SecondTypeSecondImage = await LoadBitmapFromStorage(Path.Combine("Data", "ScheduleSecondType2.jpg"));
         else
             SecondTypeSecondImage = null;
 
@@ -125,14 +127,15 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
         UpdateCanApply();
     }
 
-    private async Task<string?> SelectImage(string title) {
+    private async Task<byte[]?> SelectImage(string title) {
         if (PlatformHooks.NativeGaleryAction is not null) {
             var photoPath = await PlatformHooks.NativeGaleryAction.Invoke();
 
             if (photoPath is not null) {
-                var tempFile = Path.Combine(Path.GetTempPath(), $"{System.Guid.NewGuid()}.img");
-                File.Copy(photoPath, tempFile, true);
-                return tempFile;
+                using var stream = File.OpenRead(photoPath);
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                return ms.ToArray();
             }
             return null;
         }
@@ -148,106 +151,104 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
                 Title = title,
                 AllowMultiple = false,
                 FileTypeFilter = new[] {
-                new FilePickerFileType("Изображения") {
-                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" },
-                    MimeTypes = new[] { "image/*" }
+                    new FilePickerFileType("Изображения") {
+                        Patterns = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" },
+                        MimeTypes = new[] { "image/*" }
+                    }
                 }
-            }
             };
 
             var result = await storageProvider.OpenFilePickerAsync(options);
 
             if (result.Count > 0) {
                 var file = result[0];
-                var tempFile = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString() + ".img");
-                using (var stream = await file.OpenReadAsync())
-                using (var outStream = File.Create(tempFile)) {
-                    await stream.CopyToAsync(outStream);
-                }
-                return tempFile;
+                using var stream = await file.OpenReadAsync();
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                return ms.ToArray();
             }
             return null;
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task SelectFirstTypeImage() {
-        TempFirstTypeImagePath = await SelectImage("Выбрать расписание");
-        if (TempFirstTypeImagePath is not null) {
-            FirstTypeImage = LoadBitmap(TempFirstTypeImagePath);
+        TempFirstTypeImageBytes = await SelectImage("Выберите расписание");
+        if (TempFirstTypeImageBytes is not null) {
+            FirstTypeImage = LoadBitmap(TempFirstTypeImageBytes);
             CanApply = true;
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task SelectSecondTypeFirstImage() {
-        TempSecondTypeFirstImagePath = await SelectImage("Выбрать первое расписание");
-        if (TempSecondTypeFirstImagePath is not null) {
-            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImagePath);
+        TempSecondTypeFirstImageBytes = await SelectImage("Выберите расписание числителя");
+        if (TempSecondTypeFirstImageBytes is not null) {
+            SecondTypeFirstImage = LoadBitmap(TempSecondTypeFirstImageBytes);
             ShowSecondTypeDefault = false;
             UpdateCanApply();
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task SelectSecondTypeSecondImage() {
-        TempSecondTypeSecondImagePath = await SelectImage("Выбрать второе расписание");
-        if (TempSecondTypeSecondImagePath is not null) {
-            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImagePath);
+        TempSecondTypeSecondImageBytes = await SelectImage("Выберите расписание знаменателя");
+        if (TempSecondTypeSecondImageBytes is not null) {
+            SecondTypeSecondImage = LoadBitmap(TempSecondTypeSecondImageBytes);
             ShowSecondTypeDefault = false;
             UpdateCanApply();
         }
     }
 
     private void UpdateCanApply() {
-        CanApply = (IsFirstTypeSelected && TempFirstTypeImagePath is not null) ||
-                   (IsSecondTypeSelected && (TempSecondTypeFirstImagePath is not null || TempSecondTypeSecondImagePath is not null));
+        CanApply = (IsFirstTypeSelected && TempFirstTypeImageBytes is not null) ||
+                   (IsSecondTypeSelected && (TempSecondTypeFirstImageBytes is not null || TempSecondTypeSecondImageBytes is not null));
     }
 
     [RelayCommand]
     private async Task Apply() {
-        if (IsFirstTypeSelected && TempFirstTypeImagePath is not null) {
-            using var stream = File.OpenRead(TempFirstTypeImagePath);
+        if (IsFirstTypeSelected && TempFirstTypeImageBytes is not null) {
+            using var stream = new MemoryStream(TempFirstTypeImageBytes);
             await FileStorage.SaveStreamAsync(stream, Path.Combine("Data", "ScheduleFirstType.jpg"));
-            TempFirstTypeImagePath = null;
+            TempFirstTypeImageBytes = null;
         }
         else if (IsSecondTypeSelected) {
-            if (TempSecondTypeFirstImagePath is not null) {
-                using var stream = File.OpenRead(TempSecondTypeFirstImagePath);
+            if (TempSecondTypeFirstImageBytes is not null) {
+                using var stream = new MemoryStream(TempSecondTypeFirstImageBytes);
                 await FileStorage.SaveStreamAsync(stream, Path.Combine("Data", "ScheduleSecondType1.jpg"));
-                TempSecondTypeFirstImagePath = null;
+                TempSecondTypeFirstImageBytes = null;
             }
-            if (TempSecondTypeSecondImagePath is not null) {
-                using var stream = File.OpenRead(TempSecondTypeSecondImagePath);
+            if (TempSecondTypeSecondImageBytes is not null) {
+                using var stream = new MemoryStream(TempSecondTypeSecondImageBytes);
                 await FileStorage.SaveStreamAsync(stream, Path.Combine("Data", "ScheduleSecondType2.jpg"));
-                TempSecondTypeSecondImagePath = null;
+                TempSecondTypeSecondImageBytes = null;
             }
         }
 
         Settings.CustomSchedule = true;
         CanApply = false;
-        CheckImagesExist();
+        await CheckImagesExist();
     }
 
     [RelayCommand]
-    private void Delete() {
+    private async Task Delete() {
         if (IsFirstTypeSelected) {
-            FileStorage.RemoveFile(Path.Combine("Data", "ScheduleFirstType.jpg"));
-            TempFirstTypeImagePath = null;
+            await FileStorage.RemoveFileAsync(Path.Combine("Data", "ScheduleFirstType.jpg"));
+            TempFirstTypeImageBytes = null;
             FirstTypeImage = null;
         }
         else if (IsSecondTypeSelected) {
-            FileStorage.RemoveFile(Path.Combine("Data", "ScheduleSecondType1.jpg"));
-            FileStorage.RemoveFile(Path.Combine("Data", "ScheduleSecondType2.jpg"));
-            TempSecondTypeFirstImagePath = null;
-            TempSecondTypeSecondImagePath = null;
+            await FileStorage.RemoveFileAsync(Path.Combine("Data", "ScheduleSecondType1.jpg"));
+            await FileStorage.RemoveFileAsync(Path.Combine("Data", "ScheduleSecondType2.jpg"));
+            TempSecondTypeFirstImageBytes = null;
+            TempSecondTypeSecondImageBytes = null;
             SecondTypeFirstImage = null;
             SecondTypeSecondImage = null;
             ShowSecondTypeDefault = true;
         }
 
         CanApply = false;
-        CheckImagesExist();
+        await CheckImagesExist();
     }
 
     [RelayCommand]

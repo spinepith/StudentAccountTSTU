@@ -35,7 +35,7 @@
                         </Button>
 
                         <StackPanel Spacing="8">
-                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding TempImagePath, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding TempImageBytes, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             <Button Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding AvatarExists}"/>
                         </StackPanel>
 

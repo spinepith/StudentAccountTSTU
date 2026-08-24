@@ -50,21 +50,25 @@ public partial class Settings : ObservableObject {
     }
 
     public static Settings Load() {
-        if (OperatingSystem.IsBrowser())
-            ;
-
-        if (File.Exists(Path)) {
-            try {
+        try {
+            if (OperatingSystem.IsBrowser()) {
+                var json = BrowserStorage.GetLocalStorageItem(Path);
+                if (!string.IsNullOrWhiteSpace(json)) {
+                    var settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
+                    settings.PropertyChanged += (s, e) => settings.Save();
+                    return settings;
+                }
+            }
+            else if (File.Exists(Path)) {
                 var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path)) ?? new Settings();
                 settings.PropertyChanged += (s, e) => settings.Save();
                 return settings;
             }
-            catch {
-                var settings = new Settings();
-                settings.Save();
-                return settings;
-            }
         }
+        catch (Exception ex) {
+            Console.WriteLine($"Error loading settings: {ex}");
+        }
+
         var newSettings = new Settings();
         newSettings.Save();
         return newSettings;
@@ -72,13 +76,17 @@ public partial class Settings : ObservableObject {
 
     private void Save() {
         try {
+            var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+            
             if (OperatingSystem.IsBrowser())
-                ;
+                BrowserStorage.SetLocalStorageItem(Path, json);
             else {
                 Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
-                File.WriteAllText(Path, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+                File.WriteAllText(Path, json);
             }
         }
-        catch { }
+        catch (Exception ex) {
+            Console.WriteLine($"Error saving settings: {ex}");
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Models;
 
@@ -33,7 +33,7 @@ internal class StudentProfileStore {
 
             case nameof(Pages.Achievements):
                 path = Path.Combine("Data", "Groups.json");
-                if (!FileStorage.CheckExists(path)) {
+                if (!await FileStorage.CheckExistsAsync(path)) {
                     Groups = await webAccount.GetGroupsAsync(page);
                     await FileStorage.SaveAsync(Groups, path);
                 }

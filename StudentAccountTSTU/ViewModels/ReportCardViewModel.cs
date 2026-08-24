@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Models;
 
@@ -64,14 +64,14 @@ internal partial class ReportCardViewModel : ViewModelBase {
     }
 
     private async Task GetReportCardDataAsync() {
-        FileStorage.RemoveFile(Path.Combine("Data", "ReportCard.json"));
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "ReportCard.json"));
         ReportCard = null;
 
         var reportCard = await _webAccount.GetReportCardAsync();
         if (reportCard is not null) {
             ReportCard = reportCard;
             await FileStorage.SaveAsync(ReportCard, Path.Combine("Data", "ReportCard.json"));
-            UpdateLastModifiedDate(Path.Combine("Data", "ReportCard.json"));
+            await UpdateLastModifiedDate(Path.Combine("Data", "ReportCard.json"));
         }
     }
 
@@ -88,7 +88,7 @@ internal partial class ReportCardViewModel : ViewModelBase {
     private async Task LoadReportCardAsync() {
         var path = Path.Combine("Data", "ReportCard.json");
 
-        if (!FileStorage.CheckExists(path))
+        if (!await FileStorage.CheckExistsAsync(path))
             await GetReportCardDataAsync();
         else
             await LoadFromCacheAsync();
@@ -97,14 +97,14 @@ internal partial class ReportCardViewModel : ViewModelBase {
     private async Task LoadFromCacheAsync() {
         var path = Path.Combine("Data", "ReportCard.json");
 
-        if (FileStorage.CheckExists(path)) {
+        if (await FileStorage.CheckExistsAsync(path)) {
             ReportCard = await FileStorage.GetAsync<ReportCard>(path);
-            UpdateLastModifiedDate(path);
+            await UpdateLastModifiedDate(path);
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = Services.FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else

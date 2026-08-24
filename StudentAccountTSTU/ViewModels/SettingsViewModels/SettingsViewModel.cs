@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 
 namespace StudentAccountTSTU.ViewModels.SettingsViewModels;
@@ -56,8 +57,8 @@ internal partial class SettingsViewModel : ViewModelBase {
     public bool DataRemoved { get; private set; } = false;
 
     [RelayCommand]
-    private void RemoveSavedData() {
-        FileStorage.RemoveDirectory("Data");
+    private async Task RemoveSavedData() {
+        await FileStorage.RemoveDirectoryAsync("Data");
         RemoveDataButtonVisible = false;
         DataRemoved = true;
     }
@@ -70,7 +71,7 @@ internal partial class SettingsViewModel : ViewModelBase {
             Settings.UserPassword = null;
 
             if (Avalonia.Application.Current?.DataContext is MainViewModel mainViewModel)
-                mainViewModel.Logout();
+                await mainViewModel.Logout();
         }
     }
 
@@ -80,7 +81,7 @@ internal partial class SettingsViewModel : ViewModelBase {
     }
 
     [RelayCommand]
-    private void BackToHome() {
-        _parentViewModel.BackToHome(DataRemoved);
+    private async Task BackToHome() {
+        await _parentViewModel.BackToHome(DataRemoved);
     }
 }

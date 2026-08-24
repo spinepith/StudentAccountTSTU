@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 namespace StudentAccountTSTU.ViewModels.SettingsViewModels;
 
@@ -21,7 +22,7 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
     private Settings _settings;
 
     [ObservableProperty]
-    private string? _tempImagePath;
+    private byte[]? _tempImageBytes;
 
     [ObservableProperty]
     private Bitmap? _selectedImageBitmap;
@@ -33,15 +34,15 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
         _parentViewModel = parentViewModel;
         Settings = settings;
 
-        CheckAvatarExists();
+        _ = CheckAvatarExists();
     }
 
-    private void CheckAvatarExists() {
-        AvatarExists = FileStorage.CheckExists(Path.Combine("Data", "Avatar.jpg"));
+    private async Task CheckAvatarExists() {
+        AvatarExists = await FileStorage.CheckExistsAsync(Path.Combine("Data", "Avatar.jpg"));
 
         if (AvatarExists) {
             try {
-                using var stream = FileStorage.GetFileStreamAsync(Path.Combine("Data", "Avatar.jpg"));
+                using var stream = await FileStorage.GetFileStreamAsync(Path.Combine("Data", "Avatar.jpg"));
                 SelectedImageBitmap = new Bitmap(stream);
             }
             catch {
@@ -52,25 +53,27 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
         Settings.CustomAvatar = AvatarExists;
     }
 
-    private void LoadBitmap(string path) {
+    private void LoadBitmap(byte[] data) {
         try {
-            SelectedImageBitmap = new Bitmap(path);
+            using var ms = new MemoryStream(data);
+            SelectedImageBitmap = new Bitmap(ms);
         }
         catch {
             SelectedImageBitmap = null;
         }
     }
 
-    [RelayCommand]
+    [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task SelectImage() {
         if (PlatformHooks.NativeGaleryAction is not null) {
             var photoPath = await PlatformHooks.NativeGaleryAction.Invoke();
 
             if (photoPath is not null) {
-                var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".jpg");
-                File.Copy(photoPath, tempFile, true);
-                TempImagePath = tempFile;
-                LoadBitmap(TempImagePath);
+                using var stream = File.OpenRead(photoPath);
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                TempImageBytes = ms.ToArray();
+                LoadBitmap(TempImageBytes);
             }
             return;
         }
@@ -83,7 +86,7 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
                 return;
 
             var options = new FilePickerOpenOptions {
-                Title = "Выбрать аватар",
+                Title = "Выберите фото",
                 AllowMultiple = false,
                 FileTypeFilter = new[] {
                     new FilePickerFileType("Изображения") {
@@ -97,34 +100,31 @@ internal partial class CustomAvatarViewModel : ViewModelBase {
 
             if (result.Count > 0) {
                 var file = result[0];
-                var tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".img");
-                using (var stream = await file.OpenReadAsync())
-                using (var outStream = File.Create(tempFile)) {
-                    await stream.CopyToAsync(outStream);
-                }
-                TempImagePath = tempFile;
-                LoadBitmap(TempImagePath);
+                using var stream = await file.OpenReadAsync();
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                TempImageBytes = ms.ToArray();
+                LoadBitmap(TempImageBytes);
             }
         }
-
     }
 
     [RelayCommand]
     private async Task Apply() {
-        if (TempImagePath is not null) {
-            using var stream = File.OpenRead(TempImagePath);
+        if (TempImageBytes is not null) {
+            using var stream = new MemoryStream(TempImageBytes);
             await FileStorage.SaveStreamAsync(stream, Path.Combine("Data", "Avatar.jpg"));
-            TempImagePath = null;
-            CheckAvatarExists();
+            TempImageBytes = null;
+            await CheckAvatarExists();
         }
     }
 
     [RelayCommand]
-    private void Delete() {
-        FileStorage.RemoveFile(Path.Combine("Data", "Avatar.jpg"));
+    private async Task Delete() {
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "Avatar.jpg"));
         SelectedImageBitmap = null;
-        TempImagePath = null;
-        CheckAvatarExists();
+        TempImageBytes = null;
+        await CheckAvatarExists();
     }
 
     [RelayCommand]

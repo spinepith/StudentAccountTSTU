@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Models;
 
@@ -85,7 +85,7 @@ internal partial class MarksViewModel : ViewModelBase {
 
         List<Marks.Lesson>? lessonsData;
         if (_lessonName is "Все") {
-            FileStorage.RemoveDirectory(marksDirectory);
+            await FileStorage.RemoveDirectoryAsync(marksDirectory);
 
             lessonsData = (await _webAccount.GetMarksAsync())?.LessonsMarks;
             if (lessonsData is not null)
@@ -93,7 +93,7 @@ internal partial class MarksViewModel : ViewModelBase {
                     await FileStorage.SaveAsync(lessonData, Path.Combine(marksDirectory, $"{lessonData.Name}.json"));
         }
         else {
-            FileStorage.RemoveFile(Path.Combine(marksDirectory, $"{_lessonName}.json"));
+            await FileStorage.RemoveFileAsync(Path.Combine(marksDirectory, $"{_lessonName}.json"));
             var marksData = await _webAccount.GetMarksAsync(_lessonName);
             if (marksData?.LessonsMarks is not null && marksData.LessonsMarks.Count > 0) {
                 await FileStorage.SaveAsync(marksData.LessonsMarks[0], Path.Combine(marksDirectory, $"{_lessonName}.json"));
@@ -107,7 +107,7 @@ internal partial class MarksViewModel : ViewModelBase {
             Marks = ConvertToWrappedMarks(lessonsData);
             if (_lessonName is not "Все") {
                 var filePath = Path.Combine(marksDirectory, $"{_lessonName}.json");
-                UpdateLastModifiedDate(filePath);
+                await UpdateLastModifiedDate(filePath);
             }
         }
     }
@@ -148,10 +148,22 @@ internal partial class MarksViewModel : ViewModelBase {
             var marksDirectory = Path.Combine("Data", "Marks");
             var lessonsPath = Path.Combine("Data", "Lessons.json");
 
-            if (FileStorage.CheckExists(lessonsPath)) {
+            if (await FileStorage.CheckExistsAsync(lessonsPath)) {
                 var lessons = await FileStorage.GetAsync<List<string>>(lessonsPath);
-                if (lessons is not null && lessons.All(lesson => FileStorage.CheckExists(Path.Combine(marksDirectory, $"{lesson}.json"))))
-                    await LoadFromCacheAsync();
+                if (lessons is not null) {
+                    bool allExist = true;
+                    foreach (var lesson in lessons) {
+                        if (!await FileStorage.CheckExistsAsync(Path.Combine(marksDirectory, $"{lesson}.json"))) {
+                            allExist = false;
+                            break;
+                        }
+                    }
+
+                    if (allExist)
+                        await LoadFromCacheAsync();
+                    else
+                        await GetMarksDataAsync();
+                }
                 else
                     await GetMarksDataAsync();
             }
@@ -160,7 +172,7 @@ internal partial class MarksViewModel : ViewModelBase {
         }
         else {
             var path = Path.Combine("Data", "Marks", $"{_lessonName}.json");
-            if (!FileStorage.CheckExists(path))
+            if (!await FileStorage.CheckExistsAsync(path))
                 await GetMarksDataAsync();
             else
                 await LoadFromCacheAsync();
@@ -172,7 +184,7 @@ internal partial class MarksViewModel : ViewModelBase {
             var marksDirectory = Path.Combine("Data", "Marks");
             var lessonsPath = Path.Combine("Data", "Lessons.json");
 
-            if (FileStorage.CheckExists(lessonsPath)) {
+            if (await FileStorage.CheckExistsAsync(lessonsPath)) {
                 var lessons = await FileStorage.GetAsync<List<string>>(lessonsPath);
                 if (lessons is not null) {
                     var marksData = new List<Marks.Lesson>();
@@ -187,18 +199,18 @@ internal partial class MarksViewModel : ViewModelBase {
         }
         else {
             var path = Path.Combine("Data", "Marks", $"{_lessonName}.json");
-            if (FileStorage.CheckExists(path)) {
+            if (await FileStorage.CheckExistsAsync(path)) {
                 var lessonData = await FileStorage.GetAsync<Marks.Lesson>(path);
                 if (lessonData is not null) {
                     Marks = ConvertToWrappedMarks(new List<Marks.Lesson> { lessonData });
-                    UpdateLastModifiedDate(path);
+                    await UpdateLastModifiedDate(path);
                 }
             }
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else

@@ -7,7 +7,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
 
 using WebAccount.Interfaces;
 using WebAccount.Models;
@@ -64,8 +64,8 @@ internal partial class UserDataViewModel : ViewModelBase {
         var userDataPath = Path.Combine("Data", "UserData.json");
         var fullPath = FileStorage.GetFullPath(userDataPath);
 
-        FileStorage.RemoveFile(Path.Combine("Data", "UserData.json"));
-        FileStorage.RemoveFile(Path.Combine("Data", "UserImage.jpg"));
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "UserData.json"));
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "UserImage.jpg"));
         UserData = null;
         UserImage = null;
 
@@ -79,7 +79,7 @@ internal partial class UserDataViewModel : ViewModelBase {
             if (!string.IsNullOrEmpty(UserData.Image))
                 UserImage = await LoadImageAsync(Path.Combine("Data", "UserImage.jpg"), UserData.Image, true);
 
-            UpdateLastModifiedDate(Path.Combine("Data", "UserData.json"));
+            await UpdateLastModifiedDate(Path.Combine("Data", "UserData.json"));
         }
     }
 
@@ -95,7 +95,7 @@ internal partial class UserDataViewModel : ViewModelBase {
         var path = Path.Combine("Data", "UserData.json");
         var imagePath = Path.Combine("Data", "UserImage.jpg");
 
-        if (!FileStorage.CheckExists(path))
+        if (!await FileStorage.CheckExistsAsync(path))
             await GetUserDataAsync();
         else
             await LoadFromCacheAsync();
@@ -105,16 +105,16 @@ internal partial class UserDataViewModel : ViewModelBase {
         var path = Path.Combine("Data", "UserData.json");
         var imagePath = Path.Combine("Data", "UserImage.jpg");
 
-        if (FileStorage.CheckExists(path)) {
+        if (await FileStorage.CheckExistsAsync(path)) {
             UserData = await FileStorage.GetAsync<UserData>(path);
             if (UserData is not null && !string.IsNullOrEmpty(UserData.Image))
                 UserImage = await LoadImageAsync(imagePath, UserData.Image, false);
-            UpdateLastModifiedDate(path);
+            await UpdateLastModifiedDate(path);
         }
     }
 
-    private void UpdateLastModifiedDate(string filePath) {
-        var lastModified = FileStorage.GetLastModified(filePath);
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
         if (lastModified.HasValue)
             LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
         else
@@ -128,12 +128,12 @@ internal partial class UserDataViewModel : ViewModelBase {
                 await FileStorage.SaveStreamAsync(networkStream, path);
             }
 
-            using var fileStream = FileStorage.GetFileStreamAsync(path);
+            using var fileStream = await FileStorage.GetFileStreamAsync(path);
             return new Bitmap(fileStream);
         }
         catch {
-            if (FileStorage.CheckExists(path))
-                FileStorage.RemoveFile(path);
+            if (await FileStorage.CheckExistsAsync(path))
+                await FileStorage.RemoveFileAsync(path);
         }
 
         return null;

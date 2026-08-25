@@ -2,48 +2,75 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
              xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
              x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
-    <Grid RowDefinitions="*">
+    <UserControl.Styles>
 
-        <Border Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+        <Style Selector="Button.SettingsButton">
+            <Setter Property="MinHeight" Value="64"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="16, 0"/>
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="IsEnabled" Value="{CompiledBinding !IsLoading}"/>
+        </Style>
+
+        <Style Selector="Button.SettingsRadioButton">
+            <Setter Property="MinHeight" Value="64"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="16, 0, 0, 0"/>
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="IsEnabled" Value="{CompiledBinding !IsLoading}"/>
+        </Style>
+
+        <Style Selector="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid>
+
+        <Border Classes.Blurred="{CompiledBinding IsLoading}" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
             <Grid RowDefinitions="*, Auto" RowSpacing="4">
 
-                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
-                    <ScrollViewer Padding="12">
+                <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                    <ScrollViewer>
                         <StackPanel Spacing="12">
 
                             <!-- ОСНОВНЫЕ -->
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleSaveDataCommand}">
+                            <Button Classes="SettingsRadioButton" Command="{CompiledBinding ToggleSaveDataCommand}">
                                 <Grid ColumnDefinitions="*, Auto">
                                     <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.SaveData}" VerticalAlignment="Center"/>
                                     <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.SaveData}" OffContent="" OnContent="" IsHitTestVisible="False"/>
                                 </Grid>
                             </Button>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding ShowRemoveSavedDataButtonCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
                                 <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.RemoveData}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="*" VerticalAlignment="Center"/>
                                 </Grid>
                             </Button>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Center" Content="ПОДТВЕРДИТЬ" Foreground="IndianRed" Padding="16, 0" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
+                            <Button Classes="SettingsButton" HorizontalContentAlignment="Center" Content="ПОДТВЕРДИТЬ" Foreground="IndianRed" Command="{CompiledBinding RemoveSavedDataCommand}" IsVisible="{CompiledBinding RemoveDataButtonVisible}"/>
 
                             <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomSchedule}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomSchedule}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
                                 </Grid>
                             </Button>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.LoginAndPassword}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.LoginAndPassword}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
@@ -53,21 +80,21 @@
                             <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                             <!-- ИНТЕРФЕЙС -->
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Background="#15FFFFFF" CornerRadius="24" Padding="16, 0, 0, 0" Command="{CompiledBinding ToggleUseBlurCommand}" IsEnabled="{OnPlatform Default=False, Windows=True}">
+                            <Button Classes="SettingsRadioButton" Command="{CompiledBinding ToggleUseBlurCommand}" IsVisible="{OnPlatform Default=False, Windows=True}">
                                 <Grid ColumnDefinitions="*, Auto">
                                     <TextBlock Grid.Column="0" Text="{x:Static pages:SettingsPages.UseBlur}" VerticalAlignment="Center"/>
                                     <ToggleSwitch Grid.Column="1" IsChecked="{CompiledBinding Settings.UseBlur}" OffContent="" OnContent="" IsHitTestVisible="False"/>
                                 </Grid>
                             </Button>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.AccentColor}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.AccentColor}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
                                 </Grid>
                             </Button>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomAvatar}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.CustomAvatar}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.CustomAvatar}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
@@ -76,7 +103,7 @@
 
                             <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
-                            <Button MinHeight="32" HorizontalContentAlignment="Stretch" Padding="16, 0" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.Info}">
+                            <Button Classes="SettingsButton" Command="{CompiledBinding SelectSettingsCommand}" CommandParameter="{x:Static pages:SettingsPages.Info}">
                                 <Grid ColumnDefinitions="*, *">
                                     <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{x:Static pages:SettingsPages.Info}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text=">" VerticalAlignment="Center"/>
@@ -86,19 +113,23 @@
                             <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4, 8"/>
 
                             <!-- ВЫХОД -->
-                            <Button MinHeight="32" VerticalAlignment="Stretch" CornerRadius="24" Content="{x:Static pages:SettingsPages.Logout}" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
+                            <Button Classes="SettingsButton" Content="{x:Static pages:SettingsPages.Logout}" HorizontalContentAlignment="Center" FontWeight="Bold" Foreground="IndianRed" Command="{CompiledBinding LogoutCommand}"/>
 
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
 
-                <Button Grid.Row="1" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}"/>
+                <Button Grid.Row="1" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}" IsEnabled="{CompiledBinding !IsLoading}"/>
                 
             </Grid>
         </Border>
 
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
     </Grid>
 
 </UserControl>

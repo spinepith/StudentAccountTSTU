@@ -9,7 +9,7 @@ using Avalonia.Android;
 
 namespace StudentAccountTSTU.Android {
     [Activity(
-        Label = "Student Account TSTU",
+        Label = "ЛКС ТГТУ",
         Theme = "@style/MyTheme.NoActionBar",
         Icon = "@drawable/icon",
         MainLauncher = true,

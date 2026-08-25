@@ -1,7 +1,7 @@
 {
-  "name": "Student Account TSTU",
-  "short_name": "TSTU",
-  "description": "Student Account TSTU",
+  "name": "ЛКС ТГТУ",
+  "short_name": "ЛКС ТГТУ",
+  "description": "ЛКС ТГТУ",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#282C34",

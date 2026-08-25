@@ -3,7 +3,7 @@
   <PropertyGroup>
 
     <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
-	<Version>1.0.0b</Version>
+	<Version>1.0.0</Version>
 	<ApplicationDisplayVersion>$(Version)</ApplicationDisplayVersion>
 	<ApplicationVersion>1</ApplicationVersion>
 

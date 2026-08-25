@@ -60,6 +60,18 @@ internal partial class CustomScheduleViewModel : ViewModelBase {
         Settings = settings;
 
         _ = CheckImagesExist();
+
+        if (OperatingSystem.IsBrowser()) {
+            try {
+                Avalonia.Controls.TopLevel? topLevel = App.TopLevel;
+                if (topLevel == null && Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    topLevel = desktop.MainWindow;
+
+                if (topLevel?.StorageProvider is not null)
+                    _ = topLevel.StorageProvider.OpenFileBookmarkAsync("dummy_warmup_for_ios");
+            }
+            catch { }
+        }
     }
 
     partial void OnIsFirstTypeSelectedChanged(bool value) {

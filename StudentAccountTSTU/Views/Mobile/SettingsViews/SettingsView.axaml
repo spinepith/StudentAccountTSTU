@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
              xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="650"
@@ -16,6 +17,7 @@
             <Setter Property="Padding" Value="16, 0"/>
             <Setter Property="Background" Value="#15FFFFFF"/>
             <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="IsEnabled" Value="{CompiledBinding !IsLoading}"/>
         </Style>
 
         <Style Selector="Button.SettingsRadioButton">
@@ -24,6 +26,7 @@
             <Setter Property="Padding" Value="16, 0, 0, 0"/>
             <Setter Property="Background" Value="#15FFFFFF"/>
             <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="IsEnabled" Value="{CompiledBinding !IsLoading}"/>
         </Style>
 
         <Style Selector="TextBlock">
@@ -32,8 +35,9 @@
 
     </UserControl.Styles>
 
-    <Grid RowDefinitions="*">
-        <Grid RowDefinitions="16*, 1.4*" RowSpacing="4" VerticalAlignment="Stretch" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+    <Grid>
+
+        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="16*, 1.4*" RowSpacing="4" VerticalAlignment="Stretch" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
             
             <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
                 <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
@@ -110,14 +114,17 @@
             </Border>                
 
             <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
-                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}"/>
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToHomeCommand}" IsEnabled="{CompiledBinding !IsLoading}"/>
             </Border>
 
         </Grid>
 
-
         <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
     </Grid>
 
 </UserControl>

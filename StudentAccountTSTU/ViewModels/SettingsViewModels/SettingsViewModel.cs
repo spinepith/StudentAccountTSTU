@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +21,10 @@ internal partial class SettingsViewModel : ViewModelBase {
 
     [ObservableProperty]
     private bool _removeDataButtonVisible = false;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LogoutCommand))]
+    private bool _isLoading;
 
     internal SettingsViewModel(Settings settings, WebAccount.WebAccount webAccount, HomeViewModel parentViewModel) {
         _parentViewModel = parentViewModel;
@@ -65,14 +69,22 @@ internal partial class SettingsViewModel : ViewModelBase {
 
     [RelayCommand]
     private async Task Logout() {
-        if (await _webAccount.LogoutAsync()) {
-            Settings.DeviceId     = null;
-            Settings.UserLogin    = null;
-            Settings.UserPassword = null;
-
-            if (Avalonia.Application.Current?.DataContext is MainViewModel mainViewModel)
+        var mainViewModel = Avalonia.Application.Current?.DataContext as MainViewModel;
+        
+        if (mainViewModel is not null) {
+            IsLoading = true;
+            mainViewModel.IsAuthenticated = false;
+        
+            if (await _webAccount.LogoutAsync()) {
+                Settings.DeviceId     = null;
+                Settings.UserLogin    = null;
+                Settings.UserPassword = null;
                 await mainViewModel.Logout();
+            }
+
+            IsLoading = false;
         }
+        
     }
 
     [RelayCommand]

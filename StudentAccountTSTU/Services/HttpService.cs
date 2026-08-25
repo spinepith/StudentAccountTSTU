@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 using WebAccount.Interfaces;
@@ -11,11 +12,14 @@ using WebAccount.Interfaces;
 namespace StudentAccountTSTU.Services;
 
 public class HttpService : IHttpService, IDisposable {
-    private const string ProxyUrl = "https://student-account-tstu-proxy.gamerguy40.workers.dev/";
+    private const string ProxyUrl = "https://student-account-tstu.pages.dev/proxy";
+    //private const string ProxyUrl = "http://127.0.0.1:8788/proxy";
 
     private readonly CookieContainer cookieContainer;
     private readonly HttpClient client;
     private readonly bool isBowser;
+
+    public CancellationTokenSource Cts { get; set; } = new();
 
     public HttpService() {
         isBowser = OperatingSystem.IsBrowser();
@@ -44,7 +48,7 @@ public class HttpService : IHttpService, IDisposable {
             throw new HttpRequestException($"Некорректная или относительная ссылка: {url}");
 
         using var request = PrepareRequest(HttpMethod.Get, url);
-        using var response = await client.SendAsync(request);
+        using var response = await client.SendAsync(request, Cts.Token);
 
         ProcessProxyResponse(response, url);
 
@@ -71,7 +75,7 @@ public class HttpService : IHttpService, IDisposable {
             request.Headers.Add("Origin", new Uri(referer).GetLeftPart(UriPartial.Authority));
         }
 
-        var response = await client.SendAsync(request);
+        var response = await client.SendAsync(request, Cts.Token);
         ProcessProxyResponse(response, url);
 
         return response;
@@ -79,7 +83,7 @@ public class HttpService : IHttpService, IDisposable {
 
     public async Task<Stream> GetStreamAsync(string url) {
         var request = PrepareRequest(HttpMethod.Get, url);
-        var response = await client.SendAsync(request);
+        var response = await client.SendAsync(request, Cts.Token);
 
         ProcessProxyResponse(response, url);
 

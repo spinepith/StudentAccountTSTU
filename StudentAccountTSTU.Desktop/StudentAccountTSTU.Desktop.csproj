@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <!--If you are willing to use platform-specific APIs, use conditional compilation.
@@ -6,7 +6,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseMacOSAppBundle>true</UseMacOSAppBundle>
-    <AssemblyName>Student Account TSTU</AssemblyName>
+    <AssemblyName>ЛКС ТГТУ</AssemblyName>
     <ApplicationIcon>..\StudentAccountTSTU\Assets\icon-white.ico</ApplicationIcon>
   </PropertyGroup>
 

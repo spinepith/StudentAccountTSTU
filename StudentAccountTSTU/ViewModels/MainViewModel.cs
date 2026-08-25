@@ -79,6 +79,12 @@ internal partial class MainViewModel : ViewModelBase {
     }
 
     internal async Task Logout() {
+        if (_httpService is HttpService httpService) {
+            httpService.Cts.Cancel();
+            httpService.Cts.Dispose();
+            httpService.Cts = new System.Threading.CancellationTokenSource();
+        }
+
         IsAuthenticated = false;
         CurrentPageIndex = 0;
         CurrentPage = new LoginViewModel(this, _settings, _webAccount);

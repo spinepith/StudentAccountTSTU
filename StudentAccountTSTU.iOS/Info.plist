@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Student Account TSTU</string>
+	<string>ЛКС ТГТУ</string>
 	<key>CFBundleName</key>
-	<string>Student Account TSTU</string>
+	<string>ЛКС ТГТУ</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.companyname.StudentAccountTSTU</string>
 	<key>LSRequiresIPhoneOS</key>

@@ -8,6 +8,12 @@
              x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.CustomAvatarView"
              x:DataType="vm:CustomAvatarViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="Button.AvatarButton">
+            <Setter Property="MinHeight" Value="48" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
         
         <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
@@ -36,8 +42,8 @@
                         </Button>
 
                         <StackPanel Spacing="8">
-                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding TempImageBytes, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                            <Button Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding AvatarExists}"/>
+                            <Button Classes="AvatarButton" Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding TempImageBytes, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <Button Classes="AvatarButton" Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding AvatarExists}"/>
                         </StackPanel>
 
                     </StackPanel>

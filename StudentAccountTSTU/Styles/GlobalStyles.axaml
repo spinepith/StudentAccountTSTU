@@ -1,0 +1,213 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector=":is(TopLevel)">
+        <Setter Property="Background" Value="#FF282C34"/>
+    </Style>
+  <Design.PreviewWith>
+    <Border Padding="20">
+        <StackPanel Spacing="4">
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Label Content="label"/>
+            </Border>
+            
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <StackPanel Spacing="4" Margin="3">
+
+                    <Border BorderThickness="2" BorderBrush="Coral">
+                        <TextBox PlaceholderText="textbox"/>
+                    </Border>
+                
+                    <Border BorderThickness="2" BorderBrush="Coral">
+                        <TextBox Text="textbox"/>
+                    </Border>
+                    
+                </StackPanel>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Button Content="button"/>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <RadioButton Content="radiobutton"/>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <StackPanel Spacing="4" Margin="4">
+
+                    <Border Classes="TableLabel" BorderThickness="2" BorderBrush="Coral">
+                        <Grid ColumnDefinitions="*, *">
+                            <TextBlock Grid.Column="0" Classes="Label" Text="Label1"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="Value1"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="SpacedBlock" BorderThickness="2" BorderBrush="Coral"/>
+
+                    <Border Classes="TableValue" BorderThickness="2" BorderBrush="Coral">
+                        <Grid ColumnDefinitions="*, *">
+                            <TextBlock Grid.Column="0" Classes="Label" Text="Label2"/>
+                            <TextBlock Grid.Column="1" Classes="Value" Text="Value2"/>
+                        </Grid>
+                    </Border>
+                
+                </StackPanel>
+            </Border>
+
+            <Border Classes="isHighlited" BorderThickness="2" BorderBrush="CornflowerBlue">
+                <TextBlock Classes="Value" Text="Текст"/>
+            </Border>
+
+            <Border BorderThickness="2" BorderBrush="CornflowerBlue">
+                <Border Classes="Blurred">
+                    <Label Content="label"/>
+                </Border>
+            </Border>
+
+        </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+    <Style Selector="Label">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="PlaceholderForeground" Value="White"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="CaretBrush" Value="White"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#18FFFFFF"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style Selector="TextBox:pointerover">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#08FFFFFF"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style Selector="TextBox:focus">
+      <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="SelectableTextBlock">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="Button">
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="CornerRadius" Value="28"/>
+      <Setter Property="Background" Value="#10FFFFFF"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="RenderTransform" Value="scale(1)"/>
+    </Style>
+
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Background" Value="#18FFFFFF"/>
+    </Style>
+
+    <Style Selector="Button:pressed /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Background" Value="#08FFFFFF"/>
+    </Style>
+
+    <Style Selector="Button:pressed">
+      <Setter Property="RenderTransform" Value="scale(1)"/>
+    </Style>
+
+    <Style Selector="Button:disabled /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="#80FFFFFF" />
+    </Style>
+
+    <Style Selector="RadioButton">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:pressed /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:checked /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:checked:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:disabled /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style Selector="RadioButton:unchecked /template/ Ellipse#OuterEllipse">
+        <Setter Property="Stroke" Value="White"/>
+    </Style>
+
+    <Style Selector="ToggleSwitch:unchecked /template/ Border#OuterBorder">
+        <Setter Property="BorderBrush" Value="White"/>
+    </Style>
+
+    <Style Selector="ToggleSwitch:unchecked /template/ Ellipse#SwitchKnobOff">
+        <Setter Property="Fill" Value="White"/>
+    </Style>
+
+    <Style Selector="Border.TableLabel">
+        <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0, 0, 0, 2"/>
+        <Setter Property="Padding" Value="4, 0, 4, 4"/>
+    </Style>
+
+    <Style Selector="Border.TableValue">
+        <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
+        <Setter Property="Padding" Value="4, 0, 4, 4"/>
+    </Style>
+
+    <Style Selector="TextBlock.Label">
+        <Setter Property="Foreground" Value="#90FFFFFF"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="TextBlock.Value">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Border.SpacedBlock">
+        <Setter Property="Margin" Value="0, 0, 0, 32"/>
+        <Setter Property="Padding" Value="4"/>
+    </Style>
+
+    <Style Selector="Border.isHighlited TextBlock.Value">
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
+    </Style>
+
+    <Style Selector="Border.Blurred, Grid.Blurred">
+        <Setter Property="Effect">
+            <BlurEffect Radius="2"/>
+        </Setter>
+    </Style>
+
+</Styles>

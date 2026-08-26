@@ -1,0 +1,245 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             xmlns:models="using:WebAccount.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Mobile.ScheduleView"
+             x:DataType="vm:ScheduleViewModel">
+
+    <Grid>
+        
+        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
+
+            <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                        <TextBlock VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="{CompiledBinding LastUpdated}"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"/>
+                    </Border>
+                </Border>
+
+            <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True" Classes.custom="{CompiledBinding ShowCustomSchedule}">
+                <Border.Styles>
+                    <Style Selector="Border.custom">
+                        <Setter Property="Grid.Row" Value="0"/>
+                        <Setter Property="Grid.RowSpan" Value="3"/>
+                    </Style>
+                    <Style Selector="Border:not(.custom)">
+                        <Setter Property="Grid.Row" Value="1"/>
+                        <Setter Property="Grid.RowSpan" Value="1"/>
+                    </Style>
+                </Border.Styles>
+                <Border CornerRadius="24" ClipToBounds="True">
+                    <Grid>
+
+                        <ScrollViewer Grid.RowSpan="3" VerticalAlignment="Center" IsVisible="{CompiledBinding ShowCustomSchedule}">
+                            <StackPanel Spacing="4">
+                        
+                                <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <Border CornerRadius="20" ClipToBounds="True">
+                                        <Image Source="{CompiledBinding FirstTypeImage}" Stretch="Uniform"/>
+                                    </Border>
+                                </Border>
+                        
+                                <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding SecondTypeFirstImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4">
+                                        
+                                        <Grid Classes.loading="{CompiledBinding IsLoading}">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="НЕЧЕТНАЯ НЕДЕЛЯ" TextWrapping="Wrap" Foreground="#90FFFFFF"/>
+                                        </Grid>
+                                        
+                                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True">
+                                            <Border CornerRadius="20" ClipToBounds="True">
+                                                <Image Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform"/>
+                                            </Border>
+                                        </Border>
+
+                                    </StackPanel>
+                                </Border>
+                        
+                                <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding SecondTypeSecondImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4">
+                                        
+                                        <Grid Classes.loading="{CompiledBinding IsLoading}">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="ЧЕТНАЯ НЕДЕЛЯ" TextWrapping="Wrap" Foreground="#90FFFFFF"/>
+                                        </Grid>
+                                        
+                                        <Border HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True">
+                                            <Border CornerRadius="20" ClipToBounds="True">
+                                                <Image Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform"/>
+                                            </Border>
+                                        </Border>
+
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <ScrollViewer Grid.Row="1" VerticalAlignment="Center">
+                            <StackPanel Spacing="4">
+
+                                <StackPanel.Styles>
+                                    <Style Selector="Grid.loading">
+                                        <Setter Property="MinHeight" Value="128"/>
+                                    </Style>
+                                </StackPanel.Styles>
+                        
+                                <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding !ShowCustomSchedule}">
+                                    <StackPanel Spacing="4">
+
+                                        <Grid Classes.loading="{CompiledBinding IsLoading}">
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       TextAlignment="Center" 
+                                                       Text="НЕЧЕТНАЯ НЕДЕЛЯ"
+                                                       TextWrapping="Wrap"
+                                                       Foreground="#90FFFFFF"/>
+                                        </Grid>
+
+                                        <StackPanel Spacing="4" VerticalAlignment="Center" IsVisible="{CompiledBinding GroupedOddWeek, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                                            <Border Classes="TableLabel">
+                                                <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[0]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[1]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[2]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[3]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[4]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="5" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[5]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="6" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[6]}" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <ItemsControl ItemsSource="{CompiledBinding GroupedOddWeek}">
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:DayGroup">
+                                                        <Border Classes="SpacedBlock" Classes.isHighlited="{CompiledBinding IsHighlited}">
+                                                            <ItemsControl ItemsSource="{CompiledBinding Lessons}">
+
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate x:DataType="models:Schedule+Lesson">
+                                                                        <Border>
+                                                                            <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Day}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Pair}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Subject}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding SubGroup}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Type}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="5" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Teacher}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="6" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Room}" TextWrapping="Wrap"/>
+                                                                            </Grid>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <UniformGrid Columns="1" RowSpacing="8"/>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+
+                                                            </ItemsControl>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                        </StackPanel>    
+
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding !ShowCustomSchedule}">                      
+                                    <StackPanel>
+
+                                        <Grid Classes.loading="{CompiledBinding IsLoading}">
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       TextAlignment="Center" 
+                                                       Text="ЧЕТНАЯ НЕДЕЛЯ"
+                                                       TextWrapping="Wrap"
+                                                       Foreground="#90FFFFFF"/>
+                                        </Grid>
+
+                                        <StackPanel Spacing="4" VerticalAlignment="Center" IsVisible="{CompiledBinding Schedule?.EvenWeek, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                                            <Border Classes="TableLabel">
+                                                <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                    <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[0]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[1]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[2]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[3]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[4]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="5" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[5]}" TextWrapping="Wrap"/>
+                                                    <TextBlock Grid.Column="6" Classes="Label" TextAlignment="Center" Text="{CompiledBinding Schedule.Headers[6]}" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Border>
+
+                                            <ItemsControl ItemsSource="{CompiledBinding GroupedEvenWeek}">
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:DayGroup">
+                                                        <Border Classes="SpacedBlock" Classes.isHighlited="{CompiledBinding IsHighlited}">
+                                                            <ItemsControl ItemsSource="{CompiledBinding Lessons}">
+
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate x:DataType="models:Schedule+Lesson">
+                                                                        <Border>
+                                                                            <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Day}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Pair}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Subject}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding SubGroup}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Type}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="5" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Teacher}" TextWrapping="Wrap"/>
+                                                                                <TextBlock Grid.Column="6" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Room}" TextWrapping="Wrap"/>
+                                                                            </Grid>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <UniformGrid Columns="1" RowSpacing="8"/>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+
+                                                            </ItemsControl>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Border>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Border>
+            </Border>
+
+            <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4" IsVisible="{CompiledBinding !ShowCustomSchedule}">
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+            </Border>
+
+        </Grid>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:StudentAccountTSTU.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:StudentAccountTSTU.Views.Desktop"
+        xmlns:ap="using:StudentAccountTSTU.AttachedProperties"
+        x:Class="StudentAccountTSTU.Views.Desktop.MainWindow"
+        x:DataType="vm:MainViewModel"
+        MinWidth="800"
+        MinHeight="600"
+        TransparencyBackgroundFallback="White"
+        Icon="/Assets/icon-white.ico"
+        Title="ЛКС ТГТУ"
+        ap:BlurProperty.BlurAttached="{Binding Settings.UseBlur}"
+        ap:AccentColorProperty.AccentColorAttached="{Binding Settings.AccentColor}">
+        <views:MainViewDesktop DataContext="{CompiledBinding}" />
+</Window>

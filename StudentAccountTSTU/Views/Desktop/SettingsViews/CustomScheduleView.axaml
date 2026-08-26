@@ -1,0 +1,94 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.CustomScheduleView"
+             x:DataType="vm:CustomScheduleViewModel">
+
+    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+        <Grid RowDefinitions="*, 12*, Auto" RowSpacing="4">
+                
+            <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                <TextBlock Classes="Label"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            TextAlignment="Center"
+                            Text="{x:Static pages:SettingsPages.CustomSchedule}"
+                            TextWrapping="Wrap"
+                            Margin="8"/>
+            </Border>
+
+            <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                <ScrollViewer>
+                    <StackPanel MinWidth="256" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
+                        
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
+
+                            <Grid Grid.Column="0" Background="Transparent">
+                                
+                                <Grid RowDefinitions="*, Auto">
+
+                                    <Panel Grid.Row="0" Height="256">
+                                        <Image Source="/Assets/Settings/schedule-first-type.png" Stretch="Uniform" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                        <Image Source="{CompiledBinding FirstTypeImage}" Stretch="Uniform" IsVisible="{CompiledBinding FirstTypeImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                    </Panel>
+                                    <RadioButton Grid.Row="1" Content="ОДНО ИЗОБРАЖЕНИЕ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsFirstTypeSelected}"/>
+                                
+                                </Grid>
+                                <RadioButton GroupName="Schedule" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{CompiledBinding IsFirstTypeSelected}"/>
+                            
+                            </Grid>
+
+                            <Grid Grid.Column="1" Background="Transparent">
+
+                                <Grid RowDefinitions="*, Auto">
+                                    
+                                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto, *" ColumnSpacing="4">
+
+                                        <Image Grid.ColumnSpan="3" MaxHeight="256" Source="/Assets/Settings/schedule-second-type.png" Stretch="Uniform" IsVisible="{CompiledBinding ShowSecondTypeDefault}"/>
+                                        <Image Grid.Column="0" MaxHeight="256" Source="{CompiledBinding SecondTypeFirstImage}" Stretch="Uniform" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+                                        <Border Grid.Column="1" Width="2" VerticalAlignment="Stretch" CornerRadius="8" Background="#90FFFFFF" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+                                        <Image Grid.Column="2" MaxHeight="256" Source="{CompiledBinding SecondTypeSecondImage}" Stretch="Uniform" IsVisible="{CompiledBinding !ShowSecondTypeDefault}"/>
+
+                                    </Grid>
+                                    <RadioButton Grid.Row="1" Content="ДВА ИЗОБРАЖЕНИЯ" HorizontalAlignment="Center" IsHitTestVisible="False" IsChecked="{CompiledBinding IsSecondTypeSelected}"/>
+                                
+                                </Grid>
+
+                                <RadioButton GroupName="Schedule" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsChecked="{CompiledBinding IsSecondTypeSelected}"/>
+
+                            </Grid>
+
+                        </Grid>
+
+                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4"/>
+
+                        <StackPanel Spacing="8" IsVisible="{CompiledBinding IsFirstTypeSelected}">
+                            <Button Content="НЕЧЕТНАЯ И ЧЕТНАЯ НЕДЕЛИ" Command="{CompiledBinding SelectFirstTypeImageCommand}"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="16" IsVisible="{CompiledBinding IsSecondTypeSelected}">
+                            <Button Grid.Column="0" Content="НЕЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeFirstImageCommand}"/>
+                            <Button Grid.Column="1" Content="ЧЕТНАЯ НЕДЕЛЯ" Command="{CompiledBinding SelectSecondTypeSecondImageCommand}"/>
+                        </Grid>
+
+                        <Border Height="2" HorizontalAlignment="Stretch" CornerRadius="8" Background="#20FFFFFF" Margin="4"/>
+
+                        <StackPanel Spacing="8">
+                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding CanApply}"/>
+                            <Button Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding CanDelete}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Button Grid.Row="2" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+
+        </Grid>
+    </Border>
+
+</UserControl>

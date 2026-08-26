@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Mobile.LessonsView"
+             x:DataType="vm:LessonsViewModel">
+
+    <Grid>
+
+        <Grid Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="*, 15*, 1.4*" RowSpacing="4" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+
+            <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                    <TextBlock VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               Text="{CompiledBinding LastUpdated}"
+                               TextWrapping="Wrap"
+                               Foreground="#90FFFFFF"
+                               IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </Border>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Background="#10FFFFFF"
+                    CornerRadius="28"
+                    Padding="4"
+                    ClipToBounds="True">
+                <Border CornerRadius="24" ClipToBounds="True">
+                    <Grid>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="ДИСЦИПЛИНЫ"
+                                   TextWrapping="Wrap"
+                                   Foreground="#90FFFFFF"
+                                   IsVisible="{CompiledBinding Lessons, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <ScrollViewer IsVisible="{CompiledBinding Lessons, Converter={x:Static ObjectConverters.IsNotNull}}">
+                             <ItemsControl ItemsSource="{CompiledBinding Lessons}">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="x:String">
+                                        <Button MinHeight="64"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                Content="{CompiledBinding .}"
+                                                CornerRadius="24"
+                                                CommandParameter="{CompiledBinding .}"
+                                                Command="{CompiledBinding $parent[UserControl].((vm:LessonsViewModel)DataContext).SelectLessonCommand}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="4"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                            </ItemsControl>
+                         </ScrollViewer>
+
+                    </Grid>
+                </Border>
+            </Border>
+
+            <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+                <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+            </Border>
+
+        </Grid>
+
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
+
+</UserControl>

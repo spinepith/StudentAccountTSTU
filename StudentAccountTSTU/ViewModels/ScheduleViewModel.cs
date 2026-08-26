@@ -1,0 +1,228 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+
+using Avalonia.Media.Imaging;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+using StudentAccountTSTU.Services;
+using StudentAccountTSTU.Services.Storage;
+
+using WebAccount.Models;
+
+
+namespace StudentAccountTSTU.ViewModels;
+
+internal class DayGroup {
+    public string? DayName               { get; init; }
+    public bool IsHighlited              { get; init; }
+    public List<Schedule.Lesson> Lessons { get; init; } = new();
+}
+
+internal partial class ScheduleViewModel : ViewModelBase {
+    private readonly WebAccount.WebAccount _webAccount;
+    private readonly Dictionary<string, Task?> _activeLoadingTasks;
+
+    [ObservableProperty]
+    private Schedule? _schedule;
+
+    [ObservableProperty]
+    private bool _customSchedule;
+
+    [ObservableProperty]
+    private IEnumerable<DayGroup>? _groupedOddWeek;
+
+    [ObservableProperty]
+    private IEnumerable<DayGroup>? _groupedEvenWeek;
+
+    [ObservableProperty]
+    private IEnumerable<DayGroup>? _currentWeekSchedule;
+
+    [ObservableProperty]
+    private string? _currentWeek;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(GetDataCommand))]
+    private bool _isLoading;
+
+    [ObservableProperty]
+    private string? _lastUpdated;
+
+    [ObservableProperty]
+    private Bitmap? _firstTypeImage;
+
+    [ObservableProperty]
+    private Bitmap? _secondTypeFirstImage;
+
+    [ObservableProperty]
+    private Bitmap? _secondTypeSecondImage;
+
+    [ObservableProperty]
+    private bool _showCustomSchedule;
+
+    [ObservableProperty]
+    private bool _showWeeksHeader;
+
+    internal ScheduleViewModel(Dictionary<string, Task?> activeLoadingTasks, WebAccount.WebAccount webAccount, Settings settings) {
+        _activeLoadingTasks = activeLoadingTasks;
+        _webAccount = webAccount;
+
+        CustomSchedule = settings.CustomSchedule;
+
+        _ = InitializeDataAsync();
+    }
+
+    partial void OnScheduleChanged(Schedule? value) {
+        if (value is not null) {
+            var week = value.CurrentWeek!.Split()[^1].Trim();
+            var isOddWeek = week is "НЕЧЕТНАЯ";
+
+            CurrentWeek = isOddWeek ? "НЕЧЕТНАЯ" : "ЧЕТНАЯ";
+            GroupedOddWeek = GroupLessonsByDay(value.OddWeek, isOddWeek);
+            GroupedEvenWeek = GroupLessonsByDay(value.EvenWeek, !isOddWeek);
+            CurrentWeekSchedule = isOddWeek ? GroupedOddWeek : GroupedEvenWeek;
+        }
+        else {
+            CurrentWeek = null;
+            GroupedOddWeek = null;
+            GroupedEvenWeek = null;
+            CurrentWeekSchedule = null;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    private async Task GetData() {
+        IsLoading = true;
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Refresh", GetScheduleDataAsync, LoadFromCacheAsync);
+        IsLoading = false;
+    }
+
+    private async Task GetScheduleDataAsync() {
+        await FileStorage.RemoveFileAsync(Path.Combine("Data", "Schedule.json"));
+        Schedule = null;
+
+        var schedule = await _webAccount.GetScheduleAsync();
+        if (schedule is not null) {
+            Schedule = schedule;
+            await FileStorage.SaveAsync(Schedule, Path.Combine("Data", "Schedule.json"));
+            await UpdateLastModifiedDate(Path.Combine("Data", "Schedule.json"));
+        }
+    }
+
+    private bool CanUpdate() => !IsLoading;
+
+    private async Task InitializeDataAsync() {
+        IsLoading = true;
+        await InitializeWithCacheAsync(_activeLoadingTasks, "Schedule_Init", LoadScheduleAsync, LoadFromCacheAsync, "Schedule_Refresh");
+        IsLoading = false;
+    }
+
+    private async Task LoadScheduleAsync() {
+        var firstTypePath = Path.Combine("Data", "ScheduleFirstType.jpg");
+        var secondType1Path = Path.Combine("Data", "ScheduleSecondType1.jpg");
+        var secondType2Path = Path.Combine("Data", "ScheduleSecondType2.jpg");
+
+        var firstTypeExists = await FileStorage.CheckExistsAsync(firstTypePath);
+        var secondType1Exists = await FileStorage.CheckExistsAsync(secondType1Path);
+        var secondType2Exists = await FileStorage.CheckExistsAsync(secondType2Path);
+
+        var hasSecondType = secondType1Exists || secondType2Exists;
+        var hasFirstType = firstTypeExists;
+
+        if (hasSecondType) {
+            ShowCustomSchedule = true;
+            ShowWeeksHeader = true;
+            if (secondType1Exists) {
+                using var stream1 = await FileStorage.GetFileStreamAsync(secondType1Path);
+                SecondTypeFirstImage = new Bitmap(stream1);
+            }
+            if (secondType2Exists) {
+                using var stream2 = await FileStorage.GetFileStreamAsync(secondType2Path);
+                SecondTypeSecondImage = new Bitmap(stream2);
+            }
+        }
+        else if (hasFirstType) {
+            ShowCustomSchedule = true;
+            ShowWeeksHeader = false;
+            using var stream = await FileStorage.GetFileStreamAsync(firstTypePath);
+            FirstTypeImage = new Bitmap(stream);
+        }
+        else {
+            ShowCustomSchedule = false;
+            ShowWeeksHeader = true;
+        }
+
+        var path = Path.Combine("Data", "Schedule.json");
+        bool hasCache = await FileStorage.CheckExistsAsync(path);
+
+        if (hasCache)
+            await LoadFromCacheAsync();
+
+        bool needParser = !hasCache && !ShowCustomSchedule;
+
+        if (needParser)
+            await GetScheduleDataAsync();
+    }
+
+    private async Task LoadFromCacheAsync() {
+        var path = Path.Combine("Data", "Schedule.json");
+
+        if (await FileStorage.CheckExistsAsync(path)) {
+            Schedule = await FileStorage.GetAsync<Schedule>(path);
+            await UpdateLastModifiedDate(path);
+        }
+    }
+
+    private async Task UpdateLastModifiedDate(string filePath) {
+        var lastModified = await FileStorage.GetLastModifiedAsync(filePath);
+        if (lastModified.HasValue && !ShowCustomSchedule)
+            LastUpdated = $"ОБНОВЛЕНО {lastModified.Value:dd.MM.yyyy HH:mm}";
+        else
+            LastUpdated = null;
+    }
+
+    private IEnumerable<DayGroup>? GroupLessonsByDay(IReadOnlyList<Schedule.Lesson>? lessons, bool isCurrentWeek) {
+        if (lessons is null)
+            return null;
+
+        var groupedList = new List<DayGroup>();
+        string today = DateTime.Now.DayOfWeek switch {
+            DayOfWeek.Monday    => "пн",
+            DayOfWeek.Tuesday   => "вт",
+            DayOfWeek.Wednesday => "ср",
+            DayOfWeek.Thursday  => "чт",
+            DayOfWeek.Friday    => "пт",
+            DayOfWeek.Saturday  => "сб",
+            DayOfWeek.Sunday    => "вс",
+            _                   => ""
+        };
+
+        foreach (var lesson in lessons) {
+            if (lesson.Day is null || string.IsNullOrEmpty(lesson.Day))
+                continue;
+
+            DayGroup? targetGroup = null;
+
+            foreach (var group in groupedList)
+                if (group.DayName == lesson.Day) {
+                    targetGroup = group;
+                    break;
+                }
+
+            if (targetGroup is null) {
+                targetGroup = new DayGroup {
+                    DayName = lesson.Day,
+                    IsHighlited = isCurrentWeek && string.Equals(lesson.Day, today, StringComparison.OrdinalIgnoreCase)
+                };
+                groupedList.Add(targetGroup);
+            }
+
+            targetGroup.Lessons.Add(lesson);
+        }
+
+        return groupedList;
+    }
+}

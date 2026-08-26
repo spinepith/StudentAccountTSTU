@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/libs/">
+    <File Path="libs/StudentAccountTSTU.Crypto.dll" />
+    <File Path="libs/WebAccount.dll" />
+  </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="StudentAccountTSTU.Android/StudentAccountTSTU.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="StudentAccountTSTU.Browser/StudentAccountTSTU.Browser.csproj" />
+  <Project Path="StudentAccountTSTU.Desktop/StudentAccountTSTU.Desktop.csproj" />
+  <Project Path="StudentAccountTSTU.iOS/StudentAccountTSTU.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="StudentAccountTSTU/StudentAccountTSTU.csproj" />
+</Solution>

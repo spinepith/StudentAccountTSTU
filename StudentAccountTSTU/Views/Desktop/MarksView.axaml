@@ -1,0 +1,144 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Desktop.MarksView"
+             x:DataType="vm:MarksViewModel">
+
+    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+        <Grid RowDefinitions="*, Auto" RowSpacing="4">
+            
+            <Grid Grid.Row="0" Classes.Blurred="{CompiledBinding IsLoading}" RowDefinitions="Auto, *, Auto" RowSpacing="8">
+
+                <TextBlock Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            Text="{CompiledBinding LastUpdated}"
+                            TextWrapping="Wrap"
+                            Foreground="#90FFFFFF"
+                            FontSize="10"
+                            IsVisible="{CompiledBinding LastUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+                <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4">
+                    <Grid>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Center"
+                                    Text="БАЛЛЫ"
+                                    TextWrapping="Wrap"
+                                    Foreground="#90FFFFFF"
+                                    IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                        <ScrollViewer IsVisible="{CompiledBinding Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="4" VerticalAlignment="Center">
+
+                                <ItemsControl ItemsSource="{CompiledBinding Marks}">
+
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="64"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Spacing="8">
+
+                                                <TextBlock Classes="Label" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
+
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                                    <StackPanel>
+
+                                                        <Border Classes="TableLabel">
+                                                            <Grid ColumnDefinitions="128, *">
+
+                                                                <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Headers[0]}" TextWrapping="Wrap"/>
+
+                                                                <ItemsControl Grid.Column="1" ItemsSource="{CompiledBinding Headers}">
+
+                                                                    <!-- ПРОПУСК ПЕРВОГО СТОЛБЦА С ФИО -->
+                                                                    <ItemsControl.Styles>
+                                                                        <Style Selector="ContentPresenter:nth-child(1)">
+                                                                            <Setter Property="IsVisible" Value="False"/>
+                                                                        </Style>
+                                                                    </ItemsControl.Styles>
+
+                                                                    <ItemsControl.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <UniformGrid Rows="1"/>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ItemsControl.ItemsPanel>
+
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate DataType="x:String">
+                                                                            <TextBlock Classes="Value" MaxWidth="64" TextAlignment="Center" Text="{CompiledBinding .}" TextWrapping="Wrap"/>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+
+                                                                </ItemsControl>
+
+                                                            </Grid>
+                                                        </Border>
+
+                                                        <ItemsControl ItemsSource="{CompiledBinding Students}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Classes="TableValue" Classes.isHighlited="{CompiledBinding IsCurrentUser}">
+                                                                        <Grid ColumnDefinitions="128, *">
+
+                                                                            <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Name}" TextWrapping="Wrap"/>
+
+                                                                            <ItemsControl Grid.Column="1" ItemsSource="{CompiledBinding Marks}">
+
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <UniformGrid Rows="1"/>
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+
+                                                                                <ItemsControl.ItemTemplate>
+                                                                                    <DataTemplate DataType="x:String">
+                                                                                        <TextBlock Classes="Value" MaxWidth="64" TextAlignment="Center" Text="{CompiledBinding .}" TextWrapping="Wrap"/>
+                                                                                    </DataTemplate>
+                                                                                </ItemsControl.ItemTemplate>
+
+                                                                            </ItemsControl>
+
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+
+                                                    </StackPanel>
+                                                </ScrollViewer>
+
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </StackPanel>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Border>
+
+                <Button Grid.Row="2" MinHeight="48" Content="ОБНОВИТЬ" Command="{CompiledBinding GetDataCommand}"/>
+                
+            </Grid>
+
+            <Border Grid.Row="0" CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+                <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+
+            <Button Grid.Row="1" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToLessonsCommand}"/>
+
+        </Grid>
+    </Border>
+
+</UserControl>

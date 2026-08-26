@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0-browser</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <WasmBuildNative>true</WasmBuildNative>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <AssemblyName>LKS_TGTU</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  	<DebugType>none</DebugType>
+  	<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="wwwroot\favicon.ico" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentAccountTSTU\StudentAccountTSTU.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WebAccount">
+      <HintPath>..\libs\WebAccount.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="StudentAccountTSTU.Crypto">
+      <HintPath>..\libs\StudentAccountTSTU.Crypto.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+  	<TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+  </ItemGroup>
+	
+  <Target Name="InjectVersionToJS" BeforeTargets="Build">
+  	<WriteLinesToFile File="wwwroot\version.js" Lines="const APP_VERSION = '$(Version)';" Overwrite="true" />
+  </Target>
+</Project>

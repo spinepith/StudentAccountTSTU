@@ -1,0 +1,8 @@
+<linker>
+	<assembly fullname="StudentAccountTSTU" preserve="all" />
+	<assembly fullname="SkiaSharp" preserve="all" />
+	<assembly fullname="Avalonia.Svg.Skia" preserve="all" />
+	<assembly fullname="Svg.Controls.Skia.Avalonia" preserve="all" />
+	<assembly fullname="Svg.Skia" preserve="all" />
+	<assembly fullname="Svg.Model" preserve="all" />
+</linker>

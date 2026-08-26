@@ -1,0 +1,283 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lotie="using:Avalonia.Labs.Lottie"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:svg="clr-namespace:Svg.Controls.Skia.Avalonia"
+             x:Class="StudentAccountTSTU.Views.Desktop.HomeView"
+             x:DataType="vm:HomeViewModel">
+  
+    <Grid>
+        
+        <Border Classes.Blurred="{CompiledBinding IsLoading}"
+                Background="#10FFFFFF"
+                CornerRadius="28"
+                ClipToBounds="True"
+                Padding="4"
+                IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNull}}">
+            <Grid ColumnDefinitions="2*, *" ColumnSpacing="4">
+            
+                <Grid Grid.Column="0" RowDefinitions="*, *" RowSpacing="4">
+                    
+                    <Grid Grid.Row="0" ColumnDefinitions="2*, *" ColumnSpacing="4">
+                    
+                        <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">                      
+                            <Panel VerticalAlignment="Stretch">
+
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="ЛИЧНЫЕ ДАННЫЕ&#xA;загрузка"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{CompiledBinding UserDataViewModel.UserData, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                                <Grid ColumnDefinitions="*, Auto,  *" ColumnSpacing="4"
+                                      IsVisible="{CompiledBinding UserDataViewModel.UserData, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+                                    <Border Grid.Column="0" IsVisible="{CompiledBinding DisplayImage, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="20">
+                                        <Border.Background>
+                                            <ImageBrush Source="{CompiledBinding DisplayImage}" Stretch="UniformToFill"/>
+                                        </Border.Background>
+                                    </Border>
+
+                                    <Border Grid.Column="1"
+                                            Width="2"
+                                            VerticalAlignment="Stretch"
+                                            CornerRadius="8"
+                                            Background="#90FFFFFF"
+                                            Margin="0, 4"
+                                            IsVisible="{CompiledBinding UserDataViewModel.UserData?.Orders, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                
+                                    <ScrollViewer Grid.Column="2" IsVisible="{CompiledBinding UserDataViewModel.UserData.Orders, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                        <ItemsControl ItemsSource="{CompiledBinding UserDataViewModel.UserData.Orders}">
+                                            
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="4">
+                                                        <StackPanel Spacing="2">
+                                                            <TextBlock Classes="Label" Text="{CompiledBinding Date}" FontSize="10"/>
+                                                            <TextBlock Classes="Value" Text="{CompiledBinding Description}" TextWrapping="Wrap" FontSize="12"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Spacing="8" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+                                </Grid>
+                        
+                            </Panel>
+                        </Border>
+
+                        <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                            <Panel>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="РЕЙТИНГ&#xA;загрузка"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{CompiledBinding GroupsViewModel.Groups, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                                <ScrollViewer IsVisible="{CompiledBinding RatingViewModel.GroupRating, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{CompiledBinding SelectedGroupName}"
+                                                   Classes="Label"
+                                                   HorizontalAlignment="Center"/>
+                                        <ItemsControl ItemsSource="{CompiledBinding RatingViewModel.GroupRating.Students}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Padding="4" Classes.isHighlited="{CompiledBinding IsCurrentUser}">
+                                                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="8">
+                                                            <TextBlock Grid.Column="0" Classes="Value" Text="{CompiledBinding Position}" FontSize="10" HorizontalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Classes="Value" Text="{CompiledBinding Fio}" FontSize="10" TextWrapping="Wrap"/>
+                                                            <TextBlock Grid.Column="2" Classes="Value" Text="{CompiledBinding Rating}" FontSize="10" HorizontalAlignment="Right"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ScrollViewer>
+
+                                <ScrollViewer IsVisible="{CompiledBinding RatingViewModel.GroupRating, Converter={x:Static ObjectConverters.IsNull}}">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <ItemsControl ItemsSource="{CompiledBinding GroupsViewModel.Groups}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{CompiledBinding .}"
+                                                            Command="{Binding $parent[UserControl].DataContext.SelectGroupCommand}"
+                                                            CommandParameter="{CompiledBinding}"
+                                                            HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Spacing="8" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Panel>
+                        </Border>
+                    
+                    </Grid>
+
+                    <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                        <Border CornerRadius="20" ClipToBounds="True">
+                            <Grid>
+
+                                <Panel IsVisible="{CompiledBinding !ShowHomeCustomImage}">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Text="РАСПИСАНИЕ&#xA;загрузка"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               IsVisible="{CompiledBinding ScheduleViewModel.Schedule, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                                    <Grid RowDefinitions="Auto, *" IsVisible="{CompiledBinding ScheduleViewModel.Schedule, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                        
+                                        <TextBlock Grid.Row="0" Classes="Label" Text="{CompiledBinding ScheduleViewModel.CurrentWeek}" TextAlignment="Center" TextWrapping="Wrap"/>
+
+                                        <ScrollViewer Grid.Row="1">
+                                            <StackPanel Spacing="4" VerticalAlignment="Center">
+
+                                                <Border Classes="TableLabel">
+                                                    <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                        <TextBlock Grid.Column="0" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[0]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="1" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[1]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="2" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[2]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="3" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[3]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="4" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[4]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="5" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[5]}" TextWrapping="Wrap"/>
+                                                        <TextBlock Grid.Column="6" Classes="Label" TextAlignment="Center" Text="{CompiledBinding ScheduleViewModel.Schedule.Headers[6]}" TextWrapping="Wrap"/>
+                                                    </Grid>
+                                                </Border>
+
+                                                <ItemsControl ItemsSource="{CompiledBinding ScheduleViewModel.CurrentWeekSchedule}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate x:DataType="vm:DayGroup">
+                                                            <Border Classes="SpacedBlock" Classes.isHighlited="{CompiledBinding IsHighlited}">
+                                                                <ItemsControl ItemsSource="{CompiledBinding Lessons}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Border>
+                                                                                <Grid ColumnDefinitions="*, *, 4*, *, *, 2*, *" ColumnSpacing="4">
+                                                                                    <TextBlock Grid.Column="0" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Day}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="1" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Pair}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="2" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Subject}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="3" Classes="Value" TextAlignment="Center" Text="{CompiledBinding SubGroup}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="4" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Type}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="5" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Teacher}" TextWrapping="Wrap"/>
+                                                                                    <TextBlock Grid.Column="6" Classes="Value" TextAlignment="Center" Text="{CompiledBinding Room}" TextWrapping="Wrap"/>
+                                                                                </Grid>
+                                                                            </Border>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+
+                                                                    <ItemsControl.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <UniformGrid Columns="1" RowSpacing="8"/>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ItemsControl.ItemsPanel>
+                                                                </ItemsControl>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+
+                                            </StackPanel>
+                                        </ScrollViewer>
+
+                                    </Grid>
+                                </Panel>
+
+                                <ScrollViewer IsVisible="{CompiledBinding ShowHomeCustomImage}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="Label" Text="{CompiledBinding CurrentWeek}" TextAlignment="Center" TextWrapping="Wrap" IsVisible="{CompiledBinding ShowHomeCustomImageWeek}"/>
+                                        <Image Source="{CompiledBinding HomeCustomImage}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                
+                            </Grid>
+                        </Border>
+                    </Border>
+
+                </Grid>
+
+                <Grid Grid.Column="1" RowDefinitions="*, 12*" RowSpacing="4">
+
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto" ColumnSpacing="4">
+                        
+
+                        <Border Grid.Column="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                            <TextBlock VerticalAlignment="Center" Text="{CompiledBinding UserDataViewModel.Greeting}" TextAlignment="Center" TextWrapping="Wrap"/>
+                        </Border>
+
+                        <Border Grid.Column="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                            <Button Padding="4" Command="{CompiledBinding OpenSettingsCommand}" IsEnabled="{CompiledBinding !IsLoading}">
+                                <Svg Path="/Assets/UI/settings.svg"/>
+                            </Button>
+                        </Border>
+
+                    </Grid>
+                    
+
+                    <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                        <Panel VerticalAlignment="Stretch">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="БАЛЛЫ&#xA;загрузка"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       IsVisible="{CompiledBinding MarksViewModel.Marks, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                            <ScrollViewer IsVisible="{CompiledBinding MarksViewModel.Marks, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <ItemsControl VerticalAlignment="Center" ItemsSource="{CompiledBinding MarksViewModel.Marks}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <ItemsControl ItemsSource="{CompiledBinding Students}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border IsVisible="{CompiledBinding IsCurrentUser}" Padding="8">
+                                                            <Grid ColumnDefinitions="*, 7*" ColumnSpacing="2">
+                                                                <TextBlock Grid.Column="0" HorizontalAlignment="Center" Classes="Label" Text="{CompiledBinding CurrentMark}"/>
+                                                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Classes="Value" Text="{Binding $parent[ItemsControl].DataContext.Name}" TextWrapping="Wrap"/>
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Panel>
+                    </Border>
+                    
+                </Grid>
+            
+            </Grid>
+        </Border>
+
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding CurrentPage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+        <Border CornerRadius="28" Padding="4" ClipToBounds="True" IsVisible="{CompiledBinding IsLoading}" ZIndex="999">
+            <lotie:Lottie Path="/Assets/loading.json" Width="128" Height="128" RepeatCount="-1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>   
+
+</UserControl>

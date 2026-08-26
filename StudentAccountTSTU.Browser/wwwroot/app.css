@@ -1,0 +1,23 @@
+﻿/* HTML styles for the splash screen */
+.avalonia-splash {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .avalonia-splash {
+        background: #282C34;
+    }
+}
+
+.avalonia-splash.splash-close {
+    transition: opacity 200ms, display 200ms;
+    display: none;
+    opacity: 0;
+}

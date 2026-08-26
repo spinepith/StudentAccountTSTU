@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!--If you are willing to use platform-specific APIs, use conditional compilation.
+    See https://docs.avaloniaui.net/docs/guides/platforms/platform-specific-code/dotnet for more details.-->
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>LKS_TGTU</AssemblyName>
+    <ApplicationTitle>ЛКС ТГТУ</ApplicationTitle>
+    <ApplicationIcon>..\StudentAccountTSTU\Assets\icon-white.ico</ApplicationIcon>
+	<CFBundleIconFile>icon.icns</CFBundleIconFile>
+	<CFBundleShortVersionString>$(ApplicationDisplayVersion)</CFBundleShortVersionString>
+	<CFBundleVersion>$(ApplicationVersion)</CFBundleVersion>
+	<CFBundleIdentifier>com.companyname.StudentAccountTSTU</CFBundleIdentifier>
+	<CFBundleName>$(AssemblyName)</CFBundleName>
+	<CFBundleDisplayName>$(ApplicationTitle)</CFBundleDisplayName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  	<DebugType>none</DebugType>
+  	<DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" />
+	<PackageReference Include="Dotnet.Bundle" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudentAccountTSTU\StudentAccountTSTU.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64' Or '$(RuntimeIdentifier)' == 'osx-arm64'">
+  	<Content Include="..\StudentAccountTSTU\Assets\icon.icns" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  
+</Project>

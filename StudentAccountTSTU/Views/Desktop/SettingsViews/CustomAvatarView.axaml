@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Desktop.SettingsViews.CustomAvatarView"
+             x:DataType="vm:CustomAvatarViewModel">
+
+    <Border Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+        <Grid RowDefinitions="*, 12*, Auto" RowSpacing="4">
+
+            <Border Grid.Row="0" Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True" Padding="4">
+                <TextBlock Classes="Label"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            TextAlignment="Center"
+                            Text="{x:Static pages:SettingsPages.CustomAvatar}"
+                            TextWrapping="Wrap"
+                            Margin="8"/>
+            </Border>
+
+            <Border Grid.Row="1" Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                <ScrollViewer>
+                    <StackPanel MinWidth="256" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+
+                        <Button Width="256" Height="256" Command="{CompiledBinding SelectImageCommand}">
+                            <Border CornerRadius="24" ClipToBounds="True">
+                                <Panel>
+                                    <Svg Path="/Assets/Settings/smile-face.svg" Stretch="Uniform" IsVisible="{CompiledBinding SelectedImageBitmap, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                    <Image Source="{CompiledBinding SelectedImageBitmap}" Stretch="Uniform" IsVisible="{CompiledBinding SelectedImageBitmap, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                </Panel>
+                            </Border>
+                        </Button>
+
+                        <StackPanel Spacing="8">
+                            <Button Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}" IsEnabled="{CompiledBinding TempImageBytes, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <Button Content="УДАЛИТЬ" Command="{CompiledBinding DeleteCommand}" IsEnabled="{CompiledBinding AvatarExists}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Button Grid.Row="2" MinHeight="48" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+
+        </Grid>
+    </Border>
+
+</UserControl>

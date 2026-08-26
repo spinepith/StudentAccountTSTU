@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             xmlns:local="using:StudentAccountTSTU"
+             x:Class="StudentAccountTSTU.Views.Desktop.MainViewDesktop"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid Background="#40000000">
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
+
+        <Grid ColumnDefinitions="64, *" ColumnSpacing="20" Margin="20" IsVisible="{CompiledBinding IsAuthenticated}">
+            <local:NavigationBar Grid.Column="0" Orientation="Vertical" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=OneWay}" TabClickedCommand="{CompiledBinding TabClickedCommand}" IsEnabled="{CompiledBinding IsAuthenticated}"/>
+            <ContentControl Grid.Column="1" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
+        </Grid>
+    </Grid>
+
+</UserControl>

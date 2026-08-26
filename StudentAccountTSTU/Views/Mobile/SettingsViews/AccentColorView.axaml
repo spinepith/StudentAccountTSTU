@@ -1,0 +1,113 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             xmlns:pages="using:StudentAccountTSTU.ViewModels.SettingsViewModels"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="StudentAccountTSTU.Views.Mobile.SettingsViews.AccentColorView"
+             x:DataType="vm:AccentColorViewModel">
+
+     <UserControl.Styles>
+
+        <Style Selector="SelectableTextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+         <Style Selector="Border.ExampleColor">
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="MinHeight" Value="48" />
+            <Setter Property="CornerRadius" Value="26" />
+            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*, 15*, 1.4*" RowSpacing="4">
+
+        <Border Grid.Row="0" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Border Background="#20FFFFFF" CornerRadius="24" ClipToBounds="True">
+                <TextBlock Classes="Label"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="{x:Static pages:SettingsPages.AccentColor}"
+                           TextWrapping="Wrap"/>
+            </Border>
+        </Border>
+
+        <Border Grid.Row="1" Background="#10FFFFFF" CornerRadius="28" Padding="4" ClipToBounds="True">
+            <Border Background="#20FFFFFF" CornerRadius="24" Padding="4" ClipToBounds="True">
+                <ScrollViewer>
+                    <Grid RowDefinitions="*, Auto" HorizontalAlignment="Center" VerticalAlignment="Center" RowSpacing="16">
+                
+                        <StackPanel Grid.Row="0" Spacing="4" MinWidth="256">
+
+                            <TextBlock Grid.Row="0"
+                                        Classes="Value"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Center"
+                                        Text="ПРИМЕРЫ"
+                                        TextWrapping="Wrap"/>
+
+                            <Border Classes="ExampleColor">
+                                <Border Background="#009B77" CornerRadius="22">
+                                    <SelectableTextBlock Text="#009B77"/>
+                                </Border>
+                            </Border>
+
+                            <Border Classes="ExampleColor">
+                                <Border Background="#FFC107" CornerRadius="22">
+                                    <SelectableTextBlock Text="#FFC107"/>
+                                </Border>
+                            </Border>
+
+                            <Border Classes="ExampleColor">
+                                <Border Background="#D87093" CornerRadius="22">
+                                    <SelectableTextBlock Text="#D87093"/>
+                                </Border>
+                            </Border>
+
+                            <Border Classes="ExampleColor">
+                                <Border Background="#4A71F9" CornerRadius="22">
+                                    <SelectableTextBlock Text="#4A71F9"/>
+                                </Border>
+                            </Border>
+
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Spacing="4">
+
+                            <Border MinHeight="48" Background="#10FFFFFF" CornerRadius="26" Padding="4" ClipToBounds="True">
+                                <Label Background="{CompiledBinding Settings.AccentColor}" CornerRadius="30" Content="ТЕКУЩИЙ" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            </Border>
+
+                            <TextBox MinHeight="48"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Background="#10FFFFFF"
+                                     BorderBrush="Transparent"
+                                     CornerRadius="26"
+                                     PlaceholderText="ЦВЕТ"
+                                     Text="{CompiledBinding ColorInput}"/>
+                                
+                            <Button MinHeight="48" Content="ПРИМЕНИТЬ" Command="{CompiledBinding ApplyCommand}"/>
+                            
+                        </StackPanel>
+
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Border>
+
+        <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="28" ClipToBounds="True" Padding="4">
+            <Button VerticalAlignment="Stretch" Background="#20FFFFFF" CornerRadius="24" Content="НАЗАД" Command="{CompiledBinding BackToAllSettingsCommand}"/>
+        </Border>
+
+    </Grid>
+    
+
+</UserControl>

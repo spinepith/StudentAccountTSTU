@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:StudentAccountTSTU.ViewModels"
+             xmlns:local="using:StudentAccountTSTU"
+             xmlns:ap="using:StudentAccountTSTU.AttachedProperties"
+             x:Class="StudentAccountTSTU.Views.Mobile.MainViewMobile"
+             x:DataType="vm:MainViewModel"
+             ap:AccentColorProperty.AccentColorAttached="{Binding Settings.AccentColor}">
+
+    <Grid Background="#FF282C34" RowDefinitions="*">
+        <ContentControl Content="{CompiledBinding CurrentPage}" IsVisible="{CompiledBinding !IsAuthenticated}"/>
+
+        <Grid RowDefinitions="*, 68" RowSpacing="20" Margin="{OnPlatform Default='20, 0', Browser='20, 0, 20, 24'}" IsVisible="{CompiledBinding IsAuthenticated}">
+            <ContentControl Grid.Row="0" x:Name="MainContentArea" Content="{CompiledBinding CurrentPage}" Padding="4"/>
+            <local:NavigationBar Grid.Row="1" Orientation="Horizontal" SelectedIndex="{CompiledBinding CurrentPageIndex, Mode=OneWay}" TabClickedCommand="{CompiledBinding TabClickedCommand}"  IsEnabled="{CompiledBinding IsAuthenticated}"/>
+        </Grid>
+    </Grid>
+
+</UserControl>

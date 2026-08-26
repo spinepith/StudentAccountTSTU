@@ -23,6 +23,7 @@ public partial class NavigationBar : UserControl {
     private readonly TranslateTransform _selectionTransform = new(0, 0);
     private readonly ScaleTransform _scaleTransform = new(1, 1);
     private readonly ScaleTransform _pillScaleTransform = new(1, 1);
+    private readonly ScaleTransform _rootScaleTransform = new(1, 1);
     private readonly double SelectorCornerRadius = 24;
     private bool _isDragging = false;
     private bool _hasMoved = false;
@@ -53,6 +54,8 @@ public partial class NavigationBar : UserControl {
         Selector.RenderTransformOrigin = RelativePoint.Center;
         Pill.RenderTransform = _pillScaleTransform;
         Pill.RenderTransformOrigin = RelativePoint.Center;
+        RootBorder.RenderTransform = _rootScaleTransform;
+        RootBorder.RenderTransformOrigin = RelativePoint.Center;
 
         _animationTransitions = new Transitions
         {
@@ -84,6 +87,7 @@ public partial class NavigationBar : UserControl {
         _selectionTransform.Transitions = _animationTransitions;
         _scaleTransform.Transitions = _animationTransitions;
         _pillScaleTransform.Transitions = _animationTransitions;
+        _rootScaleTransform.Transitions = _animationTransitions;
 
         Loaded += (sender, e) => {
             UpdateElementsSize();
@@ -168,12 +172,15 @@ public partial class NavigationBar : UserControl {
             _scaleTransform.ScaleX = 1.4;
             _scaleTransform.ScaleY = 1.4;
             _pillScaleTransform.ScaleX = 1.6;
+            _rootScaleTransform.ScaleX = 1.02;
+            _rootScaleTransform.ScaleY = 1.02;
         }
         else {
             _scaleTransform.ScaleX = 1.3;
             _scaleTransform.ScaleY = 1.2;
             _pillScaleTransform.ScaleY = 1.3;
         }
+
 
         Selector.CornerRadius = new CornerRadius(26);
 
@@ -214,6 +221,8 @@ public partial class NavigationBar : UserControl {
         _scaleTransform.ScaleY = 1.0;
         _pillScaleTransform.ScaleX = 1.0;
         _pillScaleTransform.ScaleY = 1.0;
+        _rootScaleTransform.ScaleX = 1.0;
+        _rootScaleTransform.ScaleY = 1.0;
         Selector.CornerRadius = new CornerRadius(SelectorCornerRadius);
 
         _isDragging = false;
@@ -272,6 +281,8 @@ public partial class NavigationBar : UserControl {
         _scaleTransform.ScaleY = 1.0;
         _pillScaleTransform.ScaleX = 1.0;
         _pillScaleTransform.ScaleY = 1.0;
+        _rootScaleTransform.ScaleX = 1.0;
+        _rootScaleTransform.ScaleY = 1.0;
         _isDragging = false;
         _hasMoved = false;
     }

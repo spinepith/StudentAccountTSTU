@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <WasmBuildNative>true</WasmBuildNative>
     <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <AssemblyName>LKS_TGTU</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">

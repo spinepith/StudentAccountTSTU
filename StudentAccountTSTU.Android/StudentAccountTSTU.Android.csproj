@@ -9,6 +9,7 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AssemblyName>LKS_TGTU</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -28,4 +29,24 @@
   <ItemGroup>
     <ProjectReference Include="..\StudentAccountTSTU\StudentAccountTSTU.csproj" />
   </ItemGroup>
+	
+  <Target Name="RenameApkToAssemblyName" AfterTargets="Build;SignAndroidPackage;Publish">
+  
+  	<ItemGroup>
+  		<_SignedPkgs Include="$(OutputPath)**\$(ApplicationId)-Signed.apk;$(OutputPath)**\$(ApplicationId)-Signed.aab" />
+  		<_SignedPkgs Include="$(PublishDir)**\$(ApplicationId)-Signed.apk;$(PublishDir)**\$(ApplicationId)-Signed.aab" Condition="'$(PublishDir)' != ''" />
+  	</ItemGroup>
+  	<Move SourceFiles="@(_SignedPkgs)"
+          DestinationFiles="@(_SignedPkgs->'%(RootDir)%(Directory)$(AssemblyName)-Signed%(Extension)')"
+          Condition="'@(_SignedPkgs)' != ''" />
+  
+  	<ItemGroup>
+  		<_UnsignedPkgs Include="$(OutputPath)**\$(ApplicationId).apk;$(OutputPath)**\$(ApplicationId).aab" />
+  		<_UnsignedPkgs Include="$(PublishDir)**\$(ApplicationId).apk;$(PublishDir)**\$(ApplicationId).aab" Condition="'$(PublishDir)' != ''" />
+  	</ItemGroup>
+  	<Move SourceFiles="@(_UnsignedPkgs)"
+          DestinationFiles="@(_UnsignedPkgs->'%(RootDir)%(Directory)$(AssemblyName)%(Extension)')"
+          Condition="'@(_UnsignedPkgs)' != ''" />
+  
+  </Target>
 </Project>
